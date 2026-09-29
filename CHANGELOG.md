@@ -2,6 +2,9 @@
 
 Artifact: https://claude.ai/artifact/RQwdyLoD7o17zoTmM1Cx9n
 
+## v5 (artifact version 1790701621-315e), 2026-09-29
+- Currency changed from EUR to USD. Amounts keep the same numbers with a $ sign; no exchange-rate conversion.
+
 ## v4 (artifact version 1790701458-0b8f), 2026-09-29
 - New tabs: Start here, DQ rules, Regulation, Current state, Maturity, Value case, Roadmap. Attributes tab renamed Catalogue.
 - Start here: one card per tab with the question it answers and a live number. Opens by default.

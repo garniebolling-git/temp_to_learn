@@ -1189,7 +1189,7 @@ const chipName = id => { const n = byId.get(id); return n.kind === "attribute" &
 const chip = id => byId.has(id) ? `<button class="ref" type="button" data-go="${esc(id)}" style="--kc:var(${KINDS[byId.get(id).kind].color})">${esc(chipName(id))}</button>` : "";
 const domFocus = ids => { const f = S.f.domain; if (!f.size) return ""; return ids.some(id => f.has(domainOf(id) || id)) ? "hit" : "dim"; };
 const fmtN = n => Number(n).toLocaleString("en-GB", {maximumFractionDigits:3});
-const money = n => "€" + Math.round(n).toLocaleString("en-GB");
+const money = n => "$" + Math.round(n).toLocaleString("en-US");
 
 function catList(){
   const attrs = new Set(attrsFiltered().map(a => a.id));
@@ -1333,7 +1333,7 @@ function renderVal(){
           <label>Volume <span>${esc(v.volumeLabel)}</span>${inp(v, "volume", 1)}</label>
           <label>Today <span>${esc(v.measure)} (${esc(v.unit)})</span>${inp(v, "base", "any")}</label>
           <label>Target <span>${esc(v.unit)}</span>${inp(v, "target", "any")}</label>
-          <label>Value per unit <span>${esc(v.unitValueLabel)} (€)</span>${inp(v, "unitValue", 1)}</label>
+          <label>Value per unit <span>${esc(v.unitValueLabel)} ($)</span>${inp(v, "unitValue", 1)}</label>
         </div>
         <div class="refs"><span class="rl">Depends on</span>${v.steps.concat(v.doms).map(chip).join("")}</div>
       </article>`).join("") + `</div>
