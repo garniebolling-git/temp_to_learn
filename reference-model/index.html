@@ -109,6 +109,69 @@ td.def{white-space:normal;min-width:220px;color:var(--ink-2)}
 .schema code{font:12px var(--f-mono);background:var(--sunk);padding:1px 4px;border-radius:3px}
 .schema ol{margin:0;padding-left:20px;color:var(--ink-2);display:grid;gap:4px}
 
+.procnote{color:var(--ink-2);font-size:13px;margin:0 0 12px}
+.proc{background:var(--surface);border:1px solid var(--rule);border-radius:8px;margin-bottom:14px;overflow:hidden}
+.proc-hd{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;padding:14px 16px;align-items:start}
+.proc-code{font:600 12px var(--f-mono);letter-spacing:.06em;color:var(--k-process);border:1.5px solid currentColor;border-radius:4px;padding:5px 7px;margin-top:2px}
+.proc-t h3{font:700 19px/1.2 var(--f-display);margin:0}
+.proc-t h3 .link{text-decoration:none}
+.proc-t p{margin:4px 0 0;color:var(--ink-2);font-size:13px;max-width:70ch}
+.proc-t .value{font:12px var(--f-mono);color:var(--ink-3)}
+.tally{display:grid;justify-items:end;gap:1px;font:11.5px var(--f-mono);color:var(--ink-3);font-variant-numeric:tabular-nums;text-align:right}
+.bpmn-btn{margin-top:6px;font:600 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent);border:1px solid var(--accent);border-radius:5px;padding:5px 9px}
+.bpmn-btn[aria-expanded="true"]{background:var(--accent);color:var(--accent-ink)}
+.strip{display:flex;gap:8px;overflow-x:auto;padding:0 16px 14px;scrollbar-width:thin}
+.step{flex:0 0 190px;display:grid;gap:4px;align-content:start;text-align:left;background:var(--bg);border:1px solid var(--rule);border-radius:7px;padding:9px 10px;position:relative}
+.step:hover{border-color:var(--rule-2)}
+.step[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.step.dim{opacity:.38}
+.step.hit{border-color:var(--hl);box-shadow:inset 0 0 0 1px var(--hl)}
+.step .no{font:500 10.5px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--k-process)}
+.step .t{font-weight:600;line-height:1.3}
+.step .lane{font-size:12px;color:var(--ink-3)}
+.step .doms{display:flex;flex-wrap:wrap;gap:4px}
+.step .doms i{font:normal 500 10.5px var(--f-mono);padding:1px 5px;border-radius:3px;border:1px dashed var(--ink-3);color:var(--ink-2)}
+.step .doms i.w{border:1px solid var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--ink)}
+.step .gate{font:11px var(--f-mono);color:var(--ink-2)}
+.bpmnfig{margin:0 0 14px;border-block:1px solid var(--rule);background:var(--bg)}
+.bpmnbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:10px 16px 0;font-size:12px;color:var(--ink-2)}
+.bpmnbar .grow{flex:1}
+.bpmnbar .btn{padding:5px 10px;font-size:12.5px}
+.bpmnbar .lg{display:inline-flex;gap:6px;align-items:center}
+.sw-w,.sw-r{display:inline-block;width:18px;height:0;border-top:2px solid var(--accent)}
+.sw-r{border-top:2px dashed var(--ink-3)}
+.bpmnwrap{overflow-x:auto;padding:10px 16px;scrollbar-width:thin}
+.bpmnfig figcaption{padding:0 16px 12px;font-size:12px;color:var(--ink-3);max-width:100ch}
+.bpmn{display:block;max-width:none;color:var(--ink);font-family:var(--f-body)}
+.bpmn text{fill:currentColor}
+.bp-pool{fill:var(--surface);stroke:currentColor;stroke-width:1.2}
+.bp-pooltxt{font:600 12.5px var(--f-display)}
+.bp-lane{fill:none;stroke:currentColor;stroke-width:.8;opacity:.55}
+.bp-lanetxt{font:500 12px var(--f-body)}
+.bp-seq{fill:none;stroke:currentColor;stroke-width:1.4}
+.bp-arrhead{fill:var(--ink)}
+.bp-arrhead.w{fill:var(--accent)}
+.bp-arrhead.r{fill:var(--ink-3)}
+.bp-flowtxt,.bp-no,.bp-objtxt{font:10px var(--f-mono);fill:var(--ink-3)!important}
+.bp-evtxt,.bp-gtxt{font:11px var(--f-body);fill:var(--ink-2)!important}
+.bp-event{fill:var(--surface);stroke:currentColor;stroke-width:1.5}
+.bp-event.end{stroke-width:3.4}
+.bp-task{cursor:pointer}
+.bp-task rect{fill:var(--surface);stroke:currentColor;stroke-width:1.3}
+.bp-task:hover rect,.bp-task:focus-visible rect{stroke:var(--accent)}
+.bp-task:focus{outline:none}
+.bp-task[aria-pressed="true"] rect{stroke:var(--accent);stroke-width:2.4;fill:color-mix(in srgb,var(--accent) 12%,var(--surface))}
+.bp-t{font:500 11.5px var(--f-body)}
+.bp-gate path{fill:var(--surface);stroke:currentColor;stroke-width:1.4}
+.bp-gate path.x{fill:none;stroke-width:2.2}
+.bp-assoc{stroke-width:1.2;stroke-dasharray:2 3}
+.bp-assoc.w{stroke:var(--accent);stroke-width:1.6;stroke-dasharray:none}
+.bp-assoc.r{stroke:var(--ink-3)}
+.bp-obj path{fill:var(--surface);stroke:var(--ink-3);stroke-width:1.1}
+.bp-obj.w path{stroke:var(--accent);stroke-width:1.6;fill:color-mix(in srgb,var(--accent) 14%,var(--surface))}
+.insp .fail{border-left:3px solid var(--s-restricted);padding-left:10px}
+@media (max-width:640px){.proc-hd{grid-template-columns:minmax(0,1fr)}.tally{justify-items:start;text-align:left;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center}}
+
 @media (max-width:1000px){
   .shell{grid-template-columns:minmax(0,1fr)}
   .main{order:1} .insp{order:2} .rail{order:3}
@@ -146,6 +209,10 @@ td.def{white-space:normal;min-width:220px;color:var(--ink-2)}
         <div class="legend" id="legend"></div>
         <div class="maphint">Drag to pan · scroll to zoom · click to inspect · double-click a domain to open its subject areas</div>
       </div>
+    </div>
+    <div id="view-proc" role="tabpanel" hidden>
+      <p class="procnote" id="procnote"></p>
+      <div id="proclist"></div>
     </div>
     <div id="view-table" role="tabpanel" hidden><div class="tblwrap" id="tbl"></div></div>
     <div id="view-schema" role="tabpanel" hidden></div>
@@ -251,10 +318,10 @@ td.def{white-space:normal;min-width:220px;color:var(--ink-2)}
  {"id":"S07","name":"Data warehouse","hosting":"Cloud","def":"Reporting copy of data from every other system."}
 ],
 "processes":[
- {"id":"P01","code":"O2C","name":"Order to Cash","def":"From customer order through delivery and invoice to cash collected."},
- {"id":"P02","code":"P2P","name":"Procure to Pay","def":"From purchase request through goods receipt to supplier payment."},
+ {"id":"P01","code":"O2C","name":"Order to Cash","value":"Days sales outstanding and order fill rate","def":"From customer order through delivery and invoice to cash collected."},
+ {"id":"P02","code":"P2P","name":"Procure to Pay","value":"Payment fraud avoided and on-time supplier payment","def":"From purchase request through goods receipt to supplier payment."},
  {"id":"P03","code":"H2R","name":"Hire to Retire","def":"From recruitment through employment changes to exit."},
- {"id":"P04","code":"R2R","name":"Record to Report","def":"From journal entries to month-end close and financial statements."},
+ {"id":"P04","code":"R2R","name":"Record to Report","value":"Days to close and audit adjustments avoided","def":"From journal entries to month-end close and financial statements."},
  {"id":"P05","code":"I2M","name":"Idea to Market","def":"From new product idea to an active, sellable item."},
  {"id":"P06","code":"A2R","name":"Acquire to Retire","def":"From buying equipment through maintenance to disposal."}
 ],
@@ -290,6 +357,27 @@ td.def{white-space:normal;min-width:220px;color:var(--ink-2)}
  {"f":"C07","r":"governs","t":"D03-A007"},
  {"f":"C08","r":"governs","t":"D05-A007"},{"f":"C08","r":"governs","t":"D05-A009"},
  {"f":"D06-A009","r":"references","t":"D04"}
+],
+"steps":[
+ {"id":"P01.1","p":"P01","n":1,"lane":"Sales","name":"Receive customer order","sys":"S05","reads":["D01","D02"],"writes":[],"ctl":[],"def":"The customer places an order in the web shop or through a sales rep.","failure":"An unknown customer or a discontinued SKU stops the order at entry."},
+ {"id":"P01.2","p":"P01","n":2,"lane":"Sales","name":"Create or update customer","sys":"S01","reads":[],"writes":["D01"],"ctl":["C01","C02"],"def":"New buyers are set up in the CRM. Existing records are corrected.","failure":"A duplicate customer is created, so credit exposure is split across two records."},
+ {"id":"P01.3","p":"P01","n":3,"lane":"Credit","name":"Check credit","sys":"S02","reads":["D01"],"writes":[],"ctl":[],"gate":{"q":"Credit approved?","no":"Order blocked"},"def":"The order value plus open balance is compared with the credit limit.","failure":"A wrong credit limit lets a risky order through or blocks a good one."},
+ {"id":"P01.4","p":"P01","n":4,"lane":"Warehouse","name":"Pick, pack and ship","sys":"S04","reads":["D02","D04"],"writes":[],"ctl":[],"def":"Stock is picked, packed and handed to the carrier.","failure":"A wrong weight or pack quantity breaks the carrier booking. A wrong address returns the parcel."},
+ {"id":"P01.5","p":"P01","n":5,"lane":"Accounts receivable","name":"Issue invoice","sys":"S02","reads":["D01","D02"],"writes":[],"ctl":[],"def":"The invoice is generated from the delivery and sent to the customer.","failure":"A missing tax number makes the invoice non-compliant."},
+ {"id":"P01.6","p":"P01","n":6,"lane":"Accounts receivable","name":"Collect cash","sys":"S02","reads":["D01"],"writes":[],"ctl":[],"def":"Incoming payments are matched to open invoices.","failure":"Mismatched payment terms cause disputes and late cash."},
+
+ {"id":"P02.1","p":"P02","n":1,"lane":"Requester","name":"Raise purchase request","sys":"S02","reads":["D02","D04"],"writes":[],"ctl":[],"def":"A buyer or warehouse lead requests stock for a site.","failure":"A request against the wrong site sends stock to the wrong warehouse."},
+ {"id":"P02.2","p":"P02","n":2,"lane":"Procurement","name":"Onboard supplier","sys":"S02","reads":[],"writes":["D03"],"ctl":["C02","C07"],"gate":{"q":"Supplier cleared?","no":"Supplier rejected"},"def":"New suppliers are created with tax, bank and screening data.","failure":"A supplier is paid before sanctions screening is complete."},
+ {"id":"P02.3","p":"P02","n":3,"lane":"Procurement","name":"Issue purchase order","sys":"S02","reads":["D02","D03"],"writes":[],"ctl":[],"def":"The purchase order is sent with agreed prices and delivery dates.","failure":"An order to an inactive supplier record is never fulfilled."},
+ {"id":"P02.4","p":"P02","n":4,"lane":"Warehouse","name":"Receive goods","sys":"S04","reads":["D02","D04"],"writes":[],"ctl":["C05"],"def":"Goods are scanned in against the purchase order.","failure":"A GTIN mismatch at the dock leaves stock unbooked."},
+ {"id":"P02.5","p":"P02","n":5,"lane":"Accounts payable","name":"Match supplier invoice","sys":"S02","reads":["D02","D03"],"writes":[],"ctl":[],"def":"Invoice, purchase order and goods receipt are matched three ways.","failure":"Unit of measure differences block the match and delay payment."},
+ {"id":"P02.6","p":"P02","n":6,"lane":"Accounts payable","name":"Pay supplier","sys":"S02","reads":["D03"],"writes":[],"ctl":["C04"],"def":"Approved invoices are paid in the weekly payment run.","failure":"Changed bank details send the payment to a fraudster."},
+
+ {"id":"P04.1","p":"P04","n":1,"lane":"General ledger","name":"Post journals","sys":"S02","reads":["D01","D03"],"writes":[],"ctl":[],"def":"Sales, purchase and manual journals are posted to the ledger.","failure":"Postings to a duplicate customer split one balance in two."},
+ {"id":"P04.2","p":"P04","n":2,"lane":"Asset accounting","name":"Run depreciation","sys":"S02","reads":[],"writes":["D06"],"ctl":[],"def":"Monthly depreciation is calculated and net book value updated.","failure":"A wrong depreciation method misstates the book value of equipment."},
+ {"id":"P04.3","p":"P04","n":3,"lane":"General ledger","name":"Reconcile subledgers","sys":"S02","reads":["D01","D03","D06"],"writes":[],"ctl":[],"gate":{"q":"Balances agree?","no":"Escalate to controller"},"def":"Customer, supplier and asset subledgers are agreed to the ledger.","failure":"Duplicate or merged records leave differences no one can explain."},
+ {"id":"P04.4","p":"P04","n":4,"lane":"Controlling","name":"Allocate costs","sys":"S02","reads":["D05"],"writes":[],"ctl":[],"def":"Payroll and overhead are charged to cost centres.","failure":"An employee on the wrong cost centre distorts department cost."},
+ {"id":"P04.5","p":"P04","n":5,"lane":"Controlling","name":"Close period and report","sys":"S07","reads":["D01","D02","D03","D06"],"writes":[],"ctl":[],"def":"The period is locked and management reports are published.","failure":"Reports by customer segment or product category are wrong when the reference codes are wrong."}
 ]
 }
 </script>
@@ -309,7 +397,8 @@ const KINDS = {
   attribute:   {label:"Attribute",    plural:"Attributes",    list:"attributes",   color:"--k-domain"},
   system:      {label:"System",       plural:"Systems",       list:"systems",      color:"--k-system"},
   process:     {label:"Process",      plural:"Processes",     list:"processes",    color:"--k-process"},
-  control:     {label:"Control",      plural:"Controls",      list:"controls",     color:"--k-control"}
+  control:     {label:"Control",      plural:"Controls",      list:"controls",     color:"--k-control"},
+  step:        {label:"Process step", plural:"Process steps", list:"steps",        color:"--k-process"}
 };
 const REL = {
   masters:   "is the master of",
@@ -319,7 +408,9 @@ const REL = {
   updates:   "updates",
   governs:   "governs",
   references:"points to",
-  contains:  "contains"
+  contains:  "contains",
+  writes:    "writes",
+  applies:   "applies"
 };
 const byId = new Map();
 for (const [kind, k] of Object.entries(KINDS)) for (const r of (M[k.list] || [])) byId.set(r.id, Object.assign(r, {kind}));
@@ -328,6 +419,16 @@ const rels = [];   // every link, both built-in containment and the model's rela
 for (const s of M.subjectAreas) rels.push({f:s.domain, r:"contains", t:s.id});
 for (const a of M.attributes) rels.push({f:a.sa, r:"contains", t:a.id});
 for (const x of M.relations) if (byId.has(x.f) && byId.has(x.t)) rels.push(x);
+const STEPS = new Map();   // process id -> its steps in order
+for (const s of (M.steps || []).sort((a,b) => a.n - b.n)){
+  if (!byId.has(s.p)) continue;
+  if (!STEPS.has(s.p)) STEPS.set(s.p, []);
+  STEPS.get(s.p).push(s);
+  rels.push({f:s.p, r:"contains", t:s.id});
+  for (const d of s.writes || []) if (byId.has(d)) rels.push({f:s.id, r:"writes", t:d});
+  for (const d of s.reads || [])  if (byId.has(d)) rels.push({f:s.id, r:"reads", t:d});
+  for (const c of s.ctl || [])    if (byId.has(c)) rels.push({f:s.id, r:"applies", t:c});
+}
 const out = id => rels.filter(x => x.f === id), inn = id => rels.filter(x => x.t === id);
 const domainOf = id => { const n = byId.get(id); return !n ? null : n.kind === "domain" ? n.id : n.domain || null; };
 
@@ -340,8 +441,8 @@ const FACETS = [   // filters for the Attributes table. Add a line here to add a
   {key:"type",   label:"Data type",   get:a => a.type}
 ];
 const S = {tab:"map", sel:"D01", q:"", f:Object.fromEntries(FACETS.map(f => [f.key, new Set()])),
-           show:{system:true, process:true, control:true}, open:new Set(), hl:null};
-try { const t = localStorage.getItem("atlas.tab"); if (["map","table","schema"].includes(t)) S.tab = t; } catch (e) {}
+           show:{system:true, process:true, control:true}, open:new Set(), hl:null, bpmn:null};
+try { const t = localStorage.getItem("atlas.tab"); if (["map","proc","table","schema"].includes(t)) S.tab = t; } catch (e) {}
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
@@ -391,7 +492,7 @@ $("rail").addEventListener("click", e => {
 
 /* ---------- 4. Tabs ---------- */
 function renderTabs(){
-  const t = [["map","Map",""],["table","Attributes",attrsFiltered().length],["schema","How it's built",""]];
+  const t = [["map","Network",""],["proc","Process",STEPS.size],["table","Attributes",attrsFiltered().length],["schema","How it's built",""]];
   $("tabs").innerHTML = t.map(([k,l,n]) => `<button class="tab" role="tab" data-tab="${k}" aria-selected="${S.tab===k}">${l}${n!==""?`<span class="n">${n}</span>`:""}</button>`).join("");
   for (const [k] of t) $("view-" + k).hidden = S.tab !== k;
 }
@@ -423,7 +524,13 @@ function renderInsp(){
   if (n.kind === "attribute") h += `<dt>Domain</dt><dd>${link(n.domain)}</dd><dt>Subject area</dt><dd>${link(n.sa)}</dd>`;
   if (n.kind === "subjectArea") h += `<dt>Domain</dt><dd>${link(n.domain)}</dd>`;
   if (n.kind === "domain") h += `<dt>Attributes</dt><dd>${M.attributes.filter(a=>a.domain===n.id).length}</dd>`;
+  if (n.kind === "step"){
+    h += `<dt>Process</dt><dd>${link(n.p)}</dd><dt>Step</dt><dd>${n.n}</dd><dt>Lane</dt><dd>${esc(n.lane)}</dd>`;
+    if (byId.has(n.sys)) h += `<dt>System</dt><dd>${link(n.sys)}</dd>`;
+    if (n.gate) h += `<dt>Decision</dt><dd>${esc(n.gate.q)} If no: ${esc(n.gate.no)}</dd>`;
+  }
   h += `</dl>`;
+  if (n.kind === "step" && n.failure) h += `<h2>When the data is wrong</h2><p class="def fail">${esc(n.failure)}</p>`;
   const o = out(n.id).filter(x => !(n.kind === "domain" && x.r === "contains"));
   const i = inn(n.id).filter(x => x.r !== "contains");
   if (n.kind === "domain"){
@@ -431,7 +538,7 @@ function renderInsp(){
     const ctl = [...new Set(rels.filter(x => x.r==="governs" && domainOf(x.t)===n.id).map(x => x.f))];
     if (ctl.length) h += `<h2>Controls on its attributes</h2><ul class="rels">` + ctl.map(c => `<li><span class="r mono">${c}</span>${link(c)}</li>`).join("") + `</ul>`;
   }
-  if (o.length) h += `<h2>${n.kind==="subjectArea"?"Attributes":"Links out"}</h2><ul class="rels">` + o.map(x => `<li><span class="r">${esc(REL[x.r]||x.r)}</span>${link(x.t)}</li>`).join("") + `</ul>`;
+  if (o.length) h += `<h2>${n.kind==="subjectArea"?"Attributes":n.kind==="process"?"Steps and links":"Links out"}</h2><ul class="rels">` + o.map(x => `<li><span class="r">${esc(REL[x.r]||x.r)}</span>${link(x.t)}</li>`).join("") + `</ul>`;
   if (i.length) h += `<h2>Links in</h2><ul class="rels">` + i.map(x => `<li><span class="r">${esc(REL[x.r]||x.r)}</span>${link(x.f)}</li>`).join("") + `</ul>`;
   if (n.kind === "attribute"){
     const sys = rels.filter(x => x.t === n.domain && (x.r==="masters"||x.r==="consumes"));
@@ -625,8 +732,210 @@ const retheme = () => { readColors(); draw(); };
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", retheme);
 new MutationObserver(retheme).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
 
-/* ---------- 8. "How it's built" tab ---------- */
+/* ---------- 8. Process tab: step strips and BPMN 2.0 ---------- */
 let dl = null;
+// Save a file: the Claude viewer's downloads capability, or a normal browser download elsewhere (e.g. GitHub Pages).
+async function saveFile(filename, data, type){
+  if (dl) return (await dl.save({filename, data})).status === "saved" ? "Saved." : "";
+  if (window.claude) throw {message:"Downloads are not available in this view."};
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([data], {type}));
+  a.download = filename; document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  return "Downloaded.";
+}
+const short = id => nameOf(id).split(/[ /]/)[0];
+
+function renderProc(){
+  const focus = S.f.domain;
+  $("procnote").innerHTML = focus.size
+    ? `Highlighting steps that use ${[...focus].map(d => `<b>${esc(nameOf(d))}</b>`).join(" or ")}. Clear the Domain filter in the left rail to see all steps.`
+    : `Pick a domain in the left rail to highlight every step that uses it. Open <b>BPMN 2.0</b> on a process to see where each step writes or only reads master data.`;
+  $("proclist").innerHTML = M.processes.filter(p => STEPS.has(p.id)).map(p => {
+    const steps = STEPS.get(p.id);
+    const w = new Set(steps.flatMap(s => s.writes)), r = new Set(steps.flatMap(s => s.reads).filter(d => !w.has(d)));
+    const open = S.bpmn === p.id;
+    return `<article class="proc">
+      <div class="proc-hd">
+        <span class="proc-code">${esc(p.code)}</span>
+        <div class="proc-t"><h3><button class="link" data-go="${p.id}">${esc(p.name)}</button></h3><p>${esc(p.def)}</p>${p.value ? `<p class="value">Value at stake: ${esc(p.value)}</p>` : ""}</div>
+        <div class="tally"><span>${steps.length} steps</span><span>${w.size} domain${w.size===1?"":"s"} written</span><span>${r.size} only read</span>
+          <button class="bpmn-btn" type="button" data-bpmn="${p.id}" aria-expanded="${open}">${open ? "Hide BPMN" : "BPMN 2.0"}</button></div>
+      </div>
+      ${open ? bpmnFigure(p.id) : ""}
+      <div class="strip">${steps.map(s => {
+        const doms = [...new Set([...s.writes, ...s.reads])];
+        const cls = focus.size ? (doms.some(d => focus.has(d)) ? "hit" : "dim") : "";
+        return `<button class="step ${cls}" type="button" data-go="${s.id}" aria-pressed="${S.sel===s.id}">
+          <span class="no">${esc(p.code)} · step ${s.n}</span>
+          <span class="t">${esc(s.name)}</span>
+          <span class="lane">${esc(s.lane)} · ${esc(nameOf(s.sys))}</span>
+          <span class="doms">${s.writes.map(d => `<i class="w" title="Writes ${esc(nameOf(d))}">${esc(short(d))}</i>`).join("")}${s.reads.map(d => `<i title="Reads ${esc(nameOf(d))}">${esc(short(d))}</i>`).join("")}</span>
+          ${s.gate ? `<span class="gate">◇ ${esc(s.gate.q)}</span>` : ""}
+        </button>`;
+      }).join("")}</div>
+    </article>`;
+  }).join("") || `<div class="empty">No process has steps yet. Add records to <code>steps</code> in the model.</div>`;
+}
+$("proclist").addEventListener("click", async e => {
+  const t = e.target.closest("[data-bpmn]");
+  if (t){ S.bpmn = S.bpmn === t.dataset.bpmn ? null : t.dataset.bpmn; renderProc(); return; }
+  const x = e.target.closest("[data-bpmnxml]");
+  if (x){
+    const p = byId.get(x.dataset.bpmnxml), msg = $("bpmnmsg-" + p.id);
+    try { msg.textContent = await saveFile(p.code.toLowerCase() + "-" + p.name.toLowerCase().replace(/\W+/g, "-") + ".bpmn", bpmnXml(p.id), "application/xml"); }
+    catch (err) { msg.textContent = err.code === "cancelled" ? "" : "Download failed: " + (err.message || err.code); }
+  }
+});
+
+// One layout, used by both the SVG drawing and the BPMN DI in the exported file, so the file opens as drawn.
+const BG = {pool:30, laneHd:30, LH:160, taskW:124, taskH:56, taskCol:204, evCol:84, gwCol:100, ev:18, gw:25, obj:{w:24,h:30,gap:60}};
+function bpmnModel(pid){
+  const p = byId.get(pid), steps = STEPS.get(pid);
+  const lanes = [...new Set(steps.map(s => s.lane))];
+  const top = l => BG.pool > 0 ? 10 + lanes.indexOf(l) * BG.LH : 0;
+  const cy = l => top(l) + 20 + BG.taskH/2;
+  const nodes = [];
+  let x = 10 + BG.pool + BG.laneHd + 16;
+  const put = (n, col) => { n.cx = x + col/2; x += col; nodes.push(n); return n; };
+  put({type:"start", id:"Start_" + pid.replace(/\W/g,"_"), name:"Start", lane:steps[0].lane, cy:cy(steps[0].lane)}, BG.evCol);
+  const objs = [], extra = [];
+  for (const s of steps){
+    const sid = s.id.replace(/\W/g,"_");
+    const t = put({type:"task", id:"Task_" + sid, step:s, name:s.name, lane:s.lane, cy:cy(s.lane)}, BG.taskCol);
+    const doms = [...s.writes.map(d => [d,"w"]), ...s.reads.map(d => [d,"r"])];
+    doms.forEach(([d, mode], i) => objs.push({id:`DataRef_${sid}_${d}`, dom:d, mode, task:t,
+      cx: t.cx + (i - (doms.length - 1)/2) * BG.obj.gap, y: top(s.lane) + 92}));
+    if (s.gate){
+      const g = put({type:"gateway", id:"Gateway_" + sid, name:s.gate.q, lane:s.lane, cy:cy(s.lane)}, BG.gwCol);
+      extra.push({type:"end", id:"End_" + sid + "_no", name:s.gate.no, lane:s.lane, cx:g.cx, cy:top(s.lane) + 120, from:g});
+    }
+  }
+  put({type:"end", id:"End_" + pid.replace(/\W/g,"_"), name:"Done", lane:steps[steps.length-1].lane, cy:cy(steps[steps.length-1].lane)}, BG.evCol);
+  const W = x + 20, H = 10 + lanes.length * BG.LH + 10;
+  const half = n => n.type === "task" ? BG.taskW/2 : n.type === "gateway" ? BG.gw : BG.ev;
+  const flows = [];
+  for (let i = 1; i < nodes.length; i++){
+    const a = nodes[i-1], b = nodes[i], ax = a.cx + half(a), bx = b.cx - half(b);
+    const pts = a.cy === b.cy ? [[ax,a.cy],[bx,b.cy]] : [[ax,a.cy],[(ax+bx)/2,a.cy],[(ax+bx)/2,b.cy],[bx,b.cy]];
+    flows.push({id:`Flow_${a.id}_${b.id}`, a, b, pts, name: a.type === "gateway" ? "Yes" : ""});
+  }
+  for (const e of extra) flows.push({id:`Flow_${e.from.id}_no`, a:e.from, b:e, pts:[[e.from.cx, e.from.cy + BG.gw],[e.cx, e.cy - BG.ev]], name:"No"});
+  return {p, steps, lanes, top, nodes:nodes.concat(extra), flows, objs, W, H};
+}
+function bpmnSvg(m){
+  const o = [], X = 10, L0 = X + BG.pool;
+  o.push(`<svg class="bpmn" role="img" aria-label="BPMN 2.0 diagram of ${esc(m.p.name)}: ${m.steps.length} tasks in ${m.lanes.length} lanes" viewBox="0 0 ${m.W} ${m.H}" width="${m.W}" height="${m.H}" xmlns="http://www.w3.org/2000/svg">`);
+  o.push(`<defs><marker id="bp-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" class="bp-arrhead"/></marker>
+    <marker id="bp-arr-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" class="bp-arrhead w"/></marker>
+    <marker id="bp-arr-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" class="bp-arrhead r"/></marker></defs>`);
+  o.push(`<rect class="bp-pool" x="${X}" y="10" width="${m.W - 20}" height="${m.lanes.length * BG.LH}"/>`);
+  o.push(`<text class="bp-pooltxt" transform="translate(${X + 19} ${10 + m.lanes.length*BG.LH/2}) rotate(-90)" text-anchor="middle">${esc(m.p.name)} · Alder Street Supply</text>`);
+  m.lanes.forEach(l => {
+    const y = m.top(l);
+    o.push(`<rect class="bp-lane" x="${L0}" y="${y}" width="${m.W - 20 - BG.pool}" height="${BG.LH}"/>`);
+    o.push(`<text class="bp-lanetxt" transform="translate(${L0 + 19} ${y + BG.LH/2}) rotate(-90)" text-anchor="middle">${esc(l)}</text>`);
+    o.push(`<line class="bp-lane" x1="${L0 + BG.laneHd}" y1="${y}" x2="${L0 + BG.laneHd}" y2="${y + BG.LH}"/>`);
+  });
+  for (const f of m.flows){
+    o.push(`<polyline class="bp-seq" points="${f.pts.map(p => p.join(",")).join(" ")}" marker-end="url(#bp-arr)"/>`);
+    if (f.name){ const [x, y] = f.pts[0]; o.push(`<text class="bp-flowtxt" x="${x + (f.name === "No" ? 6 : 8)}" y="${y + (f.name === "No" ? 16 : -6)}">${f.name}</text>`); }
+  }
+  for (const d of m.objs){
+    const x = d.cx - BG.obj.w/2, y = d.y, w = BG.obj.w, h = BG.obj.h, t = d.task;
+    o.push(`<line class="bp-assoc ${d.mode}" x1="${d.mode==="w" ? t.cx : d.cx}" y1="${d.mode==="w" ? t.cy + BG.taskH/2 : y}" x2="${d.mode==="w" ? d.cx : t.cx}" y2="${d.mode==="w" ? y : t.cy + BG.taskH/2}" marker-end="url(#bp-arr-${d.mode})"/>`);
+    o.push(`<g class="bp-obj ${d.mode}"><title>${d.mode==="w" ? "Writes" : "Reads"} ${esc(nameOf(d.dom))}</title><path d="M${x} ${y}h${w-8}l8 8v${h-8}h${-w}Z M${x+w-8} ${y}v8h8"/>
+      <text class="bp-objtxt" x="${d.cx}" y="${y + h + 12}" text-anchor="middle">${esc(short(d.dom))}</text></g>`);
+  }
+  for (const n of m.nodes){
+    if (n.type === "task"){
+      const x = n.cx - BG.taskW/2, y = n.cy - BG.taskH/2, lines = wrap(n.name, 18);
+      o.push(`<g class="bp-task" data-go="${n.step.id}" tabindex="0" role="button" aria-pressed="${S.sel===n.step.id}"><rect x="${x}" y="${y}" width="${BG.taskW}" height="${BG.taskH}" rx="9"/>
+        <text class="bp-no" x="${x + 7}" y="${y + 13}">${n.step.n}</text>
+        ${lines.map((l, i) => `<text class="bp-t" x="${n.cx}" y="${n.cy + (i - (lines.length-1)/2) * 13 + 4}" text-anchor="middle">${esc(l)}</text>`).join("")}</g>`);
+    } else if (n.type === "gateway"){
+      const r = BG.gw;
+      o.push(`<g class="bp-gate"><path d="M${n.cx} ${n.cy-r}L${n.cx+r} ${n.cy}L${n.cx} ${n.cy+r}L${n.cx-r} ${n.cy}Z"/><path class="x" d="M${n.cx-7} ${n.cy-7}L${n.cx+7} ${n.cy+7}M${n.cx+7} ${n.cy-7}L${n.cx-7} ${n.cy+7}"/>
+        <text class="bp-gtxt" x="${n.cx}" y="${n.cy - r - 7}" text-anchor="middle">${esc(n.name)}</text></g>`);
+    } else {
+      const r = n.from ? 13 : BG.ev;
+      o.push(`<circle class="bp-event ${n.type}" cx="${n.cx}" cy="${n.cy}" r="${r}"/>`);
+      o.push(`<text class="bp-evtxt" x="${n.cx}" y="${n.cy + r + 13}" text-anchor="middle">${esc(n.name)}</text>`);
+    }
+  }
+  o.push(`</svg>`);
+  return o.join("");
+}
+function wrap(s, max){
+  const out = []; let line = "";
+  for (const w of s.split(" ")){ if ((line + " " + w).trim().length > max && line){ out.push(line); line = w; } else line = (line + " " + w).trim(); }
+  if (line) out.push(line);
+  return out.slice(0, 3);
+}
+function bpmnFigure(pid){
+  const m = bpmnModel(pid);
+  return `<figure class="bpmnfig">
+    <div class="bpmnbar"><span class="lg"><i class="sw-w"></i>writes master data</span><span class="lg"><i class="sw-r"></i>only reads</span>
+      <span class="grow"></span><span class="mono" id="bpmnmsg-${pid}"></span><button class="btn" type="button" data-bpmnxml="${pid}">Download .bpmn</button></div>
+    <div class="bpmnwrap">${bpmnSvg(m)}</div>
+    <figcaption>Pool: ${esc(m.p.name)}. One lane per team. Data objects under each task name the master data domain it writes (solid arrow into the object) or reads (dashed arrow into the task). Click a task to inspect it. The download is a BPMN 2.0 XML file with diagram layout. It opens in Camunda Modeler or at demo.bpmn.io.</figcaption>
+  </figure>`;
+}
+function bpmnXml(pid){
+  const m = bpmnModel(pid), x = s => esc(s), P = "Process_" + m.p.code, C = "Collab_" + m.p.code;
+  const laneId = l => "Lane_" + m.p.code + "_" + m.lanes.indexOf(l);
+  const incoming = id => m.flows.filter(f => f.b.id === id).map(f => `<bpmn:incoming>${f.id}</bpmn:incoming>`).join("");
+  const outgoing = id => m.flows.filter(f => f.a.id === id).map(f => `<bpmn:outgoing>${f.id}</bpmn:outgoing>`).join("");
+  const body = [];
+  body.push(`<bpmn:laneSet id="LaneSet_${m.p.code}">` + m.lanes.map(l => `<bpmn:lane id="${laneId(l)}" name="${x(l)}">` +
+    m.nodes.filter(n => n.lane === l).map(n => `<bpmn:flowNodeRef>${n.id}</bpmn:flowNodeRef>`).join("") + `</bpmn:lane>`).join("") + `</bpmn:laneSet>`);
+  for (const d of m.objs) body.push(`<bpmn:dataObject id="DataObject_${d.id.slice(8)}"/><bpmn:dataObjectReference id="${d.id}" name="${x(nameOf(d.dom))}" dataObjectRef="DataObject_${d.id.slice(8)}"/>`);
+  for (const n of m.nodes){
+    const io = incoming(n.id) + outgoing(n.id);
+    if (n.type === "start") body.push(`<bpmn:startEvent id="${n.id}" name="${x(n.name)}">${io}</bpmn:startEvent>`);
+    else if (n.type === "end") body.push(`<bpmn:endEvent id="${n.id}" name="${x(n.name)}">${io}</bpmn:endEvent>`);
+    else if (n.type === "gateway") body.push(`<bpmn:exclusiveGateway id="${n.id}" name="${x(n.name)}">${io}</bpmn:exclusiveGateway>`);
+    else {
+      const objs = m.objs.filter(d => d.task === n);
+      const reads = objs.filter(d => d.mode === "r"), writes = objs.filter(d => d.mode === "w");
+      body.push(`<bpmn:task id="${n.id}" name="${x(n.name)}"><bpmn:documentation>${x(n.step.def + " Failure when data is wrong: " + n.step.failure)}</bpmn:documentation>${io}` +
+        (reads.length ? `<bpmn:property id="Property_${n.id}" name="__targetRef_placeholder"/>` : "") +
+        reads.map(d => `<bpmn:dataInputAssociation id="Assoc_${d.id}"><bpmn:sourceRef>${d.id}</bpmn:sourceRef><bpmn:targetRef>Property_${n.id}</bpmn:targetRef></bpmn:dataInputAssociation>`).join("") +
+        writes.map(d => `<bpmn:dataOutputAssociation id="Assoc_${d.id}"><bpmn:targetRef>${d.id}</bpmn:targetRef></bpmn:dataOutputAssociation>`).join("") +
+        `</bpmn:task>`);
+    }
+  }
+  for (const f of m.flows) body.push(`<bpmn:sequenceFlow id="${f.id}"${f.name ? ` name="${f.name}"` : ""} sourceRef="${f.a.id}" targetRef="${f.b.id}"/>`);
+  const b = (id, X, Y, W, H, extra = "") => `<bpmndi:BPMNShape id="${id}_di" bpmnElement="${id}"${extra}><dc:Bounds x="${Math.round(X)}" y="${Math.round(Y)}" width="${Math.round(W)}" height="${Math.round(H)}"/></bpmndi:BPMNShape>`;
+  const wp = pts => pts.map(([px, py]) => `<di:waypoint x="${Math.round(px)}" y="${Math.round(py)}"/>`).join("");
+  const di = [];
+  di.push(b("Participant_" + m.p.code, 10, 10, m.W - 20, m.lanes.length * BG.LH, ` isHorizontal="true"`));
+  m.lanes.forEach(l => di.push(b(laneId(l), 10 + BG.pool, m.top(l), m.W - 20 - BG.pool, BG.LH, ` isHorizontal="true"`)));
+  for (const n of m.nodes){
+    if (n.type === "task") di.push(b(n.id, n.cx - BG.taskW/2, n.cy - BG.taskH/2, BG.taskW, BG.taskH));
+    else if (n.type === "gateway") di.push(b(n.id, n.cx - BG.gw, n.cy - BG.gw, BG.gw*2, BG.gw*2, ` isMarkerVisible="true"`));
+    else { const r = n.from ? 13 : BG.ev; di.push(b(n.id, n.cx - r, n.cy - r, r*2, r*2)); }
+  }
+  for (const d of m.objs) di.push(b(d.id, d.cx - BG.obj.w/2, d.y, BG.obj.w, BG.obj.h));
+  for (const f of m.flows) di.push(`<bpmndi:BPMNEdge id="${f.id}_di" bpmnElement="${f.id}">${wp(f.pts)}</bpmndi:BPMNEdge>`);
+  for (const d of m.objs){
+    const t = [d.task.cx, d.task.cy + BG.taskH/2], o = [d.cx, d.y];
+    di.push(`<bpmndi:BPMNEdge id="Assoc_${d.id}_di" bpmnElement="Assoc_${d.id}">${wp(d.mode === "w" ? [t, o] : [o, t])}</bpmndi:BPMNEdge>`);
+  }
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Defs_${m.p.code}" targetNamespace="https://example.com/master-data-atlas" exporter="Master Data Atlas" exporterVersion="3">
+<bpmn:collaboration id="${C}"><bpmn:participant id="Participant_${m.p.code}" name="${x(m.p.name)}" processRef="${P}"/></bpmn:collaboration>
+<bpmn:process id="${P}" name="${x(m.p.name)}" isExecutable="false">
+${body.join("\n")}
+</bpmn:process>
+<bpmndi:BPMNDiagram id="Diagram_${m.p.code}"><bpmndi:BPMNPlane id="Plane_${m.p.code}" bpmnElement="${C}">
+${di.join("\n")}
+</bpmndi:BPMNPlane></bpmndi:BPMNDiagram>
+</bpmn:definitions>
+`;
+}
+
+/* ---------- 9. "How it's built" tab ---------- */
 function renderSchema(){
   const counts = Object.entries(KINDS).map(([k,v]) => `<div class="box"><b><span class="sw" style="--kc:var(${v.color})"></span>${v.plural} <span class="mono" style="color:var(--ink-3)">${(M[v.list]||[]).length}</span></b><p>Stored in <code>${v.list}</code>.</p></div>`).join("");
   const rc = {}; for (const x of M.relations) rc[x.r] = (rc[x.r] || 0) + 1;
@@ -643,18 +952,19 @@ function renderSchema(){
     <ol><li>Download the model below and edit it, or ask Claude to rewrite it for your subject.</li>
       <li>Keep the ID pattern: domain <code>D01</code>, subject area <code>D01.01</code>, attribute <code>D01-A001</code>.</li>
       <li>Add a filter by adding one line to <code>FACETS</code> in the script.</li>
-      <li>Add a relation type by adding it to <code>REL</code> and using it in <code>relations</code>.</li></ol>
-    <div><button class="btn primary" id="dl" type="button" ${dl ? "" : "hidden"}>Download model JSON</button> <span id="dlmsg" class="mono" style="color:var(--ink-3)"></span></div>
+      <li>Add a relation type by adding it to <code>REL</code> and using it in <code>relations</code>.</li>
+      <li>Add a process flow by adding records to <code>steps</code>: process id, step number, lane, system, domains it <code>writes</code> and <code>reads</code>, and an optional <code>gate</code> decision. The Process tab and the BPMN 2.0 diagram and file are generated from them.</li></ol>
+    <div><button class="btn primary" id="dl" type="button" ${dl || !window.claude ? "" : "hidden"}>Download model JSON</button> <span id="dlmsg" class="mono" style="color:var(--ink-3)"></span></div>
   </div>`;
   const b = $("dl"); if (b) b.onclick = async () => {
     const data = JSON.stringify({meta:M.meta, domains:M.domains, subjectAreas:M.subjectAreas, attributes:M.attributes.map(({kind,domain,...a}) => a),
-      systems:M.systems, processes:M.processes, controls:M.controls, relations:M.relations}, (k, v) => k === "kind" && typeof v === "string" && KINDS[v] ? undefined : v, 1);
-    try { const r = await dl.save({filename:"master-data-model.json", data}); $("dlmsg").textContent = r.status === "saved" ? "Saved." : ""; }
+      systems:M.systems, processes:M.processes, controls:M.controls, relations:M.relations, steps:M.steps}, (k, v) => k === "kind" && typeof v === "string" && KINDS[v] ? undefined : v, 1);
+    try { $("dlmsg").textContent = await saveFile("master-data-model.json", data, "application/json"); }
     catch (e) { $("dlmsg").textContent = e.code === "cancelled" ? "" : "Download failed: " + (e.message || e.code); }
   };
 }
 
-/* ---------- 9. Ask: Claude answers, the page verifies every ID ---------- */
+/* ---------- 10. Ask: Claude answers, the page verifies every ID ---------- */
 const SUGS = ["Which systems hold restricted data?", "What protects supplier bank details?", "Which processes create master data?", "Where does the Location domain get used?"];
 $("sugs").innerHTML = SUGS.map(s => `<button class="sug" type="button">${esc(s)}</button>`).join("");
 $("sugs").addEventListener("click", e => { const b = e.target.closest(".sug"); if (b){ $("askq").value = b.textContent; ask(b.textContent); } });
@@ -667,6 +977,7 @@ function digest(){
   for (const s of M.systems) L.push(`${s.id} | system | ${s.name} (${s.hosting}) | ${s.def}`);
   for (const p of M.processes) L.push(`${p.id} | process | ${p.name} (${p.code}) | ${p.def}`);
   for (const c of M.controls) L.push(`${c.id} | control | ${c.name} (${c.category}) | ${c.def}`);
+  for (const s of (M.steps || [])) L.push(`${s.id} | step ${s.n} of ${s.p}, lane ${s.lane}, system ${s.sys} | ${s.name} | writes ${s.writes.join(",") || "none"}; reads ${s.reads.join(",") || "none"}; controls ${s.ctl.join(",") || "none"}${s.gate ? "; decision: " + s.gate.q + " no leads to " + s.gate.no : ""} | failure: ${s.failure}`);
   L.push("", "RELATIONS (from relation to):");
   for (const x of M.relations) L.push(`${x.f} ${x.r} ${x.t}`);
   return L.join("\n");
@@ -719,8 +1030,8 @@ ${q}`;
 $("askform").addEventListener("submit", e => { e.preventDefault(); ask($("askq").value); });
 $("askstop").onclick = () => ctl?.abort();
 
-/* ---------- 10. Boot ---------- */
-function renderAll(){ renderRail(); renderTabs(); renderTable(); renderInsp(); buildGraph(); draw(); }
+/* ---------- 11. Boot ---------- */
+function renderAll(){ renderRail(); renderTabs(); renderTable(); renderProc(); renderInsp(); buildGraph(); draw(); }
 readColors(); legend(); renderSchema(); renderAll();
 if (document.fonts) document.fonts.ready.then(draw);
 (async () => {

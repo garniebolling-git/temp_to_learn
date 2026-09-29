@@ -8,8 +8,8 @@ Status: done, next, planned.
 | 2 | Attributes table with filters | attributes | done (v1) |
 | 3 | Ask with ID verification | whole model | done (v1), untested in viewer |
 | 4 | How it's built | none | done (v1) |
-| 5 | Process: where bad data hurts | process steps linked to domains | next |
-| 6 | DQ rules: how to test | DQ rules linked to attributes | planned |
+| 5 | Process with BPMN 2.0 view and .bpmn export | `steps` linked to domains, systems, controls | done (v3) |
+| 6 | DQ rules: how to test | DQ rules linked to attributes | next |
 | 7 | Regulation with timeline | regulations linked to controls, attributes, dates | planned |
 | 8 | Catalogue: glossary and list view | glossary terms | planned |
 | 9 | Maturity self-assessment | questions, scores per domain, `db` capability | planned |

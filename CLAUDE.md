@@ -14,7 +14,9 @@ modeled on the architecture of a public example artifact. Built for education, n
 - Do not copy the original third-party artifact. Rebuild patterns in our own code. See `docs/decisions.md`.
 - All data is fictional example data (company: Alder Street Supply) until the owner supplies real data.
 - Data lives in the `<script id="model">` JSON block. Views are generated from it. Stable IDs:
-  domain `D01`, subject area `D01.01`, attribute `D01-A001`, system `S01`, process `P01`, control `C01`.
+  domain `D01`, subject area `D01.01`, attribute `D01-A001`, system `S01`, process `P01`, control `C01`,
+  process step `P01.1`.
+- BPMN: one layout (`BG`, `bpmnModel`) feeds both the SVG and the exported XML. Validate exports with bpmn-moddle.
 - Any Claude-powered feature must return IDs, and the page must drop IDs not found in the model.
 - Keep all page code inside one IIFE (avoids global name clashes with the viewer's scripts).
 
