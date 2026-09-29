@@ -4,19 +4,31 @@ Status: done, next, planned.
 
 | # | View | Data it needs | Status |
 |---|------|---------------|--------|
-| 1 | Map (network graph) | domains, subject areas, systems, processes, controls, relations | done (v1) |
-| 2 | Attributes table with filters | attributes | done (v1) |
+| 1 | Network (graph) | domains, subject areas, systems, processes, controls, relations | done (v1) |
+| 2 | Catalogue: table with filters | attributes | done (v1) |
 | 3 | Ask with ID verification | whole model | done (v1), untested in viewer |
 | 4 | How it's built | none | done (v1) |
-| 5 | Process with BPMN 2.0 view and .bpmn export | `steps` linked to domains, systems, controls | done (v3) |
-| 6 | DQ rules: how to test | DQ rules linked to attributes | next |
-| 7 | Regulation with timeline | regulations linked to controls, attributes, dates | planned |
-| 8 | Catalogue: glossary and list view | glossary terms | planned |
-| 9 | Maturity self-assessment | questions, scores per domain, `db` capability | planned |
-| 10 | Value case | value drivers linked to process steps | planned |
-| 11 | Roadmap view | delivery waves | planned |
+| 5 | Process with BPMN 2.0 view and .bpmn export | `steps` | done (v3) |
+| 6 | Start here | computed from all collections | done (v4) |
+| 7 | DQ rules with test queries and scores | `dq` | done (v4) |
+| 8 | Regulation with timeline | `regs` | done (v4) |
+| 9 | Catalogue: list by domain, glossary | `glossary` | done (v4) |
+| 10 | Current state matrix and findings | computed from `relations` | done (v4) |
+| 11 | Maturity heatmap, editable | `maturity` | done (v4), edits saved per browser only |
+| 12 | Value case calculator, editable | `vds` | done (v4), edits saved per browser only |
+| 13 | Roadmap waves (Gantt) | `waves` | done (v4) |
+
+## Next candidates
+- Shared maturity assessment: move edits from browser storage to the `db` capability so a team shares one assessment.
+- Lineage view: system-to-report paths per attribute.
+- Replace example data with a real subject.
+
+## Not built from the reference artifact
+- "Cockpit" and "By design" views: their purpose in the reference was not clear enough to rebuild without guessing.
+- Annual report intake (reads a customer's report with Claude): needs file upload; out of scope so far.
 
 ## Open questions
 - Ask on GitHub Pages (parked 2026-09-29). Ask works only in the Claude viewer. Options: (a) visitor pastes own Anthropic API key, stored in their browser; (b) server proxy such as a Cloudflare Worker holding the owner's key, with rate limits. Never put a key in the HTML or in GitHub Secrets injected into the page.
 - Replace fictional example data with a real subject? Owner to decide.
 - Share the artifact publicly? Ask spends each viewer's own Claude usage.
+- Regulation dates are short summaries for learning. Verify against official texts before any real use.

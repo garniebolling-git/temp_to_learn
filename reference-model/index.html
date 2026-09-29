@@ -7,7 +7,7 @@
 :root{
   --bg:#f2f3ef; --surface:#ffffff; --sunk:#e8eae4; --ink:#18212c; --ink-2:#465262; --ink-3:#7a8491;
   --rule:#d9dcd4; --rule-2:#c3c8bf; --accent:#0d6f5c; --accent-ink:#ffffff; --hl:#f0b429;
-  --k-domain:#2a56c0; --k-sa:#7890d4; --k-system:#0d7a64; --k-process:#b06400; --k-control:#b23658;
+  --k-domain:#2a56c0; --k-sa:#7890d4; --k-system:#0d7a64; --k-process:#b06400; --k-control:#b23658; --k-reg:#6a4bb0; --k-value:#3d7a3a;
   --s-public:#3d7a3a; --s-internal:#4a6bb0; --s-confidential:#b06400; --s-restricted:#b3243c;
   --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
   --f-body:"Public Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -16,12 +16,12 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#12171d; --surface:#1a2129; --sunk:#0e1318; --ink:#e6eaee; --ink-2:#aab4bf; --ink-3:#7c8793;
   --rule:#2a333d; --rule-2:#3a4552; --accent:#3fc2a3; --accent-ink:#08201a; --hl:#f5c451;
-  --k-domain:#6f95f2; --k-sa:#9fb2e8; --k-system:#3fc2a3; --k-process:#f0a340; --k-control:#ef6f92;
+  --k-domain:#6f95f2; --k-sa:#9fb2e8; --k-system:#3fc2a3; --k-process:#f0a340; --k-control:#ef6f92; --k-reg:#b7a0f2; --k-value:#7cc576;
   --s-public:#7cc576; --s-internal:#8aa6e8; --s-confidential:#f0a340; --s-restricted:#f26b80; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#12171d; --surface:#1a2129; --sunk:#0e1318; --ink:#e6eaee; --ink-2:#aab4bf; --ink-3:#7c8793;
   --rule:#2a333d; --rule-2:#3a4552; --accent:#3fc2a3; --accent-ink:#08201a; --hl:#f5c451;
-  --k-domain:#6f95f2; --k-sa:#9fb2e8; --k-system:#3fc2a3; --k-process:#f0a340; --k-control:#ef6f92;
+  --k-domain:#6f95f2; --k-sa:#9fb2e8; --k-system:#3fc2a3; --k-process:#f0a340; --k-control:#ef6f92; --k-reg:#b7a0f2; --k-value:#7cc576;
   --s-public:#7cc576; --s-internal:#8aa6e8; --s-confidential:#f0a340; --s-restricted:#f26b80; color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -62,7 +62,8 @@ header.top .sub{color:var(--ink-2);font-size:13px;max-width:70ch}
 .sw{width:10px;height:10px;display:inline-block;background:var(--kc)}
 .reset{margin-top:16px;background:none;border:0;padding:0;color:var(--accent);font-weight:600;font-size:13px}
 
-.tabs{display:flex;gap:2px;border-bottom:1px solid var(--rule);margin-bottom:12px}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--rule);margin-bottom:12px;overflow-x:auto;scrollbar-width:thin}
+.tab{white-space:nowrap;flex:none}
 .tab{background:none;border:0;border-bottom:2px solid transparent;padding:8px 12px;font-weight:600;color:var(--ink-2)}
 .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
 .tab .n{font:11px var(--f-mono);color:var(--ink-3);margin-left:4px}
@@ -170,6 +171,100 @@ td.def{white-space:normal;min-width:220px;color:var(--ink-2)}
 .bp-obj path{fill:var(--surface);stroke:var(--ink-3);stroke-width:1.1}
 .bp-obj.w path{stroke:var(--accent);stroke-width:1.6;fill:color-mix(in srgb,var(--accent) 14%,var(--surface))}
 .insp .fail{border-left:3px solid var(--s-restricted);padding-left:10px}
+.muted{color:var(--ink-3)}
+.small{font-size:12.5px}
+.grow{flex:1}
+.viewq{font:700 20px/1.25 var(--f-display);margin:2px 0 6px;text-wrap:balance}
+.sech{font:600 11px/1 var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin:22px 0 10px}
+.subtabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.subtab{border:1px solid var(--rule-2);background:var(--surface);border-radius:999px;padding:3px 12px;font-size:13px}
+.subtab[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.tree{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:10px 14px;display:grid;gap:6px}
+.tree summary{cursor:pointer;padding:4px 0}
+.tree ul{list-style:none;margin:2px 0 6px;padding-left:18px;border-left:1px solid var(--rule);display:grid;gap:3px}
+.tree li{font-size:13.5px}
+.gloss{display:grid;gap:10px;margin:0}
+.gloss > div{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:10px 14px}
+.gloss dt{font-weight:600}
+.gloss dd{margin:3px 0 0;color:var(--ink-2)}
+.refs{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:6px}
+.refs .rl{font:600 10.5px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);min-width:70px}
+.ref{cursor:pointer}
+.gap{font:12px var(--f-mono);color:var(--s-restricted)}
+.kpis{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
+.kpi{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:8px 12px;display:grid;gap:2px;min-width:120px}
+.kpi .k{font-size:12px;color:var(--ink-3)}
+.kpi .v{font:700 20px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.kpi .v small{font:12px var(--f-body);color:var(--ink-3)}
+.kpi.bad{border-color:var(--s-restricted)}
+.kpi.bad .v{color:var(--s-restricted)}
+.kpi.big{border-color:var(--k-value)}
+.kpi.big .v{color:var(--k-value);font-size:24px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.card2{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;min-width:0}
+.card2.dim,.matrix .dim{opacity:.35}
+.card2.hit{border-color:var(--hl);box-shadow:inset 0 0 0 1px var(--hl)}
+.c-hd{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.c-t{margin:8px 0 0;font-weight:500}
+.card2 p{margin:6px 0 0}
+.status{font:600 10.5px var(--f-mono);text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;border-radius:3px;margin-left:auto}
+.status.ok{color:var(--s-public);border:1px solid var(--s-public)}
+.status.bad{color:var(--s-restricted);border:1px solid var(--s-restricted)}
+.meter{position:relative;height:10px;background:var(--sunk);border-radius:5px;margin-top:10px}
+.meter i{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+.meter i.ok{background:var(--s-public)}
+.meter i.bad{background:var(--s-restricted)}
+.meter b{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+.meterlbl{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-3);margin-top:3px}
+pre.test{font:11.5px/1.45 var(--f-mono);background:var(--sunk);border-radius:6px;padding:8px 10px;white-space:pre-wrap;word-break:break-word;margin:10px 0 0;color:var(--ink-2)}
+.when{font-size:12px;color:var(--k-reg)}
+.tlwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:8px;margin-bottom:14px}
+.tl,.gantt{display:block;width:100%;min-width:720px;height:auto;font-family:var(--f-body)}
+.tl-axis{stroke:var(--ink-3);stroke-width:1.2}
+.tl-tick{stroke:var(--ink-3)}
+.tl-yr,.g-q{font:10.5px var(--f-mono);fill:var(--ink-3)}
+.tl-now{stroke:var(--hl);stroke-width:2;stroke-dasharray:4 3}
+.tl-nowtxt{font:600 10.5px var(--f-mono);fill:var(--ink-2)}
+.tl-ev{cursor:pointer}
+.tl-ev line{stroke:var(--k-reg);stroke-width:1;opacity:.6}
+.tl-ev circle{fill:var(--k-reg)}
+.tl-ev text{font:600 12px var(--f-body);fill:var(--ink)}
+.tl-ev.future circle{fill:var(--surface);stroke:var(--k-reg);stroke-width:2}
+.tl-ev.dim{opacity:.3}
+.matrix{font-size:13px}
+.matrix th{white-space:nowrap}
+.matrix td.m,.matrix td.w,.matrix td.c{text-align:center;font:600 12px var(--f-mono)}
+.matrix td.m{background:color-mix(in srgb,var(--k-system) 22%,transparent);color:var(--ink)}
+.matrix td.c{color:var(--ink-3)}
+.matrix td.w{background:color-mix(in srgb,var(--s-restricted) 20%,transparent);color:var(--s-restricted)}
+.findings{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.findings li{display:flex;gap:10px;align-items:flex-start;background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--s-confidential);border-radius:6px;padding:9px 12px;font-size:13.5px}
+.findings li.high{border-left-color:var(--s-restricted)}
+.findings .sev{font:600 10.5px var(--f-mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);min-width:52px;padding-top:2px}
+.findings .refs{margin-top:6px}
+.mat td.lv{background:color-mix(in srgb,var(--accent) var(--lv),var(--surface));white-space:nowrap}
+.mat select{font:600 13px var(--f-mono);background:var(--surface);border:1px solid var(--rule-2);border-radius:4px;padding:1px 2px}
+.mat small{font:11px var(--f-mono);color:var(--ink-2);margin-left:5px}
+.badtxt{color:var(--s-restricted);font-weight:600}
+.levels{margin:0;padding-left:22px;color:var(--ink-2);display:grid;gap:3px}
+.vform{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-top:10px}
+.vform label{display:grid;gap:2px;font-size:12px;font-weight:600}
+.vform label span{font-weight:400;color:var(--ink-3);font-size:11px;line-height:1.3}
+.vform input{width:100%;min-width:0;background:var(--bg);border:1px solid var(--rule-2);border-radius:5px;padding:5px 7px;font:13px var(--f-mono)}
+.g-col{fill:transparent}
+.g-col.alt{fill:var(--sunk)}
+.g-row{cursor:pointer}
+.g-name{font:600 12.5px var(--f-body);fill:var(--ink)}
+.g-bar{fill:color-mix(in srgb,var(--accent) 22%,var(--surface));stroke:var(--accent);stroke-width:1.2}
+.g-row:hover .g-bar{fill:color-mix(in srgb,var(--accent) 34%,var(--surface))}
+.g-val{font:11px var(--f-mono);fill:var(--ink)}
+.intro{max-width:80ch}
+.startgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:12px}
+.startcard{display:grid;gap:6px;align-content:start;text-align:left;background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:12px 14px}
+.startcard:hover{border-color:var(--accent)}
+.startcard .no{font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+.startcard .sq{font:700 16px/1.3 var(--f-display)}
+.startcard .sn{font-size:11.5px;color:var(--ink-3)}
 @media (max-width:640px){.proc-hd{grid-template-columns:minmax(0,1fr)}.tally{justify-items:start;text-align:left;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center}}
 
 @media (max-width:1000px){
@@ -202,7 +297,8 @@ td.def{white-space:normal;min-width:220px;color:var(--ink-2)}
   <aside class="rail" id="rail" aria-label="Filters"></aside>
   <main class="main">
     <div class="tabs" role="tablist" id="tabs"></div>
-    <div id="view-map" role="tabpanel">
+    <div id="view-start" role="tabpanel" hidden></div>
+    <div id="view-map" role="tabpanel" hidden>
       <div class="mapwrap">
         <canvas id="net" aria-label="Map of domains, systems, processes and controls"></canvas>
         <div class="mapbar"><button class="btn" id="fit" type="button">Fit</button><button class="btn" id="expall" type="button">Expand all</button></div>
@@ -214,7 +310,13 @@ td.def{white-space:normal;min-width:220px;color:var(--ink-2)}
       <p class="procnote" id="procnote"></p>
       <div id="proclist"></div>
     </div>
-    <div id="view-table" role="tabpanel" hidden><div class="tblwrap" id="tbl"></div></div>
+    <div id="view-table" role="tabpanel" hidden><div class="subtabs" id="catmode"></div><div id="catbody"><div class="tblwrap" id="tbl"></div></div></div>
+    <div id="view-dq" role="tabpanel" hidden></div>
+    <div id="view-reg" role="tabpanel" hidden></div>
+    <div id="view-cur" role="tabpanel" hidden></div>
+    <div id="view-mat" role="tabpanel" hidden></div>
+    <div id="view-val" role="tabpanel" hidden></div>
+    <div id="view-road" role="tabpanel" hidden></div>
     <div id="view-schema" role="tabpanel" hidden></div>
   </main>
   <aside class="insp" id="insp" aria-label="Inspector"></aside>
@@ -336,27 +438,55 @@ td.def{white-space:normal;min-width:220px;color:var(--ink-2)}
  {"id":"C08","name":"Payroll data segregation","category":"Security","def":"Salary and tax fields are visible only to payroll staff."}
 ],
 "relations":[
- {"f":"S01","r":"masters","t":"D01"},{"f":"S02","r":"consumes","t":"D01"},{"f":"S05","r":"consumes","t":"D01"},{"f":"S07","r":"consumes","t":"D01"},
- {"f":"S02","r":"masters","t":"D02"},{"f":"S04","r":"consumes","t":"D02"},{"f":"S05","r":"consumes","t":"D02"},{"f":"S07","r":"consumes","t":"D02"},
- {"f":"S02","r":"masters","t":"D03"},{"f":"S07","r":"consumes","t":"D03"},
- {"f":"S04","r":"masters","t":"D04"},{"f":"S02","r":"consumes","t":"D04"},{"f":"S06","r":"consumes","t":"D04"},{"f":"S03","r":"consumes","t":"D04"},
- {"f":"S03","r":"masters","t":"D05"},{"f":"S02","r":"consumes","t":"D05"},
- {"f":"S06","r":"masters","t":"D06"},{"f":"S02","r":"consumes","t":"D06"},{"f":"S07","r":"consumes","t":"D06"},
- {"f":"P01","r":"creates","t":"D01"},{"f":"P01","r":"reads","t":"D02"},{"f":"P01","r":"reads","t":"D04"},
- {"f":"P02","r":"creates","t":"D03"},{"f":"P02","r":"reads","t":"D02"},
- {"f":"P03","r":"creates","t":"D05"},{"f":"P03","r":"reads","t":"D04"},
- {"f":"P04","r":"reads","t":"D01"},{"f":"P04","r":"reads","t":"D03"},{"f":"P04","r":"updates","t":"D06"},
+ {"f":"S01","r":"masters","t":"D01"},
+ {"f":"S02","r":"consumes","t":"D01"},
+ {"f":"S05","r":"consumes","t":"D01"},
+ {"f":"S07","r":"consumes","t":"D01"},
+ {"f":"S02","r":"masters","t":"D02"},
+ {"f":"S04","r":"consumes","t":"D02"},
+ {"f":"S05","r":"consumes","t":"D02"},
+ {"f":"S07","r":"consumes","t":"D02"},
+ {"f":"S02","r":"masters","t":"D03"},
+ {"f":"S07","r":"consumes","t":"D03"},
+ {"f":"S04","r":"masters","t":"D04"},
+ {"f":"S02","r":"consumes","t":"D04"},
+ {"f":"S06","r":"consumes","t":"D04"},
+ {"f":"S03","r":"consumes","t":"D04"},
+ {"f":"S03","r":"masters","t":"D05"},
+ {"f":"S02","r":"consumes","t":"D05"},
+ {"f":"S06","r":"masters","t":"D06"},
+ {"f":"S02","r":"consumes","t":"D06"},
+ {"f":"S07","r":"consumes","t":"D06"},
+ {"f":"P01","r":"creates","t":"D01"},
+ {"f":"P01","r":"reads","t":"D02"},
+ {"f":"P01","r":"reads","t":"D04"},
+ {"f":"P02","r":"creates","t":"D03"},
+ {"f":"P02","r":"reads","t":"D02"},
+ {"f":"P03","r":"creates","t":"D05"},
+ {"f":"P03","r":"reads","t":"D04"},
+ {"f":"P04","r":"reads","t":"D01"},
+ {"f":"P04","r":"reads","t":"D03"},
+ {"f":"P04","r":"updates","t":"D06"},
  {"f":"P05","r":"creates","t":"D02"},
- {"f":"P06","r":"creates","t":"D06"},{"f":"P06","r":"reads","t":"D04"},
- {"f":"C01","r":"governs","t":"D01-A002"},{"f":"C01","r":"governs","t":"D01-A003"},
- {"f":"C02","r":"governs","t":"D01-A003"},{"f":"C02","r":"governs","t":"D03-A003"},
- {"f":"C03","r":"governs","t":"D01-A004"},{"f":"C03","r":"governs","t":"D01-A005"},{"f":"C03","r":"governs","t":"D05-A002"},{"f":"C03","r":"governs","t":"D05-A003"},
- {"f":"C04","r":"governs","t":"D03-A004"},{"f":"C04","r":"governs","t":"D05-A008"},
+ {"f":"P06","r":"creates","t":"D06"},
+ {"f":"P06","r":"reads","t":"D04"},
+ {"f":"C01","r":"governs","t":"D01-A002"},
+ {"f":"C01","r":"governs","t":"D01-A003"},
+ {"f":"C02","r":"governs","t":"D01-A003"},
+ {"f":"C02","r":"governs","t":"D03-A003"},
+ {"f":"C03","r":"governs","t":"D01-A004"},
+ {"f":"C03","r":"governs","t":"D01-A005"},
+ {"f":"C03","r":"governs","t":"D05-A002"},
+ {"f":"C03","r":"governs","t":"D05-A003"},
+ {"f":"C04","r":"governs","t":"D03-A004"},
+ {"f":"C04","r":"governs","t":"D05-A008"},
  {"f":"C05","r":"governs","t":"D02-A002"},
  {"f":"C06","r":"governs","t":"D01-A006"},
  {"f":"C07","r":"governs","t":"D03-A007"},
- {"f":"C08","r":"governs","t":"D05-A007"},{"f":"C08","r":"governs","t":"D05-A009"},
- {"f":"D06-A009","r":"references","t":"D04"}
+ {"f":"C08","r":"governs","t":"D05-A007"},
+ {"f":"C08","r":"governs","t":"D05-A009"},
+ {"f":"D06-A009","r":"references","t":"D04"},
+ {"f":"S05","r":"creates","t":"D01"}
 ],
 "steps":[
  {"id":"P01.1","p":"P01","n":1,"lane":"Sales","name":"Receive customer order","sys":"S05","reads":["D01","D02"],"writes":[],"ctl":[],"def":"The customer places an order in the web shop or through a sales rep.","failure":"An unknown customer or a discontinued SKU stops the order at entry."},
@@ -365,19 +495,94 @@ td.def{white-space:normal;min-width:220px;color:var(--ink-2)}
  {"id":"P01.4","p":"P01","n":4,"lane":"Warehouse","name":"Pick, pack and ship","sys":"S04","reads":["D02","D04"],"writes":[],"ctl":[],"def":"Stock is picked, packed and handed to the carrier.","failure":"A wrong weight or pack quantity breaks the carrier booking. A wrong address returns the parcel."},
  {"id":"P01.5","p":"P01","n":5,"lane":"Accounts receivable","name":"Issue invoice","sys":"S02","reads":["D01","D02"],"writes":[],"ctl":[],"def":"The invoice is generated from the delivery and sent to the customer.","failure":"A missing tax number makes the invoice non-compliant."},
  {"id":"P01.6","p":"P01","n":6,"lane":"Accounts receivable","name":"Collect cash","sys":"S02","reads":["D01"],"writes":[],"ctl":[],"def":"Incoming payments are matched to open invoices.","failure":"Mismatched payment terms cause disputes and late cash."},
-
  {"id":"P02.1","p":"P02","n":1,"lane":"Requester","name":"Raise purchase request","sys":"S02","reads":["D02","D04"],"writes":[],"ctl":[],"def":"A buyer or warehouse lead requests stock for a site.","failure":"A request against the wrong site sends stock to the wrong warehouse."},
  {"id":"P02.2","p":"P02","n":2,"lane":"Procurement","name":"Onboard supplier","sys":"S02","reads":[],"writes":["D03"],"ctl":["C02","C07"],"gate":{"q":"Supplier cleared?","no":"Supplier rejected"},"def":"New suppliers are created with tax, bank and screening data.","failure":"A supplier is paid before sanctions screening is complete."},
  {"id":"P02.3","p":"P02","n":3,"lane":"Procurement","name":"Issue purchase order","sys":"S02","reads":["D02","D03"],"writes":[],"ctl":[],"def":"The purchase order is sent with agreed prices and delivery dates.","failure":"An order to an inactive supplier record is never fulfilled."},
  {"id":"P02.4","p":"P02","n":4,"lane":"Warehouse","name":"Receive goods","sys":"S04","reads":["D02","D04"],"writes":[],"ctl":["C05"],"def":"Goods are scanned in against the purchase order.","failure":"A GTIN mismatch at the dock leaves stock unbooked."},
  {"id":"P02.5","p":"P02","n":5,"lane":"Accounts payable","name":"Match supplier invoice","sys":"S02","reads":["D02","D03"],"writes":[],"ctl":[],"def":"Invoice, purchase order and goods receipt are matched three ways.","failure":"Unit of measure differences block the match and delay payment."},
  {"id":"P02.6","p":"P02","n":6,"lane":"Accounts payable","name":"Pay supplier","sys":"S02","reads":["D03"],"writes":[],"ctl":["C04"],"def":"Approved invoices are paid in the weekly payment run.","failure":"Changed bank details send the payment to a fraudster."},
-
  {"id":"P04.1","p":"P04","n":1,"lane":"General ledger","name":"Post journals","sys":"S02","reads":["D01","D03"],"writes":[],"ctl":[],"def":"Sales, purchase and manual journals are posted to the ledger.","failure":"Postings to a duplicate customer split one balance in two."},
  {"id":"P04.2","p":"P04","n":2,"lane":"Asset accounting","name":"Run depreciation","sys":"S02","reads":[],"writes":["D06"],"ctl":[],"def":"Monthly depreciation is calculated and net book value updated.","failure":"A wrong depreciation method misstates the book value of equipment."},
  {"id":"P04.3","p":"P04","n":3,"lane":"General ledger","name":"Reconcile subledgers","sys":"S02","reads":["D01","D03","D06"],"writes":[],"ctl":[],"gate":{"q":"Balances agree?","no":"Escalate to controller"},"def":"Customer, supplier and asset subledgers are agreed to the ledger.","failure":"Duplicate or merged records leave differences no one can explain."},
  {"id":"P04.4","p":"P04","n":4,"lane":"Controlling","name":"Allocate costs","sys":"S02","reads":["D05"],"writes":[],"ctl":[],"def":"Payroll and overhead are charged to cost centres.","failure":"An employee on the wrong cost centre distorts department cost."},
  {"id":"P04.5","p":"P04","n":5,"lane":"Controlling","name":"Close period and report","sys":"S07","reads":["D01","D02","D03","D06"],"writes":[],"ctl":[],"def":"The period is locked and management reports are published.","failure":"Reports by customer segment or product category are wrong when the reference codes are wrong."}
+],
+"dq":[
+ {"id":"DQ01","dim":"Uniqueness","attrs":["D01-A002","D01-A003"],"ctl":["C01"],"steps":["P01.2","P04.1"],"threshold":99.5,"score":96.8,"def":"No two active customers share the same legal name and tax number.","test":"SELECT legal_name, tax_no FROM customer WHERE status = 'active' GROUP BY 1, 2 HAVING COUNT(*) > 1"},
+ {"id":"DQ02","dim":"Validity","attrs":["D01-A003"],"ctl":["C02"],"steps":["P01.5"],"threshold":99,"score":99.2,"def":"Customer tax numbers match the format of their country.","test":"SELECT id FROM customer WHERE NOT tax_no ~ country_tax_pattern(country)"},
+ {"id":"DQ03","dim":"Completeness","attrs":["D01-A004"],"ctl":[],"steps":["P01.1"],"threshold":98,"score":99.1,"def":"Every active customer has a primary email.","test":"SELECT id FROM customer WHERE status = 'active' AND primary_email IS NULL"},
+ {"id":"DQ04","dim":"Validity","attrs":["D01-A006"],"ctl":["C06"],"steps":[],"threshold":100,"score":92.0,"def":"Marketing consent set to yes always has the date it was given.","test":"SELECT id FROM customer WHERE marketing_consent = true AND consent_date IS NULL"},
+ {"id":"DQ05","dim":"Consistency","attrs":["D01-A007","D01-A008"],"ctl":[],"steps":["P01.3"],"threshold":99,"score":94.5,"def":"Every customer on credit terms has a credit limit.","test":"SELECT id FROM customer WHERE payment_terms <> 'PREPAID' AND credit_limit IS NULL"},
+ {"id":"DQ06","dim":"Validity","attrs":["D02-A002"],"ctl":["C05"],"steps":["P02.4"],"threshold":99.5,"score":99.7,"def":"Every GTIN has a correct check digit.","test":"SELECT sku FROM product WHERE gtin IS NOT NULL AND NOT gtin_check_digit_ok(gtin)"},
+ {"id":"DQ07","dim":"Completeness","attrs":["D02-A007","D02-A008"],"ctl":[],"steps":["P01.4"],"threshold":99,"score":95.2,"def":"Active products have a net weight and a pack quantity.","test":"SELECT sku FROM product WHERE lifecycle = 'active' AND (net_weight_kg IS NULL OR pack_qty IS NULL)"},
+ {"id":"DQ08","dim":"Completeness","attrs":["D02-A005","D02-A004"],"ctl":[],"steps":["P01.4"],"threshold":100,"score":98.9,"def":"Products in regulated categories have a hazard class.","test":"SELECT sku FROM product WHERE category IN (SELECT code FROM regulated_category) AND hazard_class IS NULL"},
+ {"id":"DQ09","dim":"Uniqueness","attrs":["D03-A004"],"ctl":["C04"],"steps":["P02.6"],"threshold":100,"score":100,"def":"No bank account (IBAN) is shared by two suppliers or by a supplier and an employee.","test":"SELECT iban FROM (SELECT iban FROM supplier UNION ALL SELECT bank_account FROM employee) t GROUP BY iban HAVING COUNT(*) > 1"},
+ {"id":"DQ10","dim":"Timeliness","attrs":["D03-A007"],"ctl":["C07"],"steps":["P02.2"],"threshold":100,"score":88.0,"def":"Every active supplier was screened against sanctions lists in the last 90 days.","test":"SELECT id FROM supplier WHERE status = 'active' AND screened_on < CURRENT_DATE - 90"},
+ {"id":"DQ11","dim":"Accuracy","attrs":["D04-A002","D04-A003"],"ctl":[],"steps":["P01.4"],"threshold":97,"score":93.6,"def":"Delivery addresses match the national postal reference file.","test":"SELECT id FROM location WHERE site_type = 'delivery point' AND NOT postal_file_match(street, postal_code, country)"},
+ {"id":"DQ12","dim":"Consistency","attrs":["D05-A005"],"ctl":[],"steps":["P04.4"],"threshold":99,"score":99.2,"def":"Every employee's cost centre exists and is open.","test":"SELECT e.id FROM employee e LEFT JOIN cost_centre c ON c.code = e.cost_centre WHERE c.code IS NULL OR c.closed"},
+ {"id":"DQ13","dim":"Consistency","attrs":["D06-A009"],"ctl":[],"steps":["P04.3"],"threshold":100,"score":97.1,"def":"Every asset points to a location that exists.","test":"SELECT a.tag FROM asset a LEFT JOIN location l ON l.id = a.location_id WHERE l.id IS NULL"},
+ {"id":"DQ14","dim":"Accuracy","attrs":["D06-A004","D06-A006"],"ctl":[],"steps":["P04.2"],"threshold":99.5,"score":99.6,"def":"Net book value equals cost minus accumulated depreciation.","test":"SELECT tag FROM asset WHERE ABS(net_book_value - (cost - accumulated_depr)) > 0.01"}
+],
+"regs":[
+ {"id":"R01","short":"GDPR","name":"General Data Protection Regulation (EU) 2016/679","cat":"Privacy","juris":"EU / EEA","date":"2018-05-25","when":"Applies since 25 May 2018","attrs":["D01-A004","D01-A005","D01-A006","D05-A002","D05-A003"],"ctl":["C03","C06"],"def":"Personal data must have a lawful basis, be kept to what is needed, and be protected."},
+ {"id":"R02","short":"ViDA","name":"EU VAT in the Digital Age package","cat":"Tax","juris":"EU","date":"2030-07-01","when":"E-invoicing and digital reporting for intra-EU B2B from 1 July 2030","attrs":["D01-A003","D03-A003","D01-A002"],"ctl":["C02"],"def":"Structured e-invoices with valid VAT numbers become mandatory for cross-border B2B trade in the EU."},
+ {"id":"R03","short":"EU sanctions","name":"Council Regulation (EU) No 833/2014 and related sanctions regulations","cat":"Trade","juris":"EU","date":"2014-08-01","when":"In force since 1 August 2014, amended repeatedly","attrs":["D03-A007","D03-A002","D03-A005"],"ctl":["C07"],"def":"No funds or goods may be made available to listed persons or entities."},
+ {"id":"R04","short":"CLP","name":"Regulation (EC) No 1272/2008 on classification, labelling and packaging","cat":"Product safety","juris":"EU","date":"2009-01-20","when":"In force since 20 January 2009","attrs":["D02-A005"],"ctl":[],"def":"Hazardous substances and mixtures must be classified and labelled."},
+ {"id":"R05","short":"IAS 16","name":"IAS 16 Property, Plant and Equipment","cat":"Financial reporting","juris":"IFRS reporters","date":"","when":"Accounting standard, no single start date","attrs":["D06-A003","D06-A004","D06-A005","D06-A006"],"ctl":[],"def":"Equipment is carried at cost less depreciation using a method that reflects its use."},
+ {"id":"R06","short":"Pay transparency","name":"Pay Transparency Directive (EU) 2023/970","cat":"Employment","juris":"EU","date":"2026-06-07","when":"Transposition deadline 7 June 2026","attrs":["D05-A004","D05-A007"],"ctl":["C08"],"def":"Employers must report pay gaps by category of worker and give pay information on request."},
+ {"id":"R07","short":"GS1 GTIN","name":"GS1 General Specifications (GTIN allocation)","cat":"Industry standard","juris":"Global","date":"","when":"Industry standard, updated yearly","attrs":["D02-A002"],"ctl":["C05"],"def":"Trade items carry a unique GTIN with a valid check digit."}
+],
+"glossary":[
+ {"id":"G01","term":"Master data","see":["D01","D02","D03"],"def":"The core records a business shares across processes: customers, products, suppliers, locations, employees, assets."},
+ {"id":"G02","term":"Golden record","see":["D01-A001","D03-A001"],"def":"The single trusted version of a record, built from all sources and used everywhere."},
+ {"id":"G03","term":"Data domain","see":["D01"],"def":"A group of master data about one kind of thing, with one owner."},
+ {"id":"G04","term":"Subject area","see":["D01.01"],"def":"A part of a domain that groups related attributes, such as Contact within Customer."},
+ {"id":"G05","term":"System of record","see":["S01","S02"],"def":"The one system where a record is created and changed. Other systems hold copies."},
+ {"id":"G06","term":"Reference data","see":["D01-A008","D04-A004"],"def":"Small code lists that classify other data, such as country codes or payment terms."},
+ {"id":"G07","term":"Data owner","see":["D01"],"def":"The business role accountable for a domain: who may change it and to what standard."},
+ {"id":"G08","term":"Data steward","see":["C01"],"def":"The person who fixes, approves and monitors records day to day."},
+ {"id":"G09","term":"Match and merge","see":["C01","DQ01"],"def":"Finding records that describe the same thing and combining them into one."},
+ {"id":"G10","term":"Survivorship","see":["G09"],"def":"The rule that decides which source value wins when records are merged."},
+ {"id":"G11","term":"Data quality dimension","see":["DQ01","DQ10"],"def":"A way to measure quality: completeness, validity, uniqueness, consistency, accuracy or timeliness."},
+ {"id":"G12","term":"Lineage","see":["S07"],"def":"The path a value takes from the system that created it to every report that uses it."}
+],
+"maturity":{
+ "levels":[
+  "Initial: ad hoc, depends on individuals",
+  "Repeatable: practices repeated but not written down",
+  "Defined: written standard applied in most places",
+  "Managed: measured and reviewed on a schedule",
+  "Optimised: improved continuously from the measurements"
+ ],
+ "dims":[
+  {"id":"M1","name":"Ownership","def":"A named owner and stewards decide changes."},
+  {"id":"M2","name":"Definitions","def":"Attributes have agreed definitions and formats."},
+  {"id":"M3","name":"Quality measurement","def":"Quality rules are measured and published."},
+  {"id":"M4","name":"Change process","def":"Create, change and retire follow a controlled workflow."},
+  {"id":"M5","name":"Integration","def":"Other systems receive changes from the master instead of re-keying."},
+  {"id":"M6","name":"Tooling","def":"Tools support matching, workflow and monitoring."}
+ ],
+ "scores":[
+  {"d":"D01","cur":[3,2,2,2,2,2],"tgt":[4,4,4,4,4,3]},
+  {"d":"D02","cur":[3,3,2,3,3,2],"tgt":[4,4,4,4,4,3]},
+  {"d":"D03","cur":[2,2,1,3,2,1],"tgt":[4,4,3,4,3,3]},
+  {"d":"D04","cur":[2,2,1,2,2,1],"tgt":[3,3,3,3,3,2]},
+  {"d":"D05","cur":[4,3,2,3,3,3],"tgt":[4,4,3,4,4,3]},
+  {"d":"D06","cur":[2,1,1,2,1,1],"tgt":[3,3,3,3,3,2]}
+ ]
+},
+"vds":[
+ {"id":"V01","name":"Fewer duplicate customers","steps":["P01.2","P04.1"],"doms":["D01"],"measure":"Duplicate rate of new customers","unit":"%","volume":12000,"volumeLabel":"new customers a year","base":6,"target":1,"unitValue":45,"unitValueLabel":"cost of one duplicate (rework, credit risk)","def":"Each duplicate costs rework in sales and finance and hides true credit exposure."},
+ {"id":"V02","name":"Fewer failed deliveries","steps":["P01.4"],"doms":["D02","D04"],"measure":"Failed delivery rate","unit":"%","volume":180000,"volumeLabel":"shipments a year","base":2.0,"target":0.6,"unitValue":38,"unitValueLabel":"cost of one failed delivery","def":"Wrong addresses and wrong weights cause returns, rebooking and lost orders."},
+ {"id":"V03","name":"Payment fraud avoided","steps":["P02.6"],"doms":["D03"],"measure":"Payments lost to bank detail fraud","unit":"%","volume":24000,"volumeLabel":"supplier payments a year","base":0.02,"target":0.002,"unitValue":25000,"unitValueLabel":"average loss per fraudulent payment","def":"Approval of bank detail changes stops most diversion fraud."},
+ {"id":"V04","name":"Fewer invoice match exceptions","steps":["P02.5"],"doms":["D02","D03"],"measure":"Invoices needing manual matching","unit":"%","volume":60000,"volumeLabel":"supplier invoices a year","base":12,"target":5,"unitValue":14,"unitValueLabel":"handling cost per exception","def":"Clean product and supplier data lets three-way match run without people."},
+ {"id":"V05","name":"Faster month-end close","steps":["P04.3","P04.5"],"doms":["D01","D03","D06"],"measure":"Working days to close","unit":"days","volume":12,"volumeLabel":"closes a year","base":6,"target":4,"unitValue":6500,"unitValueLabel":"finance team cost per close day","def":"Fewer unexplained subledger differences shorten every close."}
+],
+"waves":[
+ {"id":"W1","name":"Customer golden record","from":"2026-Q4","to":"2027-Q1","refs":["D01","C01","C02","C06","DQ01","DQ02","DQ04","P01.2","R01"],"vds":["V01"],"def":"One trusted customer record, created in the CRM only, with duplicate checks and consent tracking."},
+ {"id":"W2","name":"Safe supplier payments","from":"2027-Q1","to":"2027-Q2","refs":["D03","C04","C07","DQ09","DQ10","P02.2","P02.6","R03"],"vds":["V03","V04"],"def":"Supplier onboarding with screening, and approval of every bank detail change."},
+ {"id":"W3","name":"Product and location for fulfilment","from":"2027-Q2","to":"2027-Q4","refs":["D02","D04","C05","DQ06","DQ07","DQ08","DQ11","P01.4","R04","R07"],"vds":["V02"],"def":"Complete logistics attributes and validated addresses before goods move."},
+ {"id":"W4","name":"Assets, employees and close","from":"2027-Q4","to":"2028-Q2","refs":["D05","D06","DQ12","DQ13","DQ14","P04.3","R05","R06"],"vds":["V05"],"def":"Asset register tied to locations, clean cost centres, and a shorter close."}
 ]
 }
 </script>
@@ -398,7 +603,12 @@ const KINDS = {
   system:      {label:"System",       plural:"Systems",       list:"systems",      color:"--k-system"},
   process:     {label:"Process",      plural:"Processes",     list:"processes",    color:"--k-process"},
   control:     {label:"Control",      plural:"Controls",      list:"controls",     color:"--k-control"},
-  step:        {label:"Process step", plural:"Process steps", list:"steps",        color:"--k-process"}
+  step:        {label:"Process step", plural:"Process steps", list:"steps",        color:"--k-process"},
+  dq:          {label:"DQ rule",      plural:"DQ rules",      list:"dq",           color:"--k-control"},
+  reg:         {label:"Regulation",   plural:"Regulations",   list:"regs",         color:"--k-reg"},
+  term:        {label:"Glossary term",plural:"Glossary terms",list:"glossary",     color:"--k-sa"},
+  vd:          {label:"Value driver", plural:"Value drivers", list:"vds",          color:"--k-value"},
+  wave:        {label:"Roadmap wave", plural:"Roadmap waves", list:"waves",        color:"--accent"}
 };
 const REL = {
   masters:   "is the master of",
@@ -410,7 +620,15 @@ const REL = {
   references:"points to",
   contains:  "contains",
   writes:    "writes",
-  applies:   "applies"
+  applies:   "applies",
+  creates:   "creates",
+  checks:    "checks",
+  protects:  "protects",
+  tests:     "tests",
+  requires:  "requires",
+  explains:  "explains",
+  depends:   "depends on",
+  delivers:  "delivers"
 };
 const byId = new Map();
 for (const [kind, k] of Object.entries(KINDS)) for (const r of (M[k.list] || [])) byId.set(r.id, Object.assign(r, {kind}));
@@ -429,6 +647,12 @@ for (const s of (M.steps || []).sort((a,b) => a.n - b.n)){
   for (const d of s.reads || [])  if (byId.has(d)) rels.push({f:s.id, r:"reads", t:d});
   for (const c of s.ctl || [])    if (byId.has(c)) rels.push({f:s.id, r:"applies", t:c});
 }
+const link1 = (f, r, list) => { for (const t of list || []) if (byId.has(t)) rels.push({f, r, t}); };
+for (const q of M.dq || [])       { link1(q.id, "checks", q.attrs); link1(q.id, "tests", q.ctl); link1(q.id, "protects", q.steps); }
+for (const g of M.regs || [])     { link1(g.id, "requires", g.attrs); link1(g.id, "requires", g.ctl); }
+for (const g of M.glossary || []) link1(g.id, "explains", g.see);
+for (const v of M.vds || [])      { link1(v.id, "depends", v.steps); link1(v.id, "depends", v.doms); }
+for (const w of M.waves || [])    { link1(w.id, "delivers", w.refs); link1(w.id, "delivers", w.vds); }
 const out = id => rels.filter(x => x.f === id), inn = id => rels.filter(x => x.t === id);
 const domainOf = id => { const n = byId.get(id); return !n ? null : n.kind === "domain" ? n.id : n.domain || null; };
 
@@ -441,12 +665,20 @@ const FACETS = [   // filters for the Attributes table. Add a line here to add a
   {key:"type",   label:"Data type",   get:a => a.type}
 ];
 const S = {tab:"map", sel:"D01", q:"", f:Object.fromEntries(FACETS.map(f => [f.key, new Set()])),
-           show:{system:true, process:true, control:true}, open:new Set(), hl:null, bpmn:null};
-try { const t = localStorage.getItem("atlas.tab"); if (["map","proc","table","schema"].includes(t)) S.tab = t; } catch (e) {}
+           show:{system:true, process:true, control:true}, open:new Set(), hl:null, bpmn:null, cat:"table"};
+S.tab = "start";
+const TABS = [["start","Start here"],["map","Network"],["proc","Process"],["table","Catalogue"],["dq","DQ rules"],["reg","Regulation"],
+              ["cur","Current state"],["mat","Maturity"],["val","Value case"],["road","Roadmap"],["schema","How it's built"]];
+const store = {   // per-viewer browser storage; the page works the same without it
+  get(k, fb){ try { const v = JSON.parse(localStorage.getItem("atlas." + k)); return v ?? fb; } catch (e) { return fb; } },
+  set(k, v){ try { localStorage.setItem("atlas." + k, JSON.stringify(v)); } catch (e) {} },
+  del(k){ try { localStorage.removeItem("atlas." + k); } catch (e) {} }
+};
+{ const t = store.get("tab2", null); if (TABS.some(x => x[0] === t)) S.tab = t; }
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-const nameOf = id => byId.get(id)?.name || id;
+const nameOf = id => { const n = byId.get(id); return !n ? id : n.kind === "reg" ? n.short : n.name || n.term || id; };
 const sensColor = s => "var(--s-" + String(s).toLowerCase() + ")";
 const link = id => `<button class="link" data-go="${esc(id)}">${esc(nameOf(id))}</button>`;
 
@@ -492,18 +724,26 @@ $("rail").addEventListener("click", e => {
 
 /* ---------- 4. Tabs ---------- */
 function renderTabs(){
-  const t = [["map","Network",""],["proc","Process",STEPS.size],["table","Attributes",attrsFiltered().length],["schema","How it's built",""]];
-  $("tabs").innerHTML = t.map(([k,l,n]) => `<button class="tab" role="tab" data-tab="${k}" aria-selected="${S.tab===k}">${l}${n!==""?`<span class="n">${n}</span>`:""}</button>`).join("");
-  for (const [k] of t) $("view-" + k).hidden = S.tab !== k;
+  const n = {proc:STEPS.size, table:attrsFiltered().length, dq:(M.dq||[]).length, reg:(M.regs||[]).length, road:(M.waves||[]).length};
+  $("tabs").innerHTML = TABS.map(([k,l]) => `<button class="tab" role="tab" data-tab="${k}" aria-selected="${S.tab===k}">${l}${n[k]!=null?`<span class="n">${n[k]}</span>`:""}</button>`).join("");
+  for (const [k] of TABS) $("view-" + k).hidden = S.tab !== k;
+}
+function goTab(k){
+  S.tab = k; store.set("tab2", k);
+  renderTabs(); if (k === "map") resize();
+  $("tabs").querySelector(`[data-tab="${k}"]`)?.scrollIntoView({block:"nearest", inline:"nearest"});
 }
 $("tabs").addEventListener("click", e => {
-  const b = e.target.closest("[data-tab]"); if (!b) return;
-  S.tab = b.dataset.tab; try { localStorage.setItem("atlas.tab", S.tab); } catch (e) {}
-  renderTabs(); if (S.tab === "map") { resize(); } else if (S.tab === "table") renderTable();
+  const b = e.target.closest("[data-tab]"); if (b) goTab(b.dataset.tab);
 });
 
 /* ---------- 5. Attributes table ---------- */
 function renderTable(){
+  const modes = [["table","Table"],["list","List by domain"],["gloss","Glossary"]];
+  $("catmode").innerHTML = modes.map(([k,l]) => `<button class="subtab" type="button" data-cat="${k}" aria-pressed="${S.cat===k}">${l}</button>`).join("");
+  if (S.cat === "list"){ $("catbody").innerHTML = catList(); return; }
+  if (S.cat === "gloss"){ $("catbody").innerHTML = catGloss(); return; }
+  $("catbody").innerHTML = `<div class="tblwrap" id="tbl"></div>`;
   const rows = attrsFiltered();
   if (!rows.length){ $("tbl").innerHTML = `<div class="empty">No attributes match these filters. Use "Reset all filters" in the left rail.</div>`; return; }
   $("tbl").innerHTML = `<table><thead><tr><th>ID</th><th>Attribute</th><th>Domain</th><th>Subject area</th><th>Type</th><th>Obligation</th><th>MDM role</th><th>Sensitivity</th><th>Controls</th><th>Definition</th></tr></thead><tbody>` +
@@ -518,8 +758,10 @@ function renderInsp(){
   const n = byId.get(S.sel);
   if (!n){ $("insp").innerHTML = `<div class="card"><p class="def">Click anything on the map or in the table to see its details here.</p></div>`; return; }
   const k = KINDS[n.kind];
-  let h = `<div class="card"><div class="kind" style="--kc:var(${k.color})">${k.label} · <span class="mono">${esc(n.id)}</span></div><h3>${esc(n.name)}</h3><p class="def">${esc(n.def)}</p><dl>`;
-  const fields = {owner:"Owner", code:"Code", hosting:"Hosting", category:"Category", type:"Data type", obl:"Obligation", role:"MDM role", sens:"Sensitivity"};
+  let h = `<div class="card"><div class="kind" style="--kc:var(${k.color})">${k.label} · <span class="mono">${esc(n.id)}</span></div><h3>${esc(nameOf(n.id))}</h3><p class="def">${esc(n.def)}</p><dl>`;
+  if (n.kind === "reg") h += `<dt>Full name</dt><dd>${esc(n.name)}</dd>`;
+  const fields = {owner:"Owner", code:"Code", hosting:"Hosting", category:"Category", type:"Data type", obl:"Obligation", role:"MDM role", sens:"Sensitivity",
+    dim:"Dimension", threshold:"Threshold %", score:"Measured %", cat:"Category", juris:"Jurisdiction", when:"When", measure:"Measure", from:"From", to:"To"};
   for (const [f,l] of Object.entries(fields)) if (l && n[f] != null) h += `<dt>${l}</dt><dd>${f==="sens"?`<span class="pill" style="--pc:${sensColor(n[f])}">${esc(n[f])}</span>`:esc(n[f])}</dd>`;
   if (n.kind === "attribute") h += `<dt>Domain</dt><dd>${link(n.domain)}</dd><dt>Subject area</dt><dd>${link(n.sa)}</dd>`;
   if (n.kind === "subjectArea") h += `<dt>Domain</dt><dd>${link(n.domain)}</dd>`;
@@ -531,6 +773,8 @@ function renderInsp(){
   }
   h += `</dl>`;
   if (n.kind === "step" && n.failure) h += `<h2>When the data is wrong</h2><p class="def fail">${esc(n.failure)}</p>`;
+  if (n.kind === "dq") h += `<h2>Test</h2><pre class="test">${esc(n.test)}</pre><p class="def">Status: ${n.score >= n.threshold ? "meets threshold" : `below threshold by ${(n.threshold - n.score).toFixed(1)} points`}</p>`;
+  if (n.kind === "vd") h += `<h2>Value a year</h2><p class="def"><b>${money(vdValue(n))}</b> = ${fmtN(vdIn(n).volume)} ${esc(n.volumeLabel)} × (${vdIn(n).base} − ${vdIn(n).target}${n.unit === "%" ? " %" : " " + esc(n.unit)}) × ${money(vdIn(n).unitValue)}</p>`;
   const o = out(n.id).filter(x => !(n.kind === "domain" && x.r === "contains"));
   const i = inn(n.id).filter(x => x.r !== "contains");
   if (n.kind === "domain"){
@@ -546,7 +790,10 @@ function renderInsp(){
   }
   $("insp").innerHTML = h + `</div>`;
 }
-document.addEventListener("click", e => { const b = e.target.closest("[data-go]"); if (b) select(b.dataset.go); });
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-tabgo]"); if (t){ goTab(t.dataset.tabgo); return; }
+  const b = e.target.closest("[data-go]"); if (b) select(b.dataset.go);
+});
 
 /* ---------- 7. Map: a small force layout drawn on canvas ---------- */
 const cv = $("net"), ctx = cv.getContext("2d");
@@ -935,7 +1182,220 @@ ${di.join("\n")}
 `;
 }
 
-/* ---------- 9. "How it's built" tab ---------- */
+/* ---------- 9. Catalogue modes, DQ, Regulation, Current state, Maturity, Value case, Roadmap, Start ---------- */
+$("catmode").addEventListener("click", e => { const b = e.target.closest("[data-cat]"); if (b){ S.cat = b.dataset.cat; renderTable(); } });
+const dupAttr = (() => { const c = {}; M.attributes.forEach(a => c[a.name] = (c[a.name] || 0) + 1); return new Set(Object.keys(c).filter(k => c[k] > 1)); })();
+const chipName = id => { const n = byId.get(id); return n.kind === "attribute" && dupAttr.has(n.name) ? `${nameOf(n.domain)}: ${n.name}` : n.kind === "dq" ? `${n.id} ${n.dim}` : nameOf(id); };
+const chip = id => byId.has(id) ? `<button class="ref" type="button" data-go="${esc(id)}" style="--kc:var(${KINDS[byId.get(id).kind].color})">${esc(chipName(id))}</button>` : "";
+const domFocus = ids => { const f = S.f.domain; if (!f.size) return ""; return ids.some(id => f.has(domainOf(id) || id)) ? "hit" : "dim"; };
+const fmtN = n => Number(n).toLocaleString("en-GB", {maximumFractionDigits:3});
+const money = n => "€" + Math.round(n).toLocaleString("en-GB");
+
+function catList(){
+  const attrs = new Set(attrsFiltered().map(a => a.id));
+  const inner = M.domains.map(d => {
+    const sas = M.subjectAreas.filter(s => s.domain === d.id).map(s => {
+      const as = M.attributes.filter(a => a.sa === s.id && attrs.has(a.id));
+      return as.length ? `<li><button class="link" data-go="${s.id}">${esc(s.name)}</button> <span class="mono muted">${s.id}</span><ul>` +
+        as.map(a => `<li><button class="link" data-go="${a.id}">${esc(a.name)}</button> <span class="mono muted">${a.id} · ${esc(a.type)}</span> <span class="pill" style="--pc:${sensColor(a.sens)}">${esc(a.sens)}</span></li>`).join("") + `</ul></li>` : "";
+    }).join("");
+    return sas ? `<details open><summary><b>${esc(d.name)}</b> <span class="mono muted">${d.id} · owner ${esc(d.owner)}</span></summary><ul>${sas}</ul></details>` : "";
+  }).join("");
+  return inner ? `<div class="tree">${inner}</div>` : `<div class="empty">No attributes match these filters. Use "Reset all filters" in the left rail.</div>`;
+}
+function catGloss(){
+  const q = S.q.toLowerCase();
+  const terms = (M.glossary || []).filter(g => !q || (g.term + " " + g.def).toLowerCase().includes(q)).sort((a,b) => a.term.localeCompare(b.term));
+  return `<dl class="gloss">` + terms.map(g => `<div><dt><button class="link" data-go="${g.id}">${esc(g.term)}</button></dt><dd>${esc(g.def)}<div class="refs">${g.see.map(chip).join("")}</div></dd></div>`).join("") + `</dl>`;
+}
+
+function renderDQ(){
+  const rules = M.dq || [];
+  const pass = r => r.score >= r.threshold;
+  const dims = [...new Set(rules.map(r => r.dim))];
+  const summary = dims.map(d => { const rs = rules.filter(r => r.dim === d), p = rs.filter(pass).length;
+    return `<div class="kpi"><span class="k">${esc(d)}</span><span class="v">${p}<small> of ${rs.length} pass</small></span></div>`; }).join("");
+  $("view-dq").innerHTML = `<p class="viewq">How would we actually test it?</p>
+    <p class="procnote">Each rule states what good data looks like, the attributes it checks, a test query, the pass threshold and the latest measured score (example numbers). Pick a domain in the left rail to highlight its rules.</p>
+    <div class="kpis">${summary}<div class="kpi bad"><span class="k">Below threshold</span><span class="v">${rules.filter(r => !pass(r)).length}<small> of ${rules.length}</small></span></div></div>
+    <div class="cards">` + rules.map(r => {
+      const ok = pass(r), lo = Math.min(80, Math.floor(Math.min(r.score, r.threshold)) - 2), pct = v => ((v - lo) / (100 - lo) * 100).toFixed(1);
+      return `<article class="card2 ${domFocus(r.attrs)}">
+        <div class="c-hd"><button class="link mono" data-go="${r.id}">${r.id}</button><span class="pill">${esc(r.dim)}</span><span class="status ${ok ? "ok" : "bad"}">${ok ? "Meets threshold" : "Below threshold"}</span></div>
+        <p class="c-t">${esc(r.def)}</p>
+        <div class="meter" role="img" aria-label="Measured ${r.score}% against threshold ${r.threshold}%"><i class="${ok ? "ok" : "bad"}" style="width:${pct(r.score)}%"></i><b style="left:${pct(r.threshold)}%"></b></div>
+        <div class="meterlbl mono"><span>${lo}%</span><span>measured ${r.score}% · threshold ${r.threshold}%</span><span>100%</span></div>
+        <pre class="test">${esc(r.test)}</pre>
+        <div class="refs"><span class="rl">Checks</span>${r.attrs.map(chip).join("")}</div>
+        ${r.ctl.length || r.steps.length ? `<div class="refs"><span class="rl">Protects</span>${r.ctl.map(chip).join("")}${r.steps.map(chip).join("")}</div>` : ""}
+      </article>`;
+    }).join("") + `</div>`;
+}
+
+function renderReg(){
+  const regs = M.regs || [];
+  const dated = regs.filter(r => r.date).sort((a,b) => a.date.localeCompare(b.date));
+  const y0 = 2008, y1 = 2032, W = 900, H = 60 + 3 * 34, X = y => 20 + (y - y0) / (y1 - y0) * (W - 40);
+  const yr = d => { const t = new Date(d + "T00:00:00Z"); return t.getUTCFullYear() + (t.getUTCMonth() * 30.4 + t.getUTCDate()) / 365; };
+  const now = new Date(), nowY = now.getFullYear() + (now.getMonth() * 30.4 + now.getDate()) / 365;
+  let svg = `<svg class="tl" viewBox="0 0 ${W} ${H}" role="img" aria-label="Timeline of ${dated.length} dated regulations from ${y0} to ${y1}">`;
+  svg += `<line class="tl-axis" x1="20" y1="${H-28}" x2="${W-20}" y2="${H-28}"/>`;
+  for (let y = y0; y <= y1; y += 2) svg += `<line class="tl-tick" x1="${X(y)}" y1="${H-32}" x2="${X(y)}" y2="${H-24}"/><text class="tl-yr" x="${X(y)}" y="${H-8}" text-anchor="middle">${y}</text>`;
+  svg += `<line class="tl-now" x1="${X(nowY)}" y1="14" x2="${X(nowY)}" y2="${H-28}"/><text class="tl-nowtxt" x="${X(nowY) + 5}" y="22">today</text>`;
+  dated.forEach((r, i) => {
+    const x = X(yr(r.date)), y = 44 + (i % 3) * 34, future = yr(r.date) > nowY;
+    svg += `<g class="tl-ev ${future ? "future" : ""} ${domFocus(r.attrs)}" data-go="${r.id}" role="button" tabindex="0"><line x1="${x}" y1="${y + 6}" x2="${x}" y2="${H-28}"/><circle cx="${x}" cy="${H-28}" r="5"/>
+      <text x="${x}" y="${y}" text-anchor="${x > W - 120 ? "end" : x < 120 ? "start" : "middle"}">${esc(r.short)} · ${r.date.slice(0,4)}</text></g>`;
+  });
+  svg += `</svg>`;
+  $("view-reg").innerHTML = `<p class="viewq">What forces this, and by when?</p>
+    <p class="procnote">Laws and standards that set requirements on the example company's master data, linked to the attributes and controls they affect. Dates are short summaries for learning. Check the official text before relying on any date.</p>
+    <div class="tlwrap">${svg}</div>
+    <div class="cards">` + regs.map(r => `<article class="card2 ${domFocus(r.attrs)}">
+        <div class="c-hd"><button class="link" data-go="${r.id}"><b>${esc(r.short)}</b></button><span class="pill" style="--pc:var(--k-reg)">${esc(r.cat)}</span><span class="mono muted">${esc(r.juris)}</span></div>
+        <p class="c-t">${esc(r.name)}</p><p class="muted small">${esc(r.def)}</p>
+        <p class="when mono">${esc(r.when)}</p>
+        <div class="refs"><span class="rl">Affects</span>${r.attrs.map(chip).join("")}</div>
+        ${r.ctl.length ? `<div class="refs"><span class="rl">Met by</span>${r.ctl.map(chip).join("")}</div>` : `<div class="refs"><span class="rl">Met by</span><span class="gap">No control yet</span></div>`}
+      </article>`).join("") + `</div>`;
+}
+
+function curFindings(){
+  const out = [];
+  for (const d of M.domains){
+    const masters = rels.filter(x => x.t === d.id && x.r === "masters").map(x => x.f);
+    const creators = rels.filter(x => x.t === d.id && x.r === "creates" && byId.get(x.f)?.kind === "system").map(x => x.f);
+    if (masters.length !== 1) out.push({sev:"high", ids:[d.id, ...masters], text:`${d.name} has ${masters.length} master systems. A domain needs exactly one system of record.`});
+    if (creators.length) out.push({sev:"high", ids:[d.id, ...creators, ...masters], text:`${d.name} records are created in ${creators.map(nameOf).join(", ")} as well as in the master ${masters.map(nameOf).join(", ")}. Duplicates start here.`});
+    const restricted = M.attributes.filter(a => a.domain === d.id && a.sens === "Restricted");
+    const copies = rels.filter(x => x.t === d.id && x.r === "consumes").map(x => x.f);
+    if (restricted.length && copies.length) out.push({sev:"medium", ids:[d.id, ...copies], text:`${d.name} has ${restricted.length} restricted attribute${restricted.length === 1 ? "" : "s"} (${restricted.map(a => a.name).join(", ")}). ${copies.length} other system${copies.length === 1 ? " holds" : "s hold"} a copy: ${copies.map(nameOf).join(", ")}.`});
+  }
+  return out;
+}
+function renderCur(){
+  const cell = (s, d) => {
+    const r = rels.filter(x => x.f === s && x.t === d).map(x => x.r);
+    if (r.includes("masters")) return `<td class="m" title="${esc(nameOf(s))} is the master of ${esc(nameOf(d))}">M</td>`;
+    if (r.includes("creates")) return `<td class="w" title="${esc(nameOf(s))} creates ${esc(nameOf(d))} records without being the master">W</td>`;
+    if (r.includes("consumes")) return `<td class="c" title="${esc(nameOf(s))} uses a copy of ${esc(nameOf(d))}">C</td>`;
+    return `<td></td>`;
+  };
+  const f = curFindings();
+  $("view-cur").innerHTML = `<p class="viewq">Who owns what today?</p>
+    <p class="procnote">Each row is a system, each column a domain. <b>M</b> is the system of record, <b>C</b> holds a copy, <b>W</b> creates records without being the master.</p>
+    <div class="tblwrap"><table class="matrix"><thead><tr><th>System</th><th>Hosting</th>${M.domains.map(d => `<th class="${domFocus([d.id])}"><button class="link" data-go="${d.id}">${esc(d.name)}</button></th>`).join("")}</tr></thead><tbody>` +
+    M.systems.map(s => `<tr><td><button class="link" data-go="${s.id}">${esc(s.name)}</button></td><td class="muted">${esc(s.hosting)}</td>${M.domains.map(d => cell(s.id, d.id)).join("")}</tr>`).join("") +
+    `</tbody></table></div>
+    <h2 class="sech">Findings <span class="mono muted">${f.length}</span></h2>
+    <ul class="findings">${f.map(x => `<li class="${x.sev}"><span class="sev">${x.sev}</span><span>${esc(x.text)}<span class="refs">${[...new Set(x.ids)].map(chip).join("")}</span></span></li>`).join("") || "<li>No findings.</li>"}</ul>`;
+}
+
+const matRows = () => { const saved = store.get("mat", null), base = M.maturity?.scores || [];
+  return base.map(r => { const s = saved && saved[r.d]; return {d:r.d, tgt:r.tgt, cur: Array.isArray(s) && s.length === r.cur.length ? s.map(Number) : r.cur}; }); };
+function renderMat(){
+  const mt = M.maturity; if (!mt) return;
+  const rows = matRows(), avg = a => (a.reduce((x, y) => x + y, 0) / a.length).toFixed(1);
+  const edited = !!store.get("mat", null);
+  $("view-mat").innerHTML = `<p class="viewq">How good is it today?</p>
+    <p class="procnote">Current score per domain and dimension on a 1 to 5 scale, with the target in small print. Change a score to try your own assessment. Changes are kept in this browser only and are not shared.</p>
+    <div class="tblwrap"><table class="matrix mat"><thead><tr><th>Domain</th>${mt.dims.map(d => `<th title="${esc(d.def)}">${esc(d.name)}</th>`).join("")}<th>Average</th><th>Gap</th></tr></thead><tbody>` +
+    rows.map(r => `<tr class="${domFocus([r.d])}"><td><button class="link" data-go="${r.d}">${esc(nameOf(r.d))}</button></td>` +
+      r.cur.map((c, i) => `<td class="lv" style="--lv:${c * 17}%"><select id="mat-${r.d}-${i}" data-mat="${r.d}" data-i="${i}" aria-label="${esc(nameOf(r.d))} ${esc(mt.dims[i].name)} current score">${[1,2,3,4,5].map(v => `<option${v === c ? " selected" : ""}>${v}</option>`).join("")}</select><small>→ ${r.tgt[i]}</small></td>`).join("") +
+      `<td class="mono">${avg(r.cur)}</td><td class="mono ${r.tgt.reduce((a, t, i) => a + Math.max(0, t - r.cur[i]), 0) > 8 ? "badtxt" : ""}">${r.tgt.reduce((a, t, i) => a + Math.max(0, t - r.cur[i]), 0)}</td></tr>`).join("") +
+    `</tbody></table></div>
+    ${edited ? `<button class="reset" type="button" id="matreset">Reset to the example scores</button>` : ""}
+    <h2 class="sech">Scale</h2><ol class="levels">${mt.levels.map(l => `<li>${esc(l)}</li>`).join("")}</ol>
+    <h2 class="sech">Dimensions</h2><dl class="gloss">${mt.dims.map(d => `<div><dt>${esc(d.name)}</dt><dd>${esc(d.def)}</dd></div>`).join("")}</dl>`;
+}
+$("view-mat").addEventListener("change", e => {
+  const t = e.target.closest("[data-mat]"); if (!t) return;
+  const cur = Object.fromEntries(matRows().map(r => [r.d, r.cur.slice()]));
+  cur[t.dataset.mat][+t.dataset.i] = +t.value; store.set("mat", cur); renderMat(); renderStart();
+});
+$("view-mat").addEventListener("click", e => { if (e.target.id === "matreset"){ store.del("mat"); renderMat(); renderStart(); } });
+
+const vdIn = v => { const o = (store.get("val", {}) || {})[v.id] || {}; const n = (k) => Number.isFinite(+o[k]) && o[k] !== "" ? +o[k] : v[k];
+  return {volume:n("volume"), base:n("base"), target:n("target"), unitValue:n("unitValue")}; };
+const vdValue = v => { const i = vdIn(v); return Math.max(0, i.volume * (i.base - i.target) / (v.unit === "%" ? 100 : 1) * i.unitValue); };
+function renderVal(){
+  const vds = M.vds || []; if (!vds.length) return;
+  const total = vds.reduce((a, v) => a + vdValue(v), 0), edited = Object.keys(store.get("val", {}) || {}).length > 0;
+  const inp = (v, k, step) => `<input id="val-${v.id}-${k}" type="number" min="0" step="${step}" value="${vdIn(v)[k]}" data-val="${v.id}" data-k="${k}">`;
+  $("view-val").innerHTML = `<p class="viewq">What is it worth?</p>
+    <p class="procnote">Each driver: yearly volume × (today's rate − target rate) × value per unit. All inputs are example figures. Change any input to test your own numbers. Changes are kept in this browser only.</p>
+    <div class="kpis"><div class="kpi big"><span class="k">Total value a year</span><span class="v">${money(total)}</span></div>
+      ${vds.map(v => `<div class="kpi"><span class="k">${esc(v.name)}</span><span class="v">${money(vdValue(v))}</span></div>`).join("")}</div>
+    <div class="cards">` + vds.map(v => `<article class="card2 ${domFocus(v.doms)}">
+        <div class="c-hd"><button class="link" data-go="${v.id}"><b>${esc(v.name)}</b></button><span class="mono muted">${v.id}</span><span class="grow"></span><b class="mono">${money(vdValue(v))}</b></div>
+        <p class="muted small">${esc(v.def)}</p>
+        <div class="vform">
+          <label>Volume <span>${esc(v.volumeLabel)}</span>${inp(v, "volume", 1)}</label>
+          <label>Today <span>${esc(v.measure)} (${esc(v.unit)})</span>${inp(v, "base", "any")}</label>
+          <label>Target <span>${esc(v.unit)}</span>${inp(v, "target", "any")}</label>
+          <label>Value per unit <span>${esc(v.unitValueLabel)} (€)</span>${inp(v, "unitValue", 1)}</label>
+        </div>
+        <div class="refs"><span class="rl">Depends on</span>${v.steps.concat(v.doms).map(chip).join("")}</div>
+      </article>`).join("") + `</div>
+    ${edited ? `<button class="reset" type="button" id="valreset">Reset to the example figures</button>` : ""}`;
+}
+$("view-val").addEventListener("change", e => {
+  const t = e.target.closest("[data-val]"); if (!t) return;
+  const all = store.get("val", {}) || {}; (all[t.dataset.val] ||= {})[t.dataset.k] = t.value; store.set("val", all);
+  renderVal(); renderRoad(); renderStart();
+});
+$("view-val").addEventListener("click", e => { if (e.target.id === "valreset"){ store.del("val"); renderVal(); renderRoad(); renderStart(); } });
+
+function renderRoad(){
+  const waves = M.waves || []; if (!waves.length) return;
+  const q = s => { const [y, qq] = s.split("-Q"); return +y * 4 + (+qq - 1); };
+  const now = new Date(), nq = now.getFullYear() * 4 + Math.floor(now.getMonth() / 3);
+  const q0 = Math.min(nq, ...waves.map(w => q(w.from))), q1 = Math.max(...waves.map(w => q(w.to)));
+  const n = q1 - q0 + 1, L = 230, W = 900, cw = (W - L - 10) / n, rh = 34, H = 34 + waves.length * rh + 8;
+  const qlbl = i => `${Math.floor((q0 + i) / 4)} Q${(q0 + i) % 4 + 1}`;
+  let svg = `<svg class="gantt" viewBox="0 0 ${W} ${H}" role="img" aria-label="Roadmap of ${waves.length} waves from ${qlbl(0)} to ${qlbl(n - 1)}">`;
+  for (let i = 0; i < n; i++) svg += `<rect class="g-col ${i % 2 ? "alt" : ""}" x="${L + i * cw}" y="0" width="${cw}" height="${H}"/><text class="g-q" x="${L + i * cw + cw / 2}" y="20" text-anchor="middle">${qlbl(i)}</text>`;
+  const nx = L + (nq - q0 + (now.getMonth() % 3 + now.getDate() / 31) / 3) * cw;
+  svg += `<line class="tl-now" x1="${nx}" y1="26" x2="${nx}" y2="${H}"/>`;
+  waves.forEach((w, i) => {
+    const y = 34 + i * rh, x = L + (q(w.from) - q0) * cw, wd = (q(w.to) - q(w.from) + 1) * cw;
+    svg += `<g class="g-row" data-go="${w.id}" role="button" tabindex="0"><text class="g-name" x="10" y="${y + 20}">${w.id} · ${esc(w.name)}</text><rect class="g-bar" x="${x + 3}" y="${y + 5}" width="${wd - 6}" height="${rh - 12}" rx="5"/>
+      <text class="g-val" x="${x + 10}" y="${y + 21}">${money(w.vds.reduce((a, id) => a + (byId.has(id) ? vdValue(byId.get(id)) : 0), 0))} a year</text></g>`;
+  });
+  svg += `</svg>`;
+  const kindsOrder = ["domain","control","dq","step","reg"];
+  $("view-road").innerHTML = `<p class="viewq">In what order do we fix it?</p>
+    <p class="procnote">Delivery waves for the example company, ordered by value and risk. Each wave lists the domains, controls, DQ rules, process steps and regulations it delivers, and the yearly value from the Value case tab.</p>
+    <div class="tlwrap">${svg}</div>
+    <div class="cards">` + waves.map(w => `<article class="card2 ${domFocus(w.refs)}">
+        <div class="c-hd"><button class="link" data-go="${w.id}"><b>${w.id} · ${esc(w.name)}</b></button><span class="grow"></span><span class="mono muted">${w.from} to ${w.to}</span></div>
+        <p class="muted small">${esc(w.def)}</p>
+        ${kindsOrder.map(k => { const ids = w.refs.filter(id => byId.get(id)?.kind === k); return ids.length ? `<div class="refs"><span class="rl">${KINDS[k].plural}</span>${ids.map(chip).join("")}</div>` : ""; }).join("")}
+        <div class="refs"><span class="rl">Value</span>${w.vds.map(chip).join("")}</div>
+      </article>`).join("") + `</div>`;
+}
+
+function renderStart(){
+  const fails = (M.dq || []).filter(r => r.score < r.threshold).length;
+  const mr = matRows(), all = mr.flatMap(r => r.cur), allT = mr.flatMap(r => r.tgt), av = a => a.length ? (a.reduce((x, y) => x + y, 0) / a.length).toFixed(1) : "–";
+  const total = (M.vds || []).reduce((a, v) => a + vdValue(v), 0), wv = M.waves || [];
+  const cards = [
+    ["map","Network","What data do we have, and where does it live?",`${M.domains.length} domains · ${M.systems.length} systems · ${M.controls.length} controls`],
+    ["proc","Process","Where does bad data hurt?",`${STEPS.size} processes · ${(M.steps||[]).length} steps · BPMN 2.0`],
+    ["table","Catalogue","What exactly is each field?",`${M.attributes.length} attributes · ${(M.glossary||[]).length} glossary terms`],
+    ["dq","DQ rules","How would we actually test it?",`${fails} of ${(M.dq||[]).length} rules below threshold`],
+    ["reg","Regulation","What forces this, and by when?",`${(M.regs||[]).length} laws and standards`],
+    ["cur","Current state","Who owns what today?",`${curFindings().length} findings`],
+    ["mat","Maturity","How good is it today?",`average ${av(all)} of 5, target ${av(allT)}`],
+    ["val","Value case","What is it worth?",`${money(total)} a year`],
+    ["road","Roadmap","In what order do we fix it?",wv.length ? `${wv.length} waves, ${wv[0].from} to ${wv[wv.length-1].to}` : ""]
+  ];
+  $("view-start").innerHTML = `<div class="intro"><p class="viewq">One map of the company's master data, from what exists to what to fix first.</p>
+    <p class="procnote">Every tab reads the same model: ${byId.size} linked records for the fictional distributor Alder Street Supply. Click any name to inspect it on the right. Pick a domain in the left rail to highlight it on every tab. Ask a question at the top to get an answer checked against the model.</p></div>
+    <div class="startgrid">${cards.map(([k, l, qn, n], i) => `<button class="startcard" type="button" data-tabgo="${k}"><span class="no mono">${String(i + 1).padStart(2, "0")} · ${l}</span><span class="sq">${qn}</span><span class="sn mono">${n}</span></button>`).join("")}</div>`;
+}
+
+/* ---------- 10. "How it's built" tab ---------- */
 function renderSchema(){
   const counts = Object.entries(KINDS).map(([k,v]) => `<div class="box"><b><span class="sw" style="--kc:var(${v.color})"></span>${v.plural} <span class="mono" style="color:var(--ink-3)">${(M[v.list]||[]).length}</span></b><p>Stored in <code>${v.list}</code>.</p></div>`).join("");
   const rc = {}; for (const x of M.relations) rc[x.r] = (rc[x.r] || 0) + 1;
@@ -953,12 +1413,13 @@ function renderSchema(){
       <li>Keep the ID pattern: domain <code>D01</code>, subject area <code>D01.01</code>, attribute <code>D01-A001</code>.</li>
       <li>Add a filter by adding one line to <code>FACETS</code> in the script.</li>
       <li>Add a relation type by adding it to <code>REL</code> and using it in <code>relations</code>.</li>
-      <li>Add a process flow by adding records to <code>steps</code>: process id, step number, lane, system, domains it <code>writes</code> and <code>reads</code>, and an optional <code>gate</code> decision. The Process tab and the BPMN 2.0 diagram and file are generated from them.</li></ol>
+      <li>Add a process flow by adding records to <code>steps</code>: process id, step number, lane, system, domains it <code>writes</code> and <code>reads</code>, and an optional <code>gate</code> decision. The Process tab and the BPMN 2.0 diagram and file are generated from them.</li>
+      <li>The other tabs read <code>dq</code>, <code>regs</code>, <code>glossary</code>, <code>maturity</code>, <code>vds</code> (value drivers) and <code>waves</code> (roadmap). Current state is calculated from <code>relations</code>. Maturity scores and value inputs a viewer edits are kept in that viewer's browser only.</li></ol>
     <div><button class="btn primary" id="dl" type="button" ${dl || !window.claude ? "" : "hidden"}>Download model JSON</button> <span id="dlmsg" class="mono" style="color:var(--ink-3)"></span></div>
   </div>`;
   const b = $("dl"); if (b) b.onclick = async () => {
-    const data = JSON.stringify({meta:M.meta, domains:M.domains, subjectAreas:M.subjectAreas, attributes:M.attributes.map(({kind,domain,...a}) => a),
-      systems:M.systems, processes:M.processes, controls:M.controls, relations:M.relations, steps:M.steps}, (k, v) => k === "kind" && typeof v === "string" && KINDS[v] ? undefined : v, 1);
+    const data = JSON.stringify(Object.fromEntries(Object.entries(M).map(([k, v]) => [k, k === "attributes" ? v.map(({kind, domain, ...a}) => a) : v])),
+      (k, v) => k === "kind" && typeof v === "string" && KINDS[v] ? undefined : v, 1);
     try { $("dlmsg").textContent = await saveFile("master-data-model.json", data, "application/json"); }
     catch (e) { $("dlmsg").textContent = e.code === "cancelled" ? "" : "Download failed: " + (e.message || e.code); }
   };
@@ -977,6 +1438,12 @@ function digest(){
   for (const s of M.systems) L.push(`${s.id} | system | ${s.name} (${s.hosting}) | ${s.def}`);
   for (const p of M.processes) L.push(`${p.id} | process | ${p.name} (${p.code}) | ${p.def}`);
   for (const c of M.controls) L.push(`${c.id} | control | ${c.name} (${c.category}) | ${c.def}`);
+  for (const q of (M.dq || [])) L.push(`${q.id} | DQ rule, ${q.dim} | ${q.def} | checks ${q.attrs.join(",")}; measured ${q.score}% vs threshold ${q.threshold}%`);
+  for (const g of (M.regs || [])) L.push(`${g.id} | regulation ${g.short} (${g.cat}, ${g.juris}) | ${g.when} | requires ${g.attrs.concat(g.ctl).join(",")}`);
+  for (const g of (M.glossary || [])) L.push(`${g.id} | glossary term ${g.term} | ${g.def}`);
+  for (const v of (M.vds || [])) L.push(`${v.id} | value driver ${v.name} | ${money(vdValue(v))} a year | depends on ${v.steps.concat(v.doms).join(",")}`);
+  for (const w of (M.waves || [])) L.push(`${w.id} | roadmap wave ${w.name} ${w.from} to ${w.to} | ${w.def} | delivers ${w.refs.concat(w.vds).join(",")}`);
+  for (const r of matRows()) L.push(`maturity of ${r.d}: current ${r.cur.join("/")} target ${r.tgt.join("/")} for ${M.maturity.dims.map(d => d.name).join("/")}`);
   for (const s of (M.steps || [])) L.push(`${s.id} | step ${s.n} of ${s.p}, lane ${s.lane}, system ${s.sys} | ${s.name} | writes ${s.writes.join(",") || "none"}; reads ${s.reads.join(",") || "none"}; controls ${s.ctl.join(",") || "none"}${s.gate ? "; decision: " + s.gate.q + " no leads to " + s.gate.no : ""} | failure: ${s.failure}`);
   L.push("", "RELATIONS (from relation to):");
   for (const x of M.relations) L.push(`${x.f} ${x.r} ${x.t}`);
@@ -1031,7 +1498,7 @@ $("askform").addEventListener("submit", e => { e.preventDefault(); ask($("askq")
 $("askstop").onclick = () => ctl?.abort();
 
 /* ---------- 11. Boot ---------- */
-function renderAll(){ renderRail(); renderTabs(); renderTable(); renderProc(); renderInsp(); buildGraph(); draw(); }
+function renderAll(){ renderRail(); renderTabs(); renderTable(); renderProc(); renderStart(); renderDQ(); renderReg(); renderCur(); renderMat(); renderVal(); renderRoad(); renderInsp(); buildGraph(); draw(); }
 readColors(); legend(); renderSchema(); renderAll();
 if (document.fonts) document.fonts.ready.then(draw);
 (async () => {
