@@ -1,5 +1,19 @@
 # Decisions
 
+## 2026-09-29: Tallgrass demo is a separate page, not an edit of the atlas
+The focus moved from master data to a data integration journey. The data model changes (tables by layer, pipelines,
+use cases), so a new page in `data-journey/` reuses the engine and leaves the atlas intact at v5.
+
+## 2026-09-29: Maia content is illustrative and labeled
+The owner had no Maia source material. Examples show the working pattern (engineer describes, Maia drafts, engineer
+reviews) and carry an "Illustrative" badge, a tab note and a footer. Replace with real examples before customer use.
+
+## 2026-09-29: Ask is not presented as Maia
+Ask runs on Claude through the artifact viewer. Labeling it Maia would misrepresent what answers.
+
+## 2026-09-29: Target view starts at the EDW; Network uses full width
+Keeps the live demo on one screen without sideways scrolling. Systems feeding the EDW appear on the Today view.
+
 ## 2026-09-29: Rebuild, do not copy the reference artifact
 Reason: authored outside the organization, no license, carries its author's branding and internal sales notes,
 and 438K characters of minified script not reviewed line by line. We rebuild the architecture in our own code.

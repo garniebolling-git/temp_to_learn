@@ -1,0 +1,1104 @@
+<title>Tallgrass Data Journey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: filter rail | demo tabs | inspector. The Network tab reads left to right along the data journey. */
+:root{
+  --bg:#f1f3f4; --surface:#ffffff; --sunk:#e6eaec; --ink:#16202a; --ink-2:#44515e; --ink-3:#77838f;
+  --rule:#d7dde1; --rule-2:#bfc8ce; --accent:#0b6e99; --accent-ink:#ffffff; --hl:#e9a820;
+  --l-edw:#5d6875; --l-bronze:#a45f25; --l-silver:#5f7898; --l-gold:#a97b00;
+  --t-ssis:#b3243c; --t-excel:#3d7a3a; --t-matillion:#0b6e99;
+  --k-system:#44515e; --k-process:#b06400; --k-test:#b23658; --k-reg:#6a4bb0; --k-ai:#0f7a6a; --k-maia:#0b6e99; --k-warn:#b06400;
+  --s-public:#3d7a3a; --s-internal:#4a6bb0; --s-confidential:#b06400; --s-restricted:#b3243c;
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Public Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10161b; --surface:#182129; --sunk:#0c1116; --ink:#e5eaee; --ink-2:#a9b4be; --ink-3:#7b8792;
+  --rule:#27313a; --rule-2:#37434e; --accent:#44b4e2; --accent-ink:#06202c; --hl:#f2c14e;
+  --l-edw:#9aa6b3; --l-bronze:#e0995c; --l-silver:#9cb3d3; --l-gold:#e5b93a;
+  --t-ssis:#f26b80; --t-excel:#7cc576; --t-matillion:#44b4e2;
+  --k-system:#a9b4be; --k-process:#f0a340; --k-test:#ef6f92; --k-reg:#b7a0f2; --k-ai:#4fd1bb; --k-maia:#44b4e2; --k-warn:#f0a340;
+  --s-public:#7cc576; --s-internal:#8aa6e8; --s-confidential:#f0a340; --s-restricted:#f26b80; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10161b; --surface:#182129; --sunk:#0c1116; --ink:#e5eaee; --ink-2:#a9b4be; --ink-3:#7b8792;
+  --rule:#27313a; --rule-2:#37434e; --accent:#44b4e2; --accent-ink:#06202c; --hl:#f2c14e;
+  --l-edw:#9aa6b3; --l-bronze:#e0995c; --l-silver:#9cb3d3; --l-gold:#e5b93a;
+  --t-ssis:#f26b80; --t-excel:#7cc576; --t-matillion:#44b4e2;
+  --k-system:#a9b4be; --k-process:#f0a340; --k-test:#ef6f92; --k-reg:#b7a0f2; --k-ai:#4fd1bb; --k-maia:#44b4e2; --k-warn:#f0a340;
+  --s-public:#7cc576; --s-internal:#8aa6e8; --s-confidential:#f0a340; --s-restricted:#f26b80; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--f-body);padding-inline:16px;padding-block:0 32px}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--f-mono);font-size:12px}
+.muted{color:var(--ink-3)}
+.small{font-size:12.5px}
+.grow{flex:1}
+
+header.top{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;padding-block:18px 12px;border-bottom:1px solid var(--rule)}
+header.top h1{font:700 26px/1.1 var(--f-display);margin:0;letter-spacing:-.01em}
+header.top .sub{color:var(--ink-2);font-size:13px;max-width:78ch;flex-basis:100%}
+.badge{font:500 11px/1 var(--f-mono);text-transform:uppercase;letter-spacing:.06em;border:1px solid currentColor;border-radius:3px;padding:4px 6px}
+.badge.fict{color:var(--k-process)}
+.badge.illu{color:var(--k-maia)}
+
+.ask{display:grid;gap:10px;padding-block:14px;border-bottom:1px solid var(--rule)}
+.ask form{display:flex;gap:8px;flex-wrap:wrap}
+.ask input{flex:1 1 280px;min-width:0;background:var(--surface);border:1px solid var(--rule-2);border-radius:6px;padding:9px 12px}
+.btn{border:1px solid var(--rule-2);background:var(--surface);border-radius:6px;padding:8px 14px;font-weight:600}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:disabled{opacity:.5;cursor:default}
+.sugs{display:flex;flex-wrap:wrap;gap:6px}
+.sug{border:1px dashed var(--rule-2);background:transparent;border-radius:999px;padding:3px 10px;font-size:12.5px;color:var(--ink-2)}
+.answer{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;max-width:90ch}
+.answer .q{font-weight:600;margin-bottom:4px}
+.answer .note{color:var(--ink-3);font-size:12.5px;margin-top:6px}
+.ref{font:500 12px var(--f-mono);border:0;border-radius:4px;padding:1px 5px;background:var(--sunk);color:var(--ink);border-bottom:2px solid var(--kc,var(--rule-2));cursor:pointer}
+
+.shell{display:grid;grid-template-columns:220px minmax(0,1fr) 320px;gap:20px;padding-block:16px}
+.rail,.insp,.main{min-width:0}
+.rail h2,.insp h2,.sech{font:600 11px/1 var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin:18px 0 8px}
+.rail h2:first-child{margin-top:4px}
+.search{width:100%;background:var(--surface);border:1px solid var(--rule-2);border-radius:6px;padding:7px 10px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{border:1px solid var(--rule-2);background:var(--surface);border-radius:999px;padding:2px 9px;font-size:12.5px;display:inline-flex;gap:6px;align-items:center}
+.chip .n{color:var(--ink-3);font:11px var(--f-mono)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.chip[aria-pressed="true"] .n{color:inherit;opacity:.7}
+.sw{width:10px;height:10px;display:inline-block;background:var(--kc);border-radius:2px}
+.reset{margin-top:16px;background:none;border:0;padding:0;color:var(--accent);font-weight:600;font-size:13px}
+
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--rule);margin-bottom:12px;overflow-x:auto;scrollbar-width:thin}
+.tab{background:none;border:0;border-bottom:2px solid transparent;padding:8px 11px;font-weight:600;color:var(--ink-2);white-space:nowrap;flex:none}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab .n{font:11px var(--f-mono);color:var(--ink-3);margin-left:4px}
+.viewq{font:700 21px/1.25 var(--f-display);margin:2px 0 6px;text-wrap:balance}
+.lede{color:var(--ink-2);font-size:13.5px;margin:0 0 12px;max-width:85ch}
+
+.insp .card{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:14px;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto}
+.insp .kind{font:600 11px var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--kc)}
+.insp h3{font:700 20px/1.2 var(--f-display);margin:4px 0 2px;text-wrap:balance;word-break:break-word}
+.insp .def{color:var(--ink-2);margin:8px 0 0}
+.insp dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:12px 0 0;font-size:13px}
+.insp dt{color:var(--ink-3)}
+.insp dd{margin:0;min-width:0;word-break:break-word}
+.insp .fail{border-left:3px solid var(--s-restricted);padding-left:10px}
+.rels{display:grid;gap:4px;margin:0;padding:0;list-style:none}
+.rels li{display:flex;gap:8px;align-items:baseline;font-size:13px}
+.rels .r{font:11px var(--f-mono);color:var(--ink-3);min-width:74px}
+.link{background:none;border:0;padding:0;text-align:left;color:var(--ink);text-decoration:underline;text-decoration-color:var(--rule-2);text-underline-offset:3px}
+.link:hover{text-decoration-color:var(--accent)}
+.pill{display:inline-block;font:500 11px var(--f-mono);padding:1px 6px;border-radius:3px;border:1px solid var(--pc,var(--rule-2));color:var(--pc,var(--ink-2))}
+.empty{padding:28px;color:var(--ink-3);text-align:center}
+
+/* start: talk track */
+.scen{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin:12px 0 18px}
+.fact{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:9px 12px}
+.fact .k{display:block;font:600 10.5px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.fact .v{font-weight:600}
+.beats{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:beat}
+.beat{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:10px 14px}
+.beat .no{font:700 20px var(--f-display);color:var(--accent);text-align:center}
+.beat h3{margin:0;font:700 16px/1.3 var(--f-display)}
+.beat p{margin:3px 0 0;color:var(--ink-2);font-size:13.5px}
+.beat .btn{padding:6px 12px;font-size:13px}
+.beat.on{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+
+/* network */
+.netbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:10px}
+.seg{display:inline-flex;border:1px solid var(--rule-2);border-radius:7px;overflow:hidden}
+.seg button{border:0;background:var(--surface);padding:6px 14px;font-weight:600;font-size:13px}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.netwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:8px}
+.net{display:block;font-family:var(--f-body)}
+.n-band{fill:var(--sunk)}
+.n-bandtxt{font:600 11px var(--f-mono);fill:var(--ink-3);letter-spacing:.04em}
+.n-col{font:600 10.5px var(--f-mono);fill:var(--ink-3);text-transform:uppercase;letter-spacing:.06em}
+.n-edge{fill:none;stroke:var(--rule-2);stroke-width:1.6}
+.n-edge.manual{stroke-dasharray:5 4}
+.n-edge.on{stroke:var(--accent);stroke-width:2.4}
+.n-edge.dim{opacity:.18}
+.n-node{cursor:pointer}
+.n-node rect{fill:var(--surface);stroke:var(--nc);stroke-width:1.5}
+.n-node.pipe rect{fill:color-mix(in srgb,var(--nc) 14%,var(--surface))}
+.n-node.ds rect{fill:color-mix(in srgb,var(--nc) 10%,var(--surface))}
+.n-node .bar{fill:var(--nc);stroke:none}
+.n-node text{fill:var(--ink)}
+.n-t{font:600 11.5px var(--f-body)}
+.n-s{font:10px var(--f-mono);fill:var(--ink-3)!important}
+.n-node.sel rect{stroke-width:3}
+.n-node.dim{opacity:.22}
+.n-node .nofeed{font:600 10px var(--f-mono);fill:var(--s-restricted)!important}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--ink-2);margin-top:8px}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;border:1.5px solid var(--nc);background:color-mix(in srgb,var(--nc) 14%,var(--surface))}
+
+/* cards, kpis */
+.kpis{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
+.kpi{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:8px 12px;display:grid;gap:2px;min-width:120px}
+.kpi .k{font-size:12px;color:var(--ink-3)}
+.kpi .v{font:700 20px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.kpi .v small{font:12px var(--f-body);color:var(--ink-3)}
+.kpi.bad{border-color:var(--s-restricted)} .kpi.bad .v{color:var(--s-restricted)}
+.kpi.good{border-color:var(--k-ai)} .kpi.good .v{color:var(--k-ai)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.card2{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;min-width:0}
+.card2.dim,.dim-row{opacity:.35}
+.card2.hit{border-color:var(--hl);box-shadow:inset 0 0 0 1px var(--hl)}
+.c-hd{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.c-t{margin:8px 0 0;font-weight:500}
+.card2 p{margin:6px 0 0}
+.refs{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:6px}
+.refs .rl{font:600 10.5px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);min-width:74px}
+.status{font:600 10.5px var(--f-mono);text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;border-radius:3px;margin-left:auto}
+.status.ok{color:var(--s-public);border:1px solid var(--s-public)}
+.status.bad{color:var(--s-restricted);border:1px solid var(--s-restricted)}
+.status.mid{color:var(--s-confidential);border:1px solid var(--s-confidential)}
+pre.code{font:11.5px/1.45 var(--f-mono);background:var(--sunk);border-radius:6px;padding:8px 10px;white-space:pre-wrap;word-break:break-word;margin:10px 0 0;color:var(--ink-2)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.cmp div{border-radius:6px;padding:7px 9px;font-size:12.5px}
+.cmp .t{background:color-mix(in srgb,var(--s-restricted) 10%,transparent)}
+.cmp .f{background:color-mix(in srgb,var(--k-ai) 12%,transparent)}
+.cmp b{display:block;font:600 10.5px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+
+/* maia */
+.maia{display:grid;gap:10px}
+.mcard{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:12px 14px}
+.mflow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.mflow > div{border-radius:6px;padding:9px 11px;font-size:13px;background:var(--bg);border:1px solid var(--rule)}
+.mflow > div b{display:block;font:600 10.5px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin-bottom:3px}
+.mflow .p{border-left:3px solid var(--ink-3)}
+.mflow .o{border-left:3px solid var(--k-maia)}
+.mflow .r{border-left:3px solid var(--k-ai)}
+.note{border:1px dashed var(--k-maia);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--ink-2);margin-bottom:12px}
+
+/* tables and matrices */
+.tblwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top;white-space:nowrap}
+th{font:600 11px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);background:var(--sunk)}
+tbody tr.row{cursor:pointer}
+tbody tr.row:hover{background:var(--sunk)}
+td.def{white-space:normal;min-width:220px;color:var(--ink-2)}
+.score td.lv{text-align:center;font:600 13px var(--f-mono);background:color-mix(in srgb,var(--k-ai) var(--lv),var(--surface))}
+.score td.lv small{font:11px var(--f-mono);color:var(--ink-2);margin-left:4px}
+.findings{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.findings li{display:flex;gap:10px;align-items:flex-start;background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--s-confidential);border-radius:6px;padding:9px 12px;font-size:13.5px}
+.findings li.high{border-left-color:var(--s-restricted)}
+.findings li.low{border-left-color:var(--rule-2)}
+.findings .sev{font:600 10.5px var(--f-mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);min-width:52px;padding-top:2px}
+.subtabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.subtab{border:1px solid var(--rule-2);background:var(--surface);border-radius:999px;padding:3px 12px;font-size:13px}
+.subtab[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.gloss{display:grid;gap:10px;margin:0}
+.gloss > div{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:10px 14px}
+.gloss dt{font-weight:600}
+.gloss dd{margin:3px 0 0;color:var(--ink-2)}
+
+/* process + BPMN */
+.proc{background:var(--surface);border:1px solid var(--rule);border-radius:8px;margin-bottom:14px;overflow:hidden}
+.proc-hd{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;padding:14px 16px;align-items:start}
+.proc-code{font:600 12px var(--f-mono);letter-spacing:.06em;color:var(--k-process);border:1.5px solid currentColor;border-radius:4px;padding:5px 7px;margin-top:2px}
+.proc-t h3{font:700 19px/1.2 var(--f-display);margin:0}
+.proc-t h3 .link{text-decoration:none}
+.proc-t p{margin:4px 0 0;color:var(--ink-2);font-size:13px;max-width:70ch}
+.tally{display:grid;justify-items:end;gap:1px;font:11.5px var(--f-mono);color:var(--ink-3);text-align:right}
+.bpmn-btn{margin-top:6px;font:600 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent);border:1px solid var(--accent);border-radius:5px;padding:5px 9px}
+.bpmn-btn[aria-expanded="true"]{background:var(--accent);color:var(--accent-ink)}
+.strip{display:flex;gap:8px;overflow-x:auto;padding:0 16px 14px;scrollbar-width:thin}
+.step{flex:0 0 190px;display:grid;gap:4px;align-content:start;text-align:left;background:var(--bg);border:1px solid var(--rule);border-radius:7px;padding:9px 10px}
+.step[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.step .no{font:500 10.5px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--k-process)}
+.step .t{font-weight:600;line-height:1.3}
+.step .lane{font-size:12px;color:var(--ink-3)}
+.step .doms{display:flex;flex-wrap:wrap;gap:4px}
+.step .doms i{font:normal 500 10.5px var(--f-mono);padding:1px 5px;border-radius:3px;border:1px dashed var(--ink-3);color:var(--ink-2)}
+.step .doms i.w{border:1px solid var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--ink)}
+.step .gate{font:11px var(--f-mono);color:var(--ink-2)}
+.step .ill{font:600 10px var(--f-mono);color:var(--k-maia);text-transform:uppercase}
+.bpmnfig{margin:0 0 14px;border-block:1px solid var(--rule);background:var(--bg)}
+.bpmnbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:10px 16px 0;font-size:12px;color:var(--ink-2)}
+.bpmnbar .btn{padding:5px 10px;font-size:12.5px}
+.bpmnbar .lg{display:inline-flex;gap:6px;align-items:center}
+.sw-w,.sw-r{display:inline-block;width:18px;height:0;border-top:2px solid var(--accent)}
+.sw-r{border-top:2px dashed var(--ink-3)}
+.bpmnwrap{overflow-x:auto;padding:10px 16px;scrollbar-width:thin}
+.bpmnfig figcaption{padding:0 16px 12px;font-size:12px;color:var(--ink-3);max-width:100ch}
+.bpmn{display:block;max-width:none;color:var(--ink);font-family:var(--f-body)}
+.bpmn text{fill:currentColor}
+.bp-pool{fill:var(--surface);stroke:currentColor;stroke-width:1.2}
+.bp-pooltxt{font:600 12.5px var(--f-display)}
+.bp-lane{fill:none;stroke:currentColor;stroke-width:.8;opacity:.55}
+.bp-lanetxt{font:500 12px var(--f-body)}
+.bp-seq{fill:none;stroke:currentColor;stroke-width:1.4}
+.bp-arrhead{fill:var(--ink)} .bp-arrhead.w{fill:var(--accent)} .bp-arrhead.r{fill:var(--ink-3)}
+.bp-flowtxt,.bp-no,.bp-objtxt{font:10px var(--f-mono);fill:var(--ink-3)!important}
+.bp-evtxt,.bp-gtxt{font:11px var(--f-body);fill:var(--ink-2)!important}
+.bp-event{fill:var(--surface);stroke:currentColor;stroke-width:1.5}
+.bp-event.end{stroke-width:3.4}
+.bp-task{cursor:pointer}
+.bp-task rect{fill:var(--surface);stroke:currentColor;stroke-width:1.3}
+.bp-task.maia rect{stroke:var(--k-maia);stroke-dasharray:4 3}
+.bp-task:hover rect{stroke:var(--accent)}
+.bp-task:focus{outline:none}
+.bp-task[aria-pressed="true"] rect{stroke:var(--accent);stroke-width:2.4;fill:color-mix(in srgb,var(--accent) 12%,var(--surface))}
+.bp-t{font:500 11.5px var(--f-body)}
+.bp-gate path{fill:var(--surface);stroke:currentColor;stroke-width:1.4}
+.bp-gate path.x{fill:none;stroke-width:2.2}
+.bp-assoc{stroke-width:1.2;stroke-dasharray:2 3}
+.bp-assoc.w{stroke:var(--accent);stroke-width:1.6;stroke-dasharray:none}
+.bp-assoc.r{stroke:var(--ink-3)}
+.bp-obj path{fill:var(--surface);stroke:var(--ink-3);stroke-width:1.1}
+.bp-obj.w path{stroke:var(--accent);stroke-width:1.6;fill:color-mix(in srgb,var(--accent) 14%,var(--surface))}
+
+/* timeline, gantt */
+.tlwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:8px;margin-bottom:14px}
+.tl,.gantt{display:block;width:100%;min-width:720px;height:auto;font-family:var(--f-body)}
+.tl-axis{stroke:var(--ink-3);stroke-width:1.2}
+.tl-tick{stroke:var(--ink-3)}
+.tl-yr,.g-q{font:10.5px var(--f-mono);fill:var(--ink-3)}
+.tl-now{stroke:var(--hl);stroke-width:2;stroke-dasharray:4 3}
+.tl-nowtxt{font:600 10.5px var(--f-mono);fill:var(--ink-2)}
+.tl-ev{cursor:pointer}
+.tl-ev line{stroke:var(--k-reg);stroke-width:1;opacity:.6}
+.tl-ev circle{fill:var(--k-reg)}
+.tl-ev text{font:600 12px var(--f-body);fill:var(--ink)}
+.tl-ev.future circle{fill:var(--surface);stroke:var(--k-reg);stroke-width:2}
+.when{font-size:12px;color:var(--k-reg)}
+.g-col{fill:transparent} .g-col.alt{fill:var(--sunk)}
+.g-row{cursor:pointer}
+.g-name{font:600 12.5px var(--f-body);fill:var(--ink)}
+.g-bar{fill:color-mix(in srgb,var(--accent) 22%,var(--surface));stroke:var(--accent);stroke-width:1.2}
+.g-val{font:11px var(--f-mono);fill:var(--ink)}
+
+.schema{display:grid;gap:14px;max-width:90ch}
+.schema p{margin:0;color:var(--ink-2)}
+.schema code{font:12px var(--f-mono);background:var(--sunk);padding:1px 4px;border-radius:3px}
+.schema ol{margin:0;padding-left:20px;color:var(--ink-2);display:grid;gap:4px}
+footer{margin-top:10px;padding-top:12px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink-3);max-width:100ch}
+
+.shell.wide{grid-template-columns:minmax(0,1fr)}
+.shell.wide .rail{display:none}
+.shell.wide .insp .card{position:static;max-height:none;max-width:900px}
+@media (max-width:1100px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .main{order:1} .insp{order:2} .rail{order:3}
+  .insp .card{position:static;max-height:none}
+}
+@media (max-width:640px){
+  .proc-hd{grid-template-columns:minmax(0,1fr)}
+  .tally{justify-items:start;text-align:left;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center}
+  .beat{grid-template-columns:32px minmax(0,1fr)}
+  .beat .btn{grid-column:2}
+  .mflow,.cmp{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top">
+  <h1>Tallgrass Data Journey</h1>
+  <span class="badge fict">Fictional scenario</span>
+  <span class="badge illu">Maia content illustrative</span>
+  <span class="sub">Tallgrass Outfitters, a fictional US outdoor retailer, wants AI by next season. Its data sits in an on-premise SQL Server warehouse. This scenario shows the journey to Databricks with Matillion, for a live demo.</span>
+</header>
+
+<section class="ask" aria-label="Ask about this scenario">
+  <form id="askform">
+    <input id="askq" type="text" maxlength="240" autocomplete="off" placeholder="Ask about this scenario, e.g. what blocks the demand forecast?">
+    <button class="btn primary" id="askgo" type="submit">Ask</button>
+    <button class="btn" id="askstop" type="button" hidden>Stop</button>
+  </form>
+  <div class="sugs" id="sugs"></div>
+  <div id="askout"></div>
+</section>
+
+<div class="shell">
+  <aside class="rail" id="rail" aria-label="Filters"></aside>
+  <main class="main">
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div id="view-start" role="tabpanel" hidden></div>
+    <div id="view-ai" role="tabpanel" hidden></div>
+    <div id="view-net" role="tabpanel" hidden></div>
+    <div id="view-cur" role="tabpanel" hidden></div>
+    <div id="view-maia" role="tabpanel" hidden></div>
+    <div id="view-proc" role="tabpanel" hidden></div>
+    <div id="view-dq" role="tabpanel" hidden></div>
+    <div id="view-reg" role="tabpanel" hidden></div>
+    <div id="view-cat" role="tabpanel" hidden></div>
+    <div id="view-road" role="tabpanel" hidden></div>
+    <div id="view-schema" role="tabpanel" hidden></div>
+  </main>
+  <aside class="insp" id="insp" aria-label="Inspector"></aside>
+</div>
+<footer>Tallgrass Outfitters and every figure on this page are fictional. Maia prompts and outputs are illustrative examples written for this scenario, not captured from the product. Confirm Matillion and Maia capabilities in current Matillion documentation before presenting. Regulation dates are short summaries; check official sources.</footer>
+
+<!-- THE MODEL. Edit this block to change the scenario. Every record has a unique id; links use ids. -->
+<script id="model" type="application/json">
+{
+"meta":{"company":"Tallgrass Outfitters","industry":"Outdoor gear retail, 140 stores and online","hq":"Denver, Colorado (fictional)","goal":"Demand forecasting and a product assistant before the spring season","trigger":"Board mandate for AI; data science blocked by nightly batch and spreadsheets","source":"SQL Server 2016 EDW, on-premise","target":"Databricks on Azure with Unity Catalog","integration":"Matillion Data Productivity Cloud with Maia"},
+"systems":[
+ {"id":"S01","name":"Store POS","role":"Source","stage":"source","hosting":"On-premise","def":"Point of sale in 140 stores. Sends daily sales files."},
+ {"id":"S02","name":"E-commerce","role":"Source","stage":"source","hosting":"SaaS","def":"Online store. Orders, carts and returns."},
+ {"id":"S03","name":"ERP","role":"Source","stage":"source","hosting":"On-premise","def":"Finance, purchasing and the product master."},
+ {"id":"S04","name":"Loyalty and CRM","role":"Source","stage":"source","hosting":"SaaS","def":"4.2 million loyalty members with contact details."},
+ {"id":"S05","name":"Warehouse system","role":"Source","stage":"source","hosting":"On-premise","def":"Stock by distribution center and store."},
+ {"id":"S14","name":"Product PDFs","role":"Source","stage":"source","hosting":"On-premise file share","def":"Product manuals, spec sheets and care guides as PDF files."},
+ {"id":"S06","name":"SQL Server EDW","role":"Legacy warehouse","stage":"edwsys","hosting":"On-premise","def":"Microsoft SQL Server 2016 enterprise data warehouse. 12 years of history. Refreshed nightly."},
+ {"id":"S13","name":"Excel extracts","role":"Shadow data","stage":"file","hosting":"Laptops and a shared drive","def":"Weekly spreadsheets analysts export for data science."},
+ {"id":"S08","name":"Matillion","role":"Integration","stage":"none","hosting":"Cloud","def":"Matillion Data Productivity Cloud. Builds and runs the pipelines; transformations execute inside Databricks."},
+ {"id":"S09","name":"Databricks Lakehouse","role":"Target platform","stage":"none","hosting":"Azure, US regions","def":"Delta tables in bronze, silver and gold layers, governed by Unity Catalog."},
+ {"id":"S10","name":"Power BI","role":"Consumer","stage":"consumer","hosting":"SaaS","def":"Store, merchandising and finance dashboards."},
+ {"id":"S11","name":"Demand forecast","role":"Consumer · AI","stage":"consumer","hosting":"Databricks ML","def":"Weekly forecast by store and SKU for replenishment."},
+ {"id":"S12","name":"Product assistant","role":"Consumer · AI","stage":"consumer","hosting":"Databricks, retrieval over product content","def":"Chat assistant that answers product questions for store staff and shoppers."}
+],
+"datasets":[
+ {"id":"T01","name":"edw.FactSales","layer":"edw","subject":"Sales","owner":"BI team","refresh":"Nightly","sla":"By 06:00","sens":"Internal","rows":"1.9 billion","def":"Store and online sales lines since 2014."},
+ {"id":"T02","name":"edw.DimCustomer","layer":"edw","subject":"Customer","owner":"BI team","refresh":"Nightly","sla":"By 06:00","sens":"Restricted","rows":"4.2 million","def":"Loyalty members with email, phone and address in clear text."},
+ {"id":"T03","name":"edw.DimProduct","layer":"edw","subject":"Product","owner":"BI team","refresh":"Nightly","sla":"By 06:00","sens":"Public","rows":"86,000","def":"SKU master with category hierarchy."},
+ {"id":"T04","name":"edw.FactInventory","layer":"edw","subject":"Inventory","owner":"BI team","refresh":"Nightly","sla":"By 06:00","sens":"Internal","rows":"610 million","def":"Daily stock on hand by location and SKU."},
+ {"id":"T11","name":"bronze.sales","layer":"bronze","subject":"Sales","owner":"Data engineering","refresh":"Hourly","sla":"Within 1 hour","sens":"Internal","rows":"1.9 billion","def":"Raw copy of FactSales, loaded incrementally."},
+ {"id":"T12","name":"bronze.customer","layer":"bronze","subject":"Customer","owner":"Data engineering","refresh":"Hourly","sla":"Within 1 hour","sens":"Restricted","rows":"4.2 million","def":"Raw copy of DimCustomer. Access limited to the pipeline service account."},
+ {"id":"T13","name":"bronze.product","layer":"bronze","subject":"Product","owner":"Data engineering","refresh":"Hourly","sla":"Within 1 hour","sens":"Public","rows":"86,000","def":"Raw copy of DimProduct."},
+ {"id":"T14","name":"bronze.inventory","layer":"bronze","subject":"Inventory","owner":"Data engineering","refresh":"Hourly","sla":"Within 1 hour","sens":"Internal","rows":"610 million","def":"Raw copy of FactInventory."},
+ {"id":"T15","name":"bronze.web_orders","layer":"bronze","subject":"Sales","owner":"Data engineering","refresh":"Every 15 minutes","sla":"Within 15 minutes","sens":"Confidential","rows":"38 million","def":"Orders taken directly from the e-commerce platform, bypassing the EDW."},
+ {"id":"T16","name":"bronze.product_docs","layer":"bronze","subject":"Content","owner":"Data engineering","refresh":"Daily","sla":"Within 24 hours","sens":"Public","rows":"31,000 files","def":"Product PDFs copied from the file share with file metadata."},
+ {"id":"T21","name":"silver.sales","layer":"silver","subject":"Sales","owner":"Data engineering","refresh":"Hourly","sla":"Within 1 hour","sens":"Internal","rows":"1.9 billion","def":"Store and web sales conformed to one grain, deduplicated, with valid store and SKU keys."},
+ {"id":"T22","name":"silver.customer","layer":"silver","subject":"Customer","owner":"Data engineering","refresh":"Hourly","sla":"Within 1 hour","sens":"Confidential","rows":"4.2 million","def":"Customers with email and phone hashed. Safe for analytics and data science."},
+ {"id":"T23","name":"silver.product","layer":"silver","subject":"Product","owner":"Merchandising","refresh":"Hourly","sla":"Within 1 hour","sens":"Public","rows":"86,000","def":"Product master with a complete category hierarchy."},
+ {"id":"T24","name":"silver.inventory","layer":"silver","subject":"Inventory","owner":"Supply chain","refresh":"Hourly","sla":"Within 1 hour","sens":"Internal","rows":"610 million","def":"Stock on hand, cleaned of negative and duplicate readings."},
+ {"id":"T25","name":"silver.doc_chunks","layer":"silver","subject":"Content","owner":"Data engineering","refresh":"Daily","sla":"Within 24 hours","sens":"Public","rows":"2.3 million","def":"Product documents split into passages, each tagged with SKU and source file."},
+ {"id":"T31","name":"gold.demand_features","layer":"gold","subject":"Sales","owner":"Data science","refresh":"Hourly","sla":"Less than 2 hours old","sens":"Internal","rows":"52 million","def":"Store by SKU by week features: sales, promotions, stock-outs, seasonality."},
+ {"id":"T32","name":"gold.customer_360","layer":"gold","subject":"Customer","owner":"Marketing analytics","refresh":"Daily","sla":"By 07:00","sens":"Confidential","rows":"4.2 million","def":"One row per customer with purchase history and returns. No raw contact data."},
+ {"id":"T33","name":"gold.revenue_daily","layer":"gold","subject":"Sales","owner":"Finance","refresh":"Hourly","sla":"Within 1 hour","sens":"Internal","rows":"1.1 million","def":"Revenue by day, store and channel, reconciled to the ledger."},
+ {"id":"T34","name":"gold.product_knowledge","layer":"gold","subject":"Content","owner":"Data science","refresh":"Daily","sla":"Within 24 hours","sens":"Public","rows":"2.3 million vectors","def":"Search index over document passages, built by Databricks for the product assistant."}
+],
+"pipelines":[
+ {"id":"PL01","name":"SSIS nightly load","tool":"SSIS","view":"today","stage":"legacy","from":["S01","S02","S03","S04","S05"],"to":["T01","T02","T03","T04"],"schedule":"Nightly 01:00","runtime":"4 to 6 hours","builtBy":"Hand-built in SSIS between 2014 and 2019","failures":"11 failures last quarter","def":"42 SSIS packages and stored procedures load the EDW. Keeps feeding the EDW during the journey; the target view starts at the EDW."},
+ {"id":"PL02","name":"Weekly Excel extract","tool":"Excel","view":"today","stage":"extract","from":["T01","T02","T03"],"to":["S13"],"schedule":"Mondays, by hand","runtime":"Half a day of analyst time","builtBy":"Analyst queries saved on a laptop","failures":"Skipped when the analyst is out","def":"Analysts export sales, customers and products to spreadsheets for data science."},
+ {"id":"PL11","name":"EDW to bronze","tool":"Matillion","view":"target","stage":"ingest","from":["T01","T02","T03","T04"],"to":["T11","T12","T13","T14"],"schedule":"Hourly","runtime":"About 6 minutes","builtBy":"Drafted with Maia, reviewed by a data engineer (illustrative)","failures":"","def":"Copies changed rows from the SQL Server EDW into Databricks bronze tables."},
+ {"id":"PL16","name":"Product documents","tool":"Matillion","view":"target","stage":"ingest","from":["S14"],"to":["T16","T25"],"schedule":"Daily","runtime":"About 20 minutes","builtBy":"Drafted with Maia, reviewed by a data engineer (illustrative)","failures":"","def":"Copies product PDFs, extracts text and splits it into tagged passages."},
+ {"id":"PL17","name":"Web orders direct","tool":"Matillion","view":"target","stage":"ingest","from":["S02"],"to":["T15"],"schedule":"Every 15 minutes","runtime":"About 1 minute","builtBy":"Drafted with Maia, reviewed by a data engineer (illustrative)","failures":"","def":"Reads orders from the e-commerce platform API so web sales arrive without waiting for the EDW."},
+ {"id":"PL12","name":"Conform to silver","tool":"Matillion","view":"target","stage":"transform","from":["T11","T13","T14","T15"],"to":["T21","T23","T24"],"schedule":"Hourly, after PL11","runtime":"About 9 minutes","builtBy":"Drafted with Maia, reviewed by a data engineer (illustrative)","failures":"","def":"Cleans and conforms raw tables. SQL runs inside Databricks."},
+ {"id":"PL13","name":"Mask customer data","tool":"Matillion","view":"target","stage":"transform","from":["T12"],"to":["T22"],"schedule":"Hourly, after PL11","runtime":"About 2 minutes","builtBy":"Drafted with Maia, reviewed by a data engineer (illustrative)","failures":"","def":"Hashes email and phone and drops street address before customer data reaches analysts."},
+ {"id":"PL14","name":"Demand features","tool":"Matillion","view":"target","stage":"build","from":["T21","T23","T24"],"to":["T31"],"schedule":"Hourly, after tests pass","runtime":"About 12 minutes","builtBy":"Drafted with Maia, reviewed by a data scientist (illustrative)","failures":"","def":"Builds the store by SKU by week feature table the forecast trains on."},
+ {"id":"PL15","name":"Revenue and C360","tool":"Matillion","view":"target","stage":"build","from":["T21","T22"],"to":["T32","T33"],"schedule":"Hourly and daily","runtime":"About 7 minutes","builtBy":"Drafted with Maia, reviewed by a data engineer (illustrative)","failures":"","def":"Builds the finance revenue table and the customer 360 table."}
+],
+"relations":[
+ {"f":"T01","r":"reads","t":"S10","v":"today"},{"f":"T03","r":"reads","t":"S10","v":"today"},
+ {"f":"S13","r":"reads","t":"S11","v":"today"},
+ {"f":"T25","r":"indexes","t":"T34","v":"target"},
+ {"f":"T33","r":"reads","t":"S10","v":"target"},{"f":"T32","r":"reads","t":"S10","v":"target"},
+ {"f":"T31","r":"reads","t":"S11","v":"target"},{"f":"T34","r":"reads","t":"S12","v":"target"}
+],
+"usecases":[
+ {"id":"U01","name":"Demand forecasting","sponsor":"VP Supply Chain","wave":"W2","needs":["T31"],"freshness":"Less than 2 hours","def":"Forecast weekly demand by store and SKU to cut stock-outs before spring.","today":[2,1,2,2,1,1],"target":[5,4,4,4,4,4],"blockers":["Data science trains on weekly spreadsheets","Sales reach the EDW only once a night","No test catches missing store or SKU keys"]},
+ {"id":"U02","name":"Product assistant","sponsor":"VP Digital","wave":"W3","needs":["T34"],"freshness":"Daily","def":"Answer product questions from manuals and spec sheets for staff and shoppers.","today":[1,1,1,2,1,1],"target":[4,3,4,4,4,4],"blockers":["Product manuals exist only as PDFs on a file share","No link from a document to the SKU it describes"]},
+ {"id":"U03","name":"Churn propensity","sponsor":"VP Marketing","wave":"W4","needs":["T32"],"freshness":"Daily","def":"Score loyalty members by likelihood to lapse and target retention offers.","today":[2,1,2,1,1,1],"target":[4,4,4,5,4,4],"blockers":["Customer contact data is unmasked wherever it is copied","Returns data never reaches the EDW"]}
+],
+"readiness":["Available in the platform","Fresh enough","Tested","Governed and masked","Lineage known","Documented"],
+"findings":[
+ {"id":"F01","sev":"high","name":"Nightly data, hourly need","refs":["PL01","T01","U01"],"def":"The EDW refreshes once a night. The demand forecast needs sales less than 2 hours old."},
+ {"id":"F02","sev":"high","name":"Customer PII in spreadsheets","refs":["T02","PL02","S13"],"def":"Customer emails and phone numbers leave the EDW unmasked in weekly Excel extracts."},
+ {"id":"F03","sev":"high","name":"Models trained on spreadsheets","refs":["S13","S11"],"def":"Data scientists train on week-old spreadsheets instead of governed tables."},
+ {"id":"F04","sev":"medium","name":"Silent SSIS failures","refs":["PL01"],"def":"SSIS failed 11 times last quarter. Business users found each failure the next morning."},
+ {"id":"F05","sev":"medium","name":"No revenue lineage","refs":["S10","T01"],"def":"No lineage from Power BI revenue back to POS transactions. Auditors sample by hand."},
+ {"id":"F06","sev":"medium","name":"No feed for the assistant","refs":["S14","S12","U02"],"def":"Product manuals exist only as PDFs on a file share. The product assistant has no data source."},
+ {"id":"F07","sev":"low","name":"Undocumented tables","refs":["T01","T02","T03","T04"],"def":"None of the four core EDW tables has column descriptions."}
+],
+"backlog":[
+ {"id":"B01","name":"Hourly store sales for forecasting","requester":"Data science","weeks":22,"wave":"W1","refs":["T21","U01"],"def":"Sales by store and SKU refreshed every hour."},
+ {"id":"B02","name":"Masked customer data for data science","requester":"Data science","weeks":18,"wave":"W1","refs":["T22","U03"],"def":"Customer table without clear-text contact data."},
+ {"id":"B03","name":"Searchable product manuals","requester":"Digital","weeks":14,"wave":"W3","refs":["T25","U02"],"def":"Manual text linked to SKUs for the assistant."},
+ {"id":"B04","name":"Returns reasons","requester":"Marketing","weeks":30,"wave":"W4","refs":["U03"],"def":"Return reason codes from the e-commerce platform."},
+ {"id":"B05","name":"Real-time web orders","requester":"E-commerce","weeks":40,"wave":"W3","refs":["T15"],"def":"Web orders available within minutes, not the next day."}
+],
+"processes":[
+ {"id":"P01","code":"BLD","name":"Build a pipeline with Maia","def":"Design time. A data engineer describes the pipeline, Maia drafts it, the engineer reviews before anything runs. Illustrative."},
+ {"id":"P02","code":"NOW","name":"Nightly refresh today","def":"How data reaches reports and models today: SSIS overnight, then spreadsheets."},
+ {"id":"P03","code":"RUN","name":"Hourly refresh with Matillion","def":"Every hour: load changed rows, transform in Databricks, test, and publish only if tests pass."}
+],
+"steps":[
+ {"id":"P01.1","p":"P01","n":1,"lane":"Data engineer","name":"Describe the pipeline in plain language","sys":"S08","reads":[],"writes":[],"ctl":[],"maia":false,"def":"States sources, target tables, schedule and rules, for example: hourly, changed rows only.","failure":"A vague request produces a vague draft. The review step catches it."},
+ {"id":"P01.2","p":"P01","n":2,"lane":"Maia (illustrative)","name":"Draft pipeline and SQL","sys":"S08","reads":["T01"],"writes":["T11"],"ctl":[],"maia":true,"def":"Proposes the pipeline components, incremental logic and target tables.","failure":"A wrong assumption about a key or watermark column. The engineer checks it."},
+ {"id":"P01.3","p":"P01","n":3,"lane":"Maia (illustrative)","name":"Draft tests and documentation","sys":"S08","reads":[],"writes":[],"ctl":["DQ01","DQ04"],"maia":true,"def":"Proposes row-count and schema tests, and writes a description of each step.","failure":"Tests that pass on day one but miss a known edge case."},
+ {"id":"P01.4","p":"P01","n":4,"lane":"Data engineer","name":"Review, edit and approve","sys":"S08","reads":[],"writes":[],"ctl":[],"maia":false,"gate":{"q":"Approved?","no":"Refine the request"},"def":"Reads the draft, runs it against a sample, edits what is wrong. Nothing ships without approval.","failure":"Rubber-stamp approvals. Company policy R06 requires a named reviewer."},
+ {"id":"P01.5","p":"P01","n":5,"lane":"Matillion","name":"Deploy on the hourly schedule","sys":"S08","reads":[],"writes":["T11"],"ctl":[],"maia":false,"def":"The approved pipeline runs on schedule with run history and alerts.","failure":"Deploying without alerting set up. The template includes it."},
+
+ {"id":"P02.1","p":"P02","n":1,"lane":"SSIS","name":"Extract from source systems","sys":"S06","reads":[],"writes":[],"ctl":[],"maia":false,"def":"42 packages pull files and tables from POS, ERP, CRM and warehouse systems at 01:00.","failure":"A late POS file stops the chain. No one is alerted."},
+ {"id":"P02.2","p":"P02","n":2,"lane":"SQL Server EDW","name":"Load and transform with stored procedures","sys":"S06","reads":[],"writes":["T01","T02"],"ctl":[],"maia":false,"gate":{"q":"Done by 06:00?","no":"Reports stale all day"},"def":"Stored procedures rebuild facts and dimensions overnight.","failure":"A failed procedure leaves yesterday's numbers in every report."},
+ {"id":"P02.3","p":"P02","n":3,"lane":"Analyst","name":"Export weekly spreadsheets","sys":"S13","reads":["T01","T02","T03"],"writes":[],"ctl":[],"maia":false,"def":"Monday queries export sales, customers and products to Excel.","failure":"Customer contact data leaves the warehouse unmasked."},
+ {"id":"P02.4","p":"P02","n":4,"lane":"Data scientist","name":"Clean spreadsheets in a notebook","sys":"S11","reads":[],"writes":[],"ctl":[],"maia":false,"def":"Fixes keys and duplicates by hand before training.","failure":"Every data scientist cleans differently. Results do not match."},
+ {"id":"P02.5","p":"P02","n":5,"lane":"Data scientist","name":"Train on week-old data","sys":"S11","reads":[],"writes":[],"ctl":[],"maia":false,"def":"The forecast trains on last week's extract.","failure":"The model never sees this week's promotions or stock-outs."},
+
+ {"id":"P03.1","p":"P03","n":1,"lane":"Matillion","name":"Load changed rows from the EDW","sys":"S08","reads":["T01"],"writes":["T11"],"ctl":["DQ01","DQ04","DQ10"],"maia":false,"def":"Reads rows changed since the last run and appends them to bronze.","failure":"A schema change in the EDW. The schema test stops the load before bad data lands."},
+ {"id":"P03.2","p":"P03","n":2,"lane":"Databricks","name":"Conform sales to silver","sys":"S09","reads":["T11"],"writes":["T21"],"ctl":["DQ02","DQ06"],"maia":false,"def":"SQL generated by the pipeline runs inside Databricks. No data leaves the platform.","failure":"Late-arriving store keys. Rows are held, not dropped."},
+ {"id":"P03.3","p":"P03","n":3,"lane":"Databricks","name":"Mask customer data","sys":"S09","reads":["T12"],"writes":["T22"],"ctl":["DQ05"],"maia":false,"def":"Hashes email and phone, drops street address.","failure":"A new contact column appears. The privacy test fails the run."},
+ {"id":"P03.4","p":"P03","n":4,"lane":"Matillion","name":"Run data tests","sys":"S08","reads":["T21","T22"],"writes":[],"ctl":["DQ02","DQ05","DQ06"],"maia":false,"gate":{"q":"All tests pass?","no":"Publish blocked, engineer alerted"},"def":"Runs every test on the new data before anything is published.","failure":"Skipping tests to meet a deadline. The gate does not allow it."},
+ {"id":"P03.5","p":"P03","n":5,"lane":"Databricks","name":"Build gold demand features","sys":"S09","reads":["T21","T24"],"writes":["T31"],"ctl":["DQ03"],"maia":false,"def":"Updates the store by SKU by week features.","failure":"Features older than 2 hours. The freshness test flags it."},
+ {"id":"P03.6","p":"P03","n":6,"lane":"Databricks","name":"Forecast reads fresh features","sys":"S11","reads":["T31"],"writes":[],"ctl":[],"maia":false,"def":"The demand forecast scores on data less than 2 hours old.","failure":"None expected. The chain above guarantees tested input."}
+],
+"dq":[
+ {"id":"DQ01","dim":"Reconciliation","datasets":["T01","T11"],"pipeline":"PL11","today":"None","blocks":true,"def":"Row counts in bronze.sales match the EDW for every load.","test":"SELECT (SELECT COUNT(*) FROM bronze.sales WHERE load_id = :run) - :edw_rows_changed AS diff  -- must be 0"},
+ {"id":"DQ02","dim":"Validity","datasets":["T21"],"pipeline":"PL12","today":"Manual, monthly","blocks":true,"def":"No sales row without a valid store and SKU key.","test":"SELECT COUNT(*) FROM silver.sales s LEFT JOIN silver.product p USING (sku) WHERE s.store_id IS NULL OR p.sku IS NULL  -- must be 0"},
+ {"id":"DQ03","dim":"Freshness","datasets":["T31"],"pipeline":"PL14","today":"None","blocks":false,"def":"gold.demand_features is less than 2 hours old.","test":"SELECT MAX(updated_at) >= current_timestamp() - INTERVAL 2 HOURS FROM gold.demand_features"},
+ {"id":"DQ04","dim":"Schema","datasets":["T01","T03"],"pipeline":"PL11","today":"None","blocks":true,"def":"Source columns match the expected contract. A new or dropped column stops the load.","test":"Compare INFORMATION_SCHEMA.COLUMNS on the EDW with the stored contract for each table"},
+ {"id":"DQ05","dim":"Privacy","datasets":["T22"],"pipeline":"PL13","today":"None","blocks":true,"def":"No clear-text email or phone number in silver.customer.","test":"SELECT COUNT(*) FROM silver.customer WHERE email_hash RLIKE '@' OR phone_hash RLIKE '^[0-9+() -]{7,}$'  -- must be 0"},
+ {"id":"DQ06","dim":"Uniqueness","datasets":["T21"],"pipeline":"PL12","today":"Partial","blocks":true,"def":"One row per order line in silver.sales.","test":"SELECT order_id, line_no FROM silver.sales GROUP BY 1, 2 HAVING COUNT(*) > 1  -- must return no rows"},
+ {"id":"DQ07","dim":"Validity","datasets":["T24"],"pipeline":"PL12","today":"None","blocks":false,"def":"Stock on hand is never negative.","test":"SELECT COUNT(*) FROM silver.inventory WHERE on_hand < 0  -- must be 0"},
+ {"id":"DQ08","dim":"Completeness","datasets":["T25"],"pipeline":"PL16","today":"None","blocks":true,"def":"Every document passage has a SKU and a source file.","test":"SELECT COUNT(*) FROM silver.doc_chunks WHERE sku IS NULL OR source_file IS NULL  -- must be 0"},
+ {"id":"DQ09","dim":"Reconciliation","datasets":["T33"],"pipeline":"PL15","today":"Manual, month-end","blocks":true,"def":"Daily revenue matches the finance ledger within 0.5%.","test":"SELECT ABS(g.revenue - l.revenue) / l.revenue <= 0.005 FROM gold.revenue_daily g JOIN finance.ledger_daily l USING (day)"},
+ {"id":"DQ10","dim":"Privacy","datasets":["T11","T15"],"pipeline":"PL11","today":"None","blocks":true,"def":"No payment card numbers in any bronze table.","test":"Scan text columns for 13 to 19 digit sequences that pass the Luhn check  -- must find none"}
+],
+"regs":[
+ {"id":"R01","short":"CCPA / CPRA","name":"California Consumer Privacy Act, as amended by the California Privacy Rights Act","cat":"Privacy","juris":"California, USA","date":"2020-01-01","when":"CCPA effective 1 January 2020. CPRA amendments operative 1 January 2023.","refs":["T02","T22","PL13","DQ05"],"def":"Consumers can know, delete and limit use of their personal information. Copies in spreadsheets are hard to find and delete."},
+ {"id":"R02","short":"PCI DSS v4.0","name":"Payment Card Industry Data Security Standard, version 4.0","cat":"Industry standard","juris":"Card payments","date":"2025-03-31","when":"Future-dated requirements effective 31 March 2025.","refs":["DQ10","T11","T15"],"def":"Card numbers must not be stored where they are not needed. The lake must stay out of card data scope."},
+ {"id":"R03","short":"SOX 404","name":"Sarbanes-Oxley Act, Section 404 (applies if the company is publicly listed)","cat":"Financial reporting","juris":"USA, listed companies","date":"2002-07-30","when":"Enacted 30 July 2002.","refs":["T33","DQ09","MA05"],"def":"Management must show controls over financial reporting, including how revenue numbers are produced."},
+ {"id":"R04","short":"NIST AI RMF","name":"NIST AI Risk Management Framework 1.0","cat":"AI governance","juris":"USA, voluntary","date":"2023-01-26","when":"Released 26 January 2023. Voluntary.","refs":["U01","U02","U03","T31","T34"],"def":"Map, measure and manage AI risks, including the quality and provenance of training data."},
+ {"id":"R05","short":"Data residency policy","name":"Tallgrass internal policy: customer data stays in US regions","cat":"Internal policy","juris":"Tallgrass (fictional)","date":"","when":"Internal policy, no fixed date.","refs":["S09","T22","T32"],"def":"Customer data may only be stored and processed in US cloud regions."},
+ {"id":"R06","short":"AI code review policy","name":"Tallgrass internal policy: human review of AI-generated pipelines","cat":"Internal policy","juris":"Tallgrass (fictional)","date":"","when":"Internal policy, no fixed date.","refs":["P01.4","MA01","MA02"],"def":"A named engineer reviews and approves any pipeline drafted with AI before it runs in production."}
+],
+"maia":[
+ {"id":"MA01","name":"Load the EDW into bronze","prompt":"Load FactSales, DimCustomer, DimProduct and FactInventory from our SQL Server EDW into Databricks bronze every hour. Only changed rows. Keep a load ID on every row.","output":"A draft pipeline with one incremental load per table keyed on the modified-date column, a load ID column, and a run log.","review":"The engineer finds FactInventory has no modified-date column and switches that table to a daily full load.","produces":["PL11","T11","T12","T13","T14"]},
+ {"id":"MA02","name":"Mask customer data","prompt":"Build silver.customer from bronze.customer. Hash email and phone, drop street address, and fail the run if any clear-text email remains.","output":"A draft transformation with hashing and a privacy test that blocks publishing.","review":"The engineer adds phone formats with extensions to the test and names the privacy officer as test owner.","produces":["PL13","T22","DQ05"]},
+ {"id":"MA03","name":"Build demand features","prompt":"Create gold.demand_features: one row per store, SKU and week for the last 3 years, with units sold, promotion flag, stock-out days and week of year.","output":"A draft transformation joining silver sales, inventory and product, plus a freshness test.","review":"The data scientist changes stock-out days to count only days the store was open.","produces":["PL14","T31","DQ03"]},
+ {"id":"MA04","name":"Explain a failed run","prompt":"Why did the 03:00 run of EDW to bronze fail?","output":"An explanation that DimProduct gained a new column, the schema test stopped the load, and a proposed mapping for the new column.","review":"The engineer accepts the mapping and updates the contract. The next run succeeds.","produces":["PL11","DQ04","T03"]},
+ {"id":"MA05","name":"Document revenue for audit","prompt":"Document how gold.revenue_daily is produced, from the POS source to the Power BI report.","output":"A step-by-step description of each pipeline, table and test on the revenue path.","review":"Finance adds the ledger reconciliation owner and files it with the SOX evidence.","produces":["PL15","T33","DQ09"]}
+],
+"waves":[
+ {"id":"W1","name":"Lift the EDW into the lakehouse","from":"2026-Q4","to":"2027-Q1","refs":["PL11","PL12","PL13","T11","T12","T13","T14","T21","T22","T23","T24","DQ01","DQ02","DQ04","DQ05","DQ06","DQ10","R01","R02"],"unblocks":["B01","B02"],"def":"Core EDW tables land hourly in Databricks, conformed, masked and tested."},
+ {"id":"W2","name":"Forecast-ready gold","from":"2027-Q1","to":"2027-Q2","refs":["PL14","PL15","T31","T33","DQ03","DQ07","DQ09","R03","U01"],"unblocks":["U01"],"def":"Demand features and reconciled revenue in gold. The forecast trains on governed data."},
+ {"id":"W3","name":"Direct sources and product content","from":"2027-Q2","to":"2027-Q3","refs":["PL16","PL17","T15","T16","T25","T34","DQ08","R04","U02"],"unblocks":["U02","B03","B05"],"def":"Web orders bypass the EDW. Product manuals become searchable passages for the assistant."},
+ {"id":"W4","name":"Retire spreadsheets, add churn","from":"2027-Q4","to":"2028-Q1","refs":["T32","U03","PL02","S13"],"unblocks":["U03","B04"],"def":"Weekly Excel extracts stop. Customer 360 supports the churn model."}
+],
+"glossary":[
+ {"id":"G01","term":"Data journey","see":["T01","T31"],"def":"The path data takes from the system that creates it to the report or model that uses it."},
+ {"id":"G02","term":"EDW","see":["S06"],"def":"Enterprise data warehouse. Here, the on-premise SQL Server database that holds Tallgrass history."},
+ {"id":"G03","term":"Lakehouse","see":["S09"],"def":"A platform that stores data as open tables and serves both BI and AI from the same copy."},
+ {"id":"G04","term":"Medallion layers","see":["T11","T21","T31"],"def":"Bronze holds raw copies, silver holds cleaned and conformed data, gold holds tables built for a use."},
+ {"id":"G05","term":"ELT with pushdown","see":["PL12"],"def":"Load data first, then transform it with SQL that runs inside the target platform, so data does not leave it."},
+ {"id":"G06","term":"Incremental load","see":["PL11"],"def":"Copying only rows that changed since the last run instead of the whole table."},
+ {"id":"G07","term":"Schema drift","see":["DQ04","MA04"],"def":"A source table gains, loses or changes a column. Without a check, pipelines break or load wrong data."},
+ {"id":"G08","term":"Data test","see":["DQ01","DQ05"],"def":"A query that must pass before data is published, such as row counts matching or no clear-text email."},
+ {"id":"G09","term":"Unity Catalog","see":["S09"],"def":"Databricks governance layer for access control, lineage and discovery across tables."},
+ {"id":"G10","term":"Lineage","see":["T33","F05"],"def":"The record of which sources, pipelines and tables produced a number."},
+ {"id":"G11","term":"Retrieval for AI","see":["T34","S12"],"def":"Finding the most relevant document passages and giving them to a language model so its answer uses company content."},
+ {"id":"G12","term":"Maia","see":["MA01","P01"],"def":"Matillion's AI for data engineering. On this page its prompts and outputs are illustrative examples, not product captures."}
+]
+}
+</script>
+
+<div id="fatal" hidden style="margin-block:12px;padding:10px 12px;border:1px solid var(--s-restricted);border-radius:6px;color:var(--s-restricted);font:13px var(--f-mono)"></div>
+<script>
+window.addEventListener("error", e => { const b = document.getElementById("fatal"); if (b){ if (document.body.firstElementChild !== b) document.body.prepend(b); b.hidden = false; b.textContent += "Page error: " + (e.message || "unknown") + (e.lineno ? " (line " + e.lineno + ")" : "") + "\n"; } });
+</script>
+<script>
+(() => {
+"use strict";
+/* ---------- 1. Model and index ---------- */
+const M = JSON.parse(document.getElementById("model").textContent);
+const KINDS = {
+  system:  {label:"System",        plural:"Systems",        list:"systems",   color:"--k-system"},
+  dataset: {label:"Table",         plural:"Tables",         list:"datasets",  color:"--l-silver"},
+  pipeline:{label:"Pipeline",      plural:"Pipelines",      list:"pipelines", color:"--t-matillion"},
+  usecase: {label:"AI use case",   plural:"AI use cases",   list:"usecases",  color:"--k-ai"},
+  finding: {label:"Finding",       plural:"Findings",       list:"findings",  color:"--s-restricted"},
+  backlog: {label:"Backlog item",  plural:"Backlog",        list:"backlog",   color:"--k-warn"},
+  process: {label:"Process",       plural:"Processes",      list:"processes", color:"--k-process"},
+  step:    {label:"Process step",  plural:"Process steps",  list:"steps",     color:"--k-process"},
+  dq:      {label:"Data test",     plural:"Data tests",     list:"dq",        color:"--k-test"},
+  reg:     {label:"Regulation",    plural:"Regulations",    list:"regs",      color:"--k-reg"},
+  maia:    {label:"Maia example",  plural:"Maia examples",  list:"maia",      color:"--k-maia"},
+  wave:    {label:"Roadmap wave",  plural:"Roadmap waves",  list:"waves",     color:"--accent"},
+  term:    {label:"Glossary term", plural:"Glossary terms", list:"glossary",  color:"--ink-3"}
+};
+const REL = {feeds:"feeds", writes:"writes", reads:"feeds", indexes:"indexes", contains:"contains", uses:"reads", applies:"runs test", checks:"checks",
+  runsIn:"runs in", requires:"applies to", explains:"explains", needs:"needs", about:"about", produces:"produces", delivers:"delivers", unblocks:"unblocks", system:"runs on"};
+const byId = new Map();
+for (const [kind, k] of Object.entries(KINDS)) for (const r of (M[k.list] || [])) byId.set(r.id, Object.assign(r, {kind}));
+const LAYER_COLOR = {edw:"--l-edw", bronze:"--l-bronze", silver:"--l-silver", gold:"--l-gold"};
+const TOOL_COLOR = {SSIS:"--t-ssis", Excel:"--t-excel", Matillion:"--t-matillion"};
+const colorOf = n => n.kind === "dataset" ? LAYER_COLOR[n.layer] : n.kind === "pipeline" ? TOOL_COLOR[n.tool] : KINDS[n.kind].color;
+
+const rels = [];
+const link1 = (f, r, list, v) => { for (const t of (list || [])) if (byId.has(t)) rels.push(v ? {f, r, t, v} : {f, r, t}); };
+for (const p of M.pipelines){ for (const s of p.from) if (byId.has(s)) rels.push({f:s, r:"feeds", t:p.id, v:p.view}); link1(p.id, "writes", p.to, p.view); }
+for (const x of M.relations) if (byId.has(x.f) && byId.has(x.t)) rels.push(x);
+const STEPS = new Map();
+for (const s of M.steps.slice().sort((a,b) => a.n - b.n)){
+  if (!STEPS.has(s.p)) STEPS.set(s.p, []);
+  STEPS.get(s.p).push(s);
+  rels.push({f:s.p, r:"contains", t:s.id});
+  link1(s.id, "writes", s.writes); link1(s.id, "uses", s.reads); link1(s.id, "applies", s.ctl); if (byId.has(s.sys)) rels.push({f:s.id, r:"system", t:s.sys});
+}
+for (const q of M.dq){ link1(q.id, "checks", q.datasets); link1(q.id, "runsIn", [q.pipeline]); }
+for (const g of M.regs) link1(g.id, "requires", g.refs);
+for (const u of M.usecases) link1(u.id, "needs", u.needs);
+for (const f of M.findings) link1(f.id, "about", f.refs);
+for (const b of M.backlog) link1(b.id, "needs", b.refs);
+for (const m of M.maia) link1(m.id, "produces", m.produces);
+for (const w of M.waves){ link1(w.id, "delivers", w.refs); link1(w.id, "unblocks", w.unblocks); }
+for (const g of M.glossary) link1(g.id, "explains", g.see);
+const out = id => rels.filter(x => x.f === id), inn = id => rels.filter(x => x.t === id);
+
+/* ---------- 2. State and helpers ---------- */
+const TABS = [["start","Start here"],["ai","AI readiness"],["net","Network"],["cur","Current state"],["maia","Maia"],["proc","Process"],
+              ["dq","Data tests"],["reg","Regulation"],["cat","Catalogue"],["road","Roadmap"],["schema","How it's built"]];
+const FACETS = [
+  {key:"layer",   label:"Layer",       get:d => d.layer, order:["edw","bronze","silver","gold"]},
+  {key:"subject", label:"Subject",     get:d => d.subject},
+  {key:"sens",    label:"Sensitivity", get:d => d.sens, order:["Public","Internal","Confidential","Restricted"]}
+];
+const S = {tab:"start", sel:null, view:"today", q:"", cat:"table", bpmn:null, beat:null, f:Object.fromEntries(FACETS.map(f => [f.key, new Set()]))};
+const store = {
+  get(k, fb){ try { const v = JSON.parse(localStorage.getItem("tgj." + k)); return v ?? fb; } catch (e) { return fb; } },
+  set(k, v){ try { localStorage.setItem("tgj." + k, JSON.stringify(v)); } catch (e) {} }
+};
+{ const t = store.get("tab", null); if (TABS.some(x => x[0] === t)) S.tab = t; }
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const nameOf = id => { const n = byId.get(id); return !n ? id : n.kind === "reg" ? n.short : n.kind === "dq" ? `${n.id} ${n.dim}` : n.name || n.term || id; };
+const link = id => `<button class="link" data-go="${esc(id)}">${esc(nameOf(id))}</button>`;
+const chip = id => byId.has(id) ? `<button class="ref" type="button" data-go="${esc(id)}" style="--kc:var(${colorOf(byId.get(id))})">${esc(nameOf(id))}</button>` : "";
+const sensColor = s => "var(--s-" + String(s).toLowerCase() + ")";
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+// Rail filters apply to tables; other tabs highlight records linked to a matching table.
+const dsMatch = d => FACETS.every(f => !S.f[f.key].size || S.f[f.key].has(f.get(d)));
+const filtering = () => FACETS.some(f => S.f[f.key].size);
+const focus = ids => {
+  if (!filtering()) return "";
+  const hit = ids.some(id => { const n = byId.get(id); if (!n) return false;
+    if (n.kind === "dataset") return dsMatch(n);
+    return rels.some(x => (x.f === id && byId.get(x.t)?.kind === "dataset" && dsMatch(byId.get(x.t))) || (x.t === id && byId.get(x.f)?.kind === "dataset" && dsMatch(byId.get(x.f)))); });
+  return hit ? "hit" : "dim";
+};
+function select(id){ if (byId.has(id)){ S.sel = id; renderAll(); } }
+function goTab(k){
+  S.tab = k; store.set("tab", k); renderTabs();
+  $("tabs").querySelector(`[data-tab="${k}"]`)?.scrollIntoView({block:"nearest", inline:"nearest"});
+}
+
+/* ---------- 3. Rail, tabs, inspector ---------- */
+function renderRail(){
+  let h = `<h2>Search tables</h2><input class="search" id="q" type="search" placeholder="Table name or description" value="${esc(S.q)}">`;
+  for (const f of FACETS){
+    const counts = new Map(); for (const d of M.datasets) counts.set(f.get(d), (counts.get(f.get(d)) || 0) + 1);
+    const vals = [...counts.keys()].sort((a,b) => f.order ? f.order.indexOf(a) - f.order.indexOf(b) : String(a).localeCompare(String(b)));
+    h += `<h2>${f.label}</h2><div class="chips">` + vals.map(v => `<button class="chip" data-facet="${f.key}" data-v="${esc(v)}" aria-pressed="${S.f[f.key].has(v)}">${f.key === "layer" ? `<span class="sw" style="--kc:var(${LAYER_COLOR[v]})"></span>` : ""}${esc(v)}<span class="n">${counts.get(v)}</span></button>`).join("") + `</div>`;
+  }
+  h += `<button class="reset" id="reset">Reset filters and selection</button>`;
+  $("rail").innerHTML = h;
+  $("q").oninput = e => { S.q = e.target.value; renderCat(); };
+}
+$("rail").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.id === "reset"){ S.q = ""; for (const k in S.f) S.f[k].clear(); S.sel = null; }
+  else if (b.dataset.facet){ const set = S.f[b.dataset.facet], v = b.dataset.v; set.has(v) ? set.delete(v) : set.add(v); }
+  else return;
+  renderAll();
+});
+function renderTabs(){
+  const n = {net:M.datasets.length, cur:M.findings.length, maia:M.maia.length, proc:M.processes.length, dq:M.dq.length, reg:M.regs.length, road:M.waves.length};
+  $("tabs").innerHTML = TABS.map(([k,l]) => `<button class="tab" role="tab" data-tab="${k}" aria-selected="${S.tab===k}">${l}${n[k]!=null?`<span class="n">${n[k]}</span>`:""}</button>`).join("");
+  for (const [k] of TABS) $("view-" + k).hidden = S.tab !== k;
+  document.querySelector(".shell").classList.toggle("wide", S.tab === "net");
+}
+$("tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) goTab(b.dataset.tab); });
+
+function renderInsp(){
+  const n = byId.get(S.sel);
+  if (!n){ $("insp").innerHTML = `<div class="card"><p class="def">Click any table, pipeline, system or chip to see its details and links here.</p><p class="def">On the Network tab, clicking a table also traces its lineage upstream and downstream.</p></div>`; return; }
+  const k = KINDS[n.kind];
+  let h = `<div class="card"><div class="kind" style="--kc:var(${colorOf(n)})">${k.label} · <span class="mono">${esc(n.id)}</span></div><h3>${esc(nameOf(n.id))}</h3><p class="def">${esc(n.def)}</p><dl>`;
+  if (n.kind === "reg") h += `<dt>Full name</dt><dd>${esc(n.name)}</dd>`;
+  const F = {role:"Role", hosting:"Hosting", layer:"Layer", subject:"Subject", owner:"Owner", refresh:"Refresh", sla:"Freshness SLA", sens:"Sensitivity", rows:"Rows",
+    tool:"Tool", schedule:"Schedule", runtime:"Run time", builtBy:"Built by", failures:"Reliability", sponsor:"Sponsor", freshness:"Needs data", dim:"Dimension",
+    today:"Today", cat:"Category", juris:"Applies to", when:"When", requester:"Requested by", weeks:"Weeks waiting", sev:"Severity", lane:"Lane", from:"From", to:"To"};
+  for (const [f,l] of Object.entries(F)){
+    const v = n[f]; if (v == null || v === "" || Array.isArray(v)) continue;
+    if (f === "today" && n.kind === "usecase") continue;
+    h += `<dt>${l}</dt><dd>${f === "sens" ? `<span class="pill" style="--pc:${sensColor(v)}">${esc(v)}</span>` : esc(v)}</dd>`;
+  }
+  if (n.kind === "dq") h += `<dt>Blocks publish</dt><dd>${n.blocks ? "Yes" : "No, warns only"}</dd>`;
+  if (n.kind === "step") h += `<dt>Process</dt><dd>${link(n.p)}</dd>${n.gate ? `<dt>Decision</dt><dd>${esc(n.gate.q)} If no: ${esc(n.gate.no)}</dd>` : ""}`;
+  if (n.kind === "wave" || n.kind === "backlog") h += n.wave ? `<dt>Wave</dt><dd>${link(n.wave)}</dd>` : "";
+  if (n.kind === "usecase") h += `<dt>Wave</dt><dd>${link(n.wave)}</dd><dt>Readiness</dt><dd>${avg(n.today)} today, ${avg(n.target)} target (of 5)</dd>`;
+  h += `</dl>`;
+  if (n.kind === "step" && n.failure) h += `<h2>What goes wrong</h2><p class="def fail">${esc(n.failure)}</p>`;
+  if (n.kind === "dq") h += `<h2>Test</h2><pre class="code">${esc(n.test)}</pre>`;
+  if (n.kind === "maia") h += `<h2>Prompt (illustrative)</h2><p class="def">${esc(n.prompt)}</p><h2>Draft output (illustrative)</h2><p class="def">${esc(n.output)}</p><h2>Human review</h2><p class="def">${esc(n.review)}</p>`;
+  if (n.kind === "usecase") h += `<h2>Blockers today</h2><ul class="rels">${n.blockers.map(b => `<li>${esc(b)}</li>`).join("")}</ul>`;
+  const o = out(n.id), i = inn(n.id);
+  const li = (x, other) => `<li><span class="r">${esc(REL[x.r] || x.r)}${x.v && x.v !== "both" ? ` <span class="muted">(${x.v === "today" ? "today" : "target"})</span>` : ""}</span>${link(other)}</li>`;
+  if (o.length) h += `<h2>Links out</h2><ul class="rels">${o.map(x => li(x, x.t)).join("")}</ul>`;
+  if (i.length) h += `<h2>Links in</h2><ul class="rels">${i.map(x => li(x, x.f)).join("")}</ul>`;
+  $("insp").innerHTML = h + `</div>`;
+}
+const avg = a => a.length ? (a.reduce((x, y) => x + y, 0) / a.length).toFixed(1) : "–";
+document.addEventListener("click", e => {
+  const beat = e.target.closest("[data-beat]"); if (beat){ runBeat(+beat.dataset.beat); return; }
+  const t = e.target.closest("[data-tabgo]"); if (t){ goTab(t.dataset.tabgo); return; }
+  const b = e.target.closest("[data-go]"); if (b) select(b.dataset.go);
+});
+document.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.matches("g[data-go]")){ e.preventDefault(); select(e.target.dataset.go); } });
+
+/* ---------- 4. Start: scenario and talk track ---------- */
+const backlogWeeks = () => M.backlog.reduce((a, b) => a + b.weeks, 0);
+const BEATS = () => [
+  {title:"Open with their goal", tab:"ai", say:`The board wants demand forecasting and a product assistant before spring. Across three AI use cases, data readiness averages ${avg(M.usecases.flatMap(u => u.today))} of 5 today.`},
+  {title:"Show where the data lives today", tab:"net", view:"today", sel:"T01", say:"Everything flows once a night through SSIS into the SQL Server EDW. Data science works from Monday spreadsheets. The product assistant has no feed at all."},
+  {title:"Name the pain", tab:"cur", say:`${M.findings.filter(f => f.sev === "high").length} high-severity findings, ${M.backlog.length} data requests waiting a combined ${backlogWeeks()} weeks, and customer contact data leaving the warehouse unmasked.`},
+  {title:"Show the journey with Matillion", tab:"net", view:"target", sel:"T31", say:"The EDW stays as a source. Matillion loads it hourly into Databricks, through bronze, silver and gold. Click gold.demand_features: its lineage runs back through tested, masked layers to the EDW tables."},
+  {title:"Show how pipelines get built", tab:"maia", say:"An engineer describes the pipeline, Maia drafts pipeline, tests and documentation, and the engineer reviews before anything runs. These examples are illustrative."},
+  {title:"Show a run that protects itself", tab:"proc", bpmn:"P03", sel:"P03.4", say:"Every hourly run tests the data before it publishes. A failed test blocks publishing and alerts an engineer, so bad data never reaches the forecast."},
+  {title:"Show the tests", tab:"dq", say:`${M.dq.length} tests across the journey. Today ${M.dq.filter(q => q.today === "None").length} of them do not exist at all.`},
+  {title:"Show compliance", tab:"reg", say:"Privacy, card data, financial reporting and AI risk each map to a table, a test or a pipeline. Masking happens before analysts see the data."},
+  {title:"Close with the plan", tab:"road", say:`${M.waves.length} waves. Wave 1 lifts the EDW into Databricks; wave 2 makes the forecast data ready; wave 3 feeds the assistant.`}
+];
+function runBeat(i){
+  const b = BEATS()[i]; if (!b) return;
+  S.beat = i;
+  if (b.view) S.view = b.view;
+  if (b.bpmn) S.bpmn = b.bpmn;
+  if (b.sel) S.sel = b.sel;
+  renderAll(); goTab(b.tab);
+}
+function renderStart(){
+  const m = M.meta;
+  const facts = [["Company", m.company], ["Industry", m.industry], ["Goal", m.goal], ["Why now", m.trigger], ["Source", m.source], ["Target", m.target], ["Integration", m.integration]];
+  $("view-start").innerHTML = `<p class="viewq">From a nightly SQL Server warehouse to AI-ready data in Databricks.</p>
+    <p class="lede">A talk track for a live demo. Each step opens the right tab with the right selection. Present top to bottom, or jump to any step.</p>
+    <div class="scen">${facts.map(([k, v]) => `<div class="fact"><span class="k">${k}</span><span class="v">${esc(v)}</span></div>`).join("")}</div>
+    <ol class="beats">${BEATS().map((b, i) => `<li class="beat ${S.beat === i ? "on" : ""}"><span class="no">${i + 1}</span><div><h3>${esc(b.title)}</h3><p>${esc(b.say)}</p></div><button class="btn" type="button" data-beat="${i}">Show</button></li>`).join("")}</ol>`;
+}
+
+/* ---------- 5. AI readiness ---------- */
+function renderAI(){
+  const dims = M.readiness;
+  const all = M.usecases.flatMap(u => u.today), allT = M.usecases.flatMap(u => u.target);
+  $("view-ai").innerHTML = `<p class="viewq">Is our data ready for AI?</p>
+    <p class="lede">Each AI use case scored 1 to 5 on what its data needs. Today versus after the roadmap wave that serves it. Fictional scores for the demo.</p>
+    <div class="kpis"><div class="kpi bad"><span class="k">Readiness today</span><span class="v">${avg(all)}<small> of 5</small></span></div>
+      <div class="kpi good"><span class="k">After the roadmap</span><span class="v">${avg(allT)}<small> of 5</small></span></div>
+      <div class="kpi"><span class="k">Use cases blocked today</span><span class="v">${M.usecases.filter(u => +avg(u.today) < 3).length}<small> of ${M.usecases.length}</small></span></div></div>
+    <div class="tblwrap"><table class="score"><thead><tr><th>Use case</th>${dims.map(d => `<th>${esc(d)}</th>`).join("")}<th>Average</th><th>Ready in</th></tr></thead><tbody>` +
+    M.usecases.map(u => `<tr class="${focus(u.needs) === "dim" ? "dim-row" : ""}"><td><button class="link" data-go="${u.id}"><b>${esc(u.name)}</b></button><br><span class="muted small">${esc(u.sponsor)}</span></td>` +
+      u.today.map((v, i) => `<td class="lv" style="--lv:${v * 16}%" title="${esc(dims[i])}: ${v} today, ${u.target[i]} target">${v}<small>→ ${u.target[i]}</small></td>`).join("") +
+      `<td class="mono">${avg(u.today)} → ${avg(u.target)}</td><td>${link(u.wave)}</td></tr>`).join("") + `</tbody></table></div>
+    <h2 class="sech">What blocks each use case</h2>
+    <div class="cards">${M.usecases.map(u => `<article class="card2 ${focus(u.needs)}"><div class="c-hd"><button class="link" data-go="${u.id}"><b>${esc(u.name)}</b></button><span class="grow"></span><span class="mono muted">needs data ${esc(u.freshness.toLowerCase())}</span></div>
+      <p class="muted small">${esc(u.def)}</p><ul class="rels" style="margin-top:8px">${u.blockers.map(b => `<li>✕ ${esc(b)}</li>`).join("")}</ul>
+      <div class="refs"><span class="rl">Needs</span>${u.needs.map(chip).join("")}</div><div class="refs"><span class="rl">Ready in</span>${chip(u.wave)}</div></article>`).join("")}</div>`;
+}
+
+/* ---------- 6. Network: the journey, left to right, today or target ---------- */
+const COLS = {
+  today:  [["source","Sources"],["legacy","Legacy ETL"],["edw","SQL Server EDW"],["extract","Manual extract"],["file","Spreadsheets"],["consumer","BI and AI"]],
+  target: [["source","Direct sources"],["edw","SQL Server EDW"],["ingest","Matillion: ingest"],["bronze","Bronze"],["transform","Matillion: transform"],["silver","Silver"],["build","Matillion: build"],["gold","Gold"],["consumer","BI and AI"]]
+};
+const stageOf = n => n.kind === "dataset" ? n.layer : n.stage;
+function netGraph(view){
+  const edges = rels.filter(x => x.v && (x.v === view || x.v === "both"));
+  const ids = new Set(edges.flatMap(e => [e.f, e.t]));
+  for (const s of M.systems) if (s.stage === "consumer") ids.add(s.id);
+  const cols = COLS[view].map(c => c[0]);
+  const nodes = [...ids].map(id => byId.get(id)).filter(n => n && cols.includes(stageOf(n)) && !(n.kind === "pipeline" && n.view !== view && n.view !== "both"));
+  const keep = new Set(nodes.map(n => n.id));
+  return {nodes, edges:edges.filter(e => keep.has(e.f) && keep.has(e.t)), cols};
+}
+function lineage(g, id){
+  if (!id || !g.nodes.some(n => n.id === id)) return null;
+  const up = new Set([id]), down = new Set([id]);
+  let grew = true; while (grew){ grew = false; for (const e of g.edges){ if (up.has(e.t) && !up.has(e.f)){ up.add(e.f); grew = true; } if (down.has(e.f) && !down.has(e.t)){ down.add(e.t); grew = true; } } }
+  return new Set([...up, ...down]);
+}
+function renderNet(){
+  const view = S.view, g = netGraph(view), CW = 150, NW = 134, NH = 40, RH = 52, TOP = 62, L = 16;
+  const byCol = g.cols.map(c => g.nodes.filter(n => stageOf(n) === c));
+  const rows = Math.max(...byCol.map(c => c.length)), W = L * 2 + g.cols.length * CW - (CW - NW), H = TOP + rows * RH + 16;
+  const pos = new Map();
+  byCol.forEach((list, ci) => { const off = (rows - list.length) * RH / 2; list.forEach((n, ri) => pos.set(n.id, {x:L + ci * CW, y:TOP + off + ri * RH})); });
+  const lin = lineage(g, S.sel), sel = S.sel;
+  let svg = `<svg class="net" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${view === "today" ? "Today" : "Target"} data journey: ${g.nodes.length} systems, pipelines and tables">`;
+  const band = (c0, c1, label) => { const i0 = g.cols.indexOf(c0), i1 = g.cols.indexOf(c1); if (i0 < 0) return "";
+    return `<rect class="n-band" x="${L + i0 * CW - 8}" y="8" width="${(i1 - i0) * CW + NW + 16}" height="${H - 16}" rx="10"/><text class="n-bandtxt" x="${L + i0 * CW}" y="26">${esc(label)}</text>`; };
+  svg += band("edw", "edw", "On-premise");
+  if (view === "target") svg += band("bronze", "gold", "Databricks Lakehouse on Azure · Unity Catalog");
+  g.cols.forEach((c, i) => svg += `<text class="n-col" x="${L + i * CW}" y="46">${esc(COLS[view][i][1])}</text>`);
+  for (const e of g.edges){
+    const a = pos.get(e.f), b = pos.get(e.t); if (!a || !b) continue;
+    const x1 = a.x + NW, y1 = a.y + NH / 2, x2 = b.x, y2 = b.y + NH / 2, dx = Math.max(30, (x2 - x1) / 2);
+    const manual = [e.f, e.t].some(id => ["PL02","S13"].includes(id));
+    const cls = lin ? (lin.has(e.f) && lin.has(e.t) ? "on" : "dim") : "";
+    svg += `<path class="n-edge ${manual ? "manual" : ""} ${cls}" d="M${x1} ${y1} C${x1 + dx} ${y1} ${x2 - dx} ${y2} ${x2} ${y2}"/>`;
+  }
+  for (const n of g.nodes){
+    const p = pos.get(n.id), c = colorOf(n);
+    const sub = n.kind === "dataset" ? `${n.layer} · ${n.refresh.toLowerCase()}` : n.kind === "pipeline" ? `${n.tool} · ${n.schedule.toLowerCase()}` : n.role.toLowerCase();
+    const noFeed = n.kind === "system" && n.stage === "consumer" && !g.edges.some(e => e.t === n.id);
+    const cls = `${n.kind === "pipeline" ? "pipe" : n.kind === "dataset" ? "ds" : ""} ${sel === n.id ? "sel" : ""} ${lin && !lin.has(n.id) ? "dim" : ""} ${!lin && filtering() && focus([n.id]) === "dim" ? "dim" : ""}`;
+    const full = n.kind === "dataset" ? n.name.split(".").pop() : n.name, max = Math.floor((NW - 16) / 6.4);
+    const label = full.length > max ? full.slice(0, max - 1) + "…" : full;
+    const smax = Math.floor((NW - 16) / 6.1), subT = sub.length > smax ? sub.slice(0, smax - 1) + "…" : sub;
+    svg += `<g class="n-node ${cls}" style="--nc:var(${c})" data-go="${n.id}" role="button" tabindex="0" aria-label="${esc(n.name)}"><title>${esc(n.name)}: ${esc(n.def)}</title>
+      <rect x="${p.x}" y="${p.y}" width="${NW}" height="${NH}" rx="${n.kind === "pipeline" ? 20 : 6}"/>${n.kind === "dataset" ? `<rect class="bar" x="${p.x}" y="${p.y}" width="4" height="${NH}" rx="2"/>` : ""}
+      <text class="n-t" x="${p.x + 10}" y="${p.y + 17}">${esc(label)}</text>
+      ${noFeed ? `<text class="nofeed" x="${p.x + 10}" y="${p.y + 31}">no data feed</text>` : `<text class="n-s" x="${p.x + 10}" y="${p.y + 31}">${esc(subT)}</text>`}</g>`;
+  }
+  svg += `</svg>`;
+  const selN = byId.get(sel), onMap = lin && selN;
+  $("view-net").innerHTML = `<p class="viewq">${view === "today" ? "Where does the data go today?" : "What does the journey look like with Matillion?"}</p>
+    <div class="netbar"><div class="seg" role="group" aria-label="Network view"><button type="button" data-view="today" aria-pressed="${view === "today"}">Today</button><button type="button" data-view="target" aria-pressed="${view === "target"}">With Matillion</button></div>
+      <span class="muted small">${onMap ? `Tracing lineage of <b>${esc(selN.name)}</b>.` : "Click any table or pipeline to trace its lineage."}</span>${onMap ? `<button class="btn" type="button" id="netclear" style="padding:4px 10px;font-size:12.5px">Clear</button>` : ""}</div>
+    <div class="netwrap">${svg}</div>
+    <div class="legend"><span><i style="--nc:var(--l-edw)"></i>EDW table</span><span><i style="--nc:var(--l-bronze)"></i>Bronze</span><span><i style="--nc:var(--l-silver)"></i>Silver</span><span><i style="--nc:var(--l-gold)"></i>Gold</span>
+      <span><i style="--nc:var(--t-ssis);border-radius:8px"></i>SSIS</span><span><i style="--nc:var(--t-excel);border-radius:8px"></i>Manual Excel</span><span><i style="--nc:var(--t-matillion);border-radius:8px"></i>Matillion pipeline</span><span><i style="--nc:var(--k-system)"></i>System</span></div>`;
+}
+$("view-net").addEventListener("click", e => {
+  if (e.target.id === "netclear"){ S.sel = null; renderNet(); renderInsp(); return; }
+  const b = e.target.closest("[data-view]"); if (b){ S.view = b.dataset.view; renderNet(); }
+});
+
+/* ---------- 7. Current state ---------- */
+function renderCur(){
+  const flows = M.pipelines.filter(p => p.view !== "target");
+  $("view-cur").innerHTML = `<p class="viewq">Why can't the data team keep up today?</p>
+    <div class="kpis"><div class="kpi bad"><span class="k">High-severity findings</span><span class="v">${M.findings.filter(f => f.sev === "high").length}</span></div>
+      <div class="kpi"><span class="k">Requests waiting</span><span class="v">${M.backlog.length}<small> items</small></span></div>
+      <div class="kpi bad"><span class="k">Combined wait</span><span class="v">${backlogWeeks()}<small> weeks</small></span></div>
+      <div class="kpi"><span class="k">Automated data tests</span><span class="v">0<small> of ${M.dq.length}</small></span></div></div>
+    <h2 class="sech">How data moves today</h2>
+    <div class="tblwrap"><table><thead><tr><th>Flow</th><th>Tool</th><th>From</th><th>To</th><th>Schedule</th><th>Run time</th><th>Reliability</th></tr></thead><tbody>` +
+    flows.map(p => `<tr class="row ${focus([p.id]) === "dim" ? "dim-row" : ""}" data-go="${p.id}"><td><b>${esc(p.name)}</b></td><td><span class="pill" style="--pc:var(${TOOL_COLOR[p.tool]})">${esc(p.tool)}</span></td><td class="def">${p.from.map(nameOf).map(esc).join(", ")}</td><td class="def">${p.to.map(nameOf).map(esc).join(", ")}</td><td>${esc(p.schedule)}</td><td>${esc(p.runtime)}</td><td>${esc(p.failures)}</td></tr>`).join("") +
+    `</tbody></table></div>
+    <h2 class="sech">Findings</h2>
+    <ul class="findings">${M.findings.map(f => `<li class="${f.sev} ${focus(f.refs) === "dim" ? "dim-row" : ""}"><span class="sev">${f.sev}</span><span><button class="link" data-go="${f.id}"><b>${esc(f.name)}</b></button>. ${esc(f.def)}<span class="refs">${f.refs.map(chip).join("")}</span></span></li>`).join("")}</ul>
+    <h2 class="sech">Data requests waiting</h2>
+    <div class="tblwrap"><table><thead><tr><th>Request</th><th>From</th><th>Waiting</th><th>Unblocked in</th><th>Detail</th></tr></thead><tbody>` +
+    M.backlog.slice().sort((a,b) => b.weeks - a.weeks).map(b => `<tr class="row" data-go="${b.id}"><td><b>${esc(b.name)}</b></td><td>${esc(b.requester)}</td><td class="mono">${b.weeks} weeks</td><td>${esc(nameOf(b.wave))}</td><td class="def">${esc(b.def)}</td></tr>`).join("") + `</tbody></table></div>`;
+}
+
+/* ---------- 8. Maia (illustrative) ---------- */
+function renderMaia(){
+  $("view-maia").innerHTML = `<p class="viewq">How do pipelines get built faster?</p>
+    <div class="note"><b>Illustrative.</b> These prompts, drafts and reviews are written for this fictional scenario to show the working pattern: the engineer describes, Maia drafts, the engineer reviews and owns the result. They are not captured from the product. Confirm what Maia does today in current Matillion documentation before presenting.</div>
+    <div class="maia">${M.maia.map(m => `<article class="mcard"><div class="c-hd"><button class="link" data-go="${m.id}"><b>${esc(m.name)}</b></button><span class="mono muted">${m.id}</span><span class="grow"></span><span class="badge illu">Illustrative</span></div>
+      <div class="mflow"><div class="p"><b>Engineer asks</b>${esc(m.prompt)}</div><div class="o"><b>Maia drafts</b>${esc(m.output)}</div><div class="r"><b>Engineer reviews</b>${esc(m.review)}</div></div>
+      <div class="refs"><span class="rl">Produces</span>${m.produces.map(chip).join("")}</div></article>`).join("")}</div>
+    <p class="lede" style="margin-top:12px">The design-time process, with the approval gate, is on the Process tab: ${link("P01")}.</p>`;
+}
+
+/* ---------- 9. Process and BPMN 2.0 ---------- */
+let dl = null;
+async function saveFile(filename, data, type){
+  if (dl) return (await dl.save({filename, data})).status === "saved" ? "Saved." : "";
+  if (window.claude) throw {message:"Downloads are not available in this view."};
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([data], {type})); a.download = filename; document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  return "Downloaded.";
+}
+const objLabel = id => { const n = byId.get(id); return n?.kind === "dataset" ? n.name.split(".").pop() : nameOf(id); };
+function renderProc(){
+  $("view-proc").innerHTML = `<p class="viewq">How does a pipeline get built, and how does it run?</p>
+    <p class="lede">Three processes. Open <b>BPMN 2.0</b> to see lanes, decisions and which tables each step reads or writes. Maia steps are dashed and illustrative.</p>` +
+  M.processes.map(p => {
+    const steps = STEPS.get(p.id) || [], open = S.bpmn === p.id;
+    const w = new Set(steps.flatMap(s => s.writes)), r = new Set(steps.flatMap(s => s.reads));
+    return `<article class="proc"><div class="proc-hd"><span class="proc-code">${esc(p.code)}</span>
+        <div class="proc-t"><h3><button class="link" data-go="${p.id}">${esc(p.name)}</button></h3><p>${esc(p.def)}</p></div>
+        <div class="tally"><span>${steps.length} steps</span><span>${w.size} tables written</span><span>${r.size} tables read</span>
+          <button class="bpmn-btn" type="button" data-bpmn="${p.id}" aria-expanded="${open}">${open ? "Hide BPMN" : "BPMN 2.0"}</button></div></div>
+      ${open ? bpmnFigure(p.id) : ""}
+      <div class="strip">${steps.map(s => `<button class="step" type="button" data-go="${s.id}" aria-pressed="${S.sel===s.id}">
+          <span class="no">${esc(p.code)} · step ${s.n}</span><span class="t">${esc(s.name)}</span><span class="lane">${esc(s.lane)}</span>
+          ${s.maia ? `<span class="ill">Illustrative</span>` : ""}
+          <span class="doms">${s.writes.map(d => `<i class="w" title="Writes ${esc(nameOf(d))}">${esc(objLabel(d))}</i>`).join("")}${s.reads.map(d => `<i title="Reads ${esc(nameOf(d))}">${esc(objLabel(d))}</i>`).join("")}</span>
+          ${s.gate ? `<span class="gate">◇ ${esc(s.gate.q)}</span>` : ""}</button>`).join("")}</div></article>`;
+  }).join("");
+}
+$("view-proc").addEventListener("click", async e => {
+  const t = e.target.closest("[data-bpmn]"); if (t){ S.bpmn = S.bpmn === t.dataset.bpmn ? null : t.dataset.bpmn; renderProc(); return; }
+  const x = e.target.closest("[data-bpmnxml]");
+  if (x){ const p = byId.get(x.dataset.bpmnxml), msg = $("bpmnmsg-" + p.id);
+    try { msg.textContent = await saveFile("tallgrass-" + p.name.toLowerCase().replace(/\W+/g, "-") + ".bpmn", bpmnXml(p.id), "application/xml"); }
+    catch (err) { msg.textContent = err.code === "cancelled" ? "" : "Download failed: " + (err.message || err.code); } }
+});
+// One layout feeds the SVG and the BPMN DI in the exported file.
+const BG = {pool:30, laneHd:30, LH:160, taskW:130, taskH:58, taskCol:236, evCol:84, gwCol:104, ev:18, gw:25, obj:{w:24,h:30,gap:92}};
+function bpmnModel(pid){
+  const p = byId.get(pid), steps = STEPS.get(pid);
+  const lanes = [...new Set(steps.map(s => s.lane))];
+  const top = l => 10 + lanes.indexOf(l) * BG.LH, cy = l => top(l) + 20 + BG.taskH/2;
+  const nodes = []; let x = 10 + BG.pool + BG.laneHd + 16;
+  const put = (n, col) => { n.cx = x + col/2; x += col; nodes.push(n); return n; };
+  const pk = pid.replace(/\W/g, "_");
+  put({type:"start", id:"Start_" + pk, name:"Start", lane:steps[0].lane, cy:cy(steps[0].lane)}, BG.evCol);
+  const objs = [], extra = [];
+  for (const s of steps){
+    const sid = s.id.replace(/\W/g, "_");
+    const t = put({type:"task", id:"Task_" + sid, step:s, name:s.name, lane:s.lane, cy:cy(s.lane)}, BG.taskCol);
+    const ds = [...s.writes.map(d => [d,"w"]), ...s.reads.map(d => [d,"r"])];
+    ds.forEach(([d, mode], i) => objs.push({id:`DataRef_${sid}_${d}`, dom:d, mode, task:t, cx:t.cx + (i - (ds.length - 1)/2) * BG.obj.gap, y:top(s.lane) + 92}));
+    if (s.gate){
+      const g = put({type:"gateway", id:"Gateway_" + sid, name:s.gate.q, lane:s.lane, cy:cy(s.lane)}, BG.gwCol);
+      extra.push({type:"end", id:"End_" + sid + "_no", name:s.gate.no, lane:s.lane, cx:g.cx, cy:top(s.lane) + 120, from:g});
+    }
+  }
+  const last = steps[steps.length - 1];
+  put({type:"end", id:"End_" + pk, name:"Done", lane:last.lane, cy:cy(last.lane)}, BG.evCol);
+  const W = x + 20, H = 10 + lanes.length * BG.LH + 10;
+  const half = n => n.type === "task" ? BG.taskW/2 : n.type === "gateway" ? BG.gw : BG.ev;
+  const flows = [];
+  for (let i = 1; i < nodes.length; i++){
+    const a = nodes[i-1], b = nodes[i], ax = a.cx + half(a), bx = b.cx - half(b);
+    flows.push({id:`Flow_${a.id}_${b.id}`, a, b, name:a.type === "gateway" ? "Yes" : "", pts:a.cy === b.cy ? [[ax,a.cy],[bx,b.cy]] : [[ax,a.cy],[(ax+bx)/2,a.cy],[(ax+bx)/2,b.cy],[bx,b.cy]]});
+  }
+  for (const e of extra) flows.push({id:`Flow_${e.from.id}_no`, a:e.from, b:e, name:"No", pts:[[e.from.cx, e.from.cy + BG.gw],[e.cx, e.cy - 13]]});
+  return {p, steps, lanes, top, nodes:nodes.concat(extra), flows, objs, W, H};
+}
+function wrap(s, max){ const o = []; let l = ""; for (const w of s.split(" ")){ if ((l + " " + w).trim().length > max && l){ o.push(l); l = w; } else l = (l + " " + w).trim(); } if (l) o.push(l); return o.slice(0, 3); }
+function bpmnSvg(m){
+  const o = [], X = 10, L0 = X + BG.pool;
+  o.push(`<svg class="bpmn" role="img" aria-label="BPMN 2.0 diagram of ${esc(m.p.name)}: ${m.steps.length} tasks in ${m.lanes.length} lanes" viewBox="0 0 ${m.W} ${m.H}" width="${m.W}" height="${m.H}" xmlns="http://www.w3.org/2000/svg">`);
+  o.push(`<defs>${["","w","r"].map(k => `<marker id="bp-arr${k ? "-" + k : ""}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" class="bp-arrhead ${k}"/></marker>`).join("")}</defs>`);
+  o.push(`<rect class="bp-pool" x="${X}" y="10" width="${m.W - 20}" height="${m.lanes.length * BG.LH}"/>`);
+  o.push(`<text class="bp-pooltxt" transform="translate(${X + 19} ${10 + m.lanes.length*BG.LH/2}) rotate(-90)" text-anchor="middle">${esc(m.p.name)}</text>`);
+  m.lanes.forEach(l => { const y = m.top(l);
+    o.push(`<rect class="bp-lane" x="${L0}" y="${y}" width="${m.W - 20 - BG.pool}" height="${BG.LH}"/><text class="bp-lanetxt" transform="translate(${L0 + 19} ${y + BG.LH/2}) rotate(-90)" text-anchor="middle">${esc(l)}</text><line class="bp-lane" x1="${L0 + BG.laneHd}" y1="${y}" x2="${L0 + BG.laneHd}" y2="${y + BG.LH}"/>`); });
+  for (const f of m.flows){
+    o.push(`<polyline class="bp-seq" points="${f.pts.map(p => p.join(",")).join(" ")}" marker-end="url(#bp-arr)"/>`);
+    if (f.name){ const [x, y] = f.pts[0]; o.push(`<text class="bp-flowtxt" x="${x + (f.name === "No" ? 6 : 8)}" y="${y + (f.name === "No" ? 16 : -6)}">${f.name}</text>`); }
+  }
+  for (const d of m.objs){
+    const x = d.cx - BG.obj.w/2, y = d.y, w = BG.obj.w, h = BG.obj.h, t = d.task, tb = t.cy + BG.taskH/2;
+    o.push(`<line class="bp-assoc ${d.mode}" x1="${d.mode==="w" ? t.cx : d.cx}" y1="${d.mode==="w" ? tb : y}" x2="${d.mode==="w" ? d.cx : t.cx}" y2="${d.mode==="w" ? y : tb}" marker-end="url(#bp-arr-${d.mode})"/>`);
+    o.push(`<g class="bp-obj ${d.mode}"><title>${d.mode==="w" ? "Writes" : "Reads"} ${esc(nameOf(d.dom))}</title><path d="M${x} ${y}h${w-8}l8 8v${h-8}h${-w}Z M${x+w-8} ${y}v8h8"/><text class="bp-objtxt" x="${d.cx}" y="${y + h + 12}" text-anchor="middle">${esc(objLabel(d.dom))}</text></g>`);
+  }
+  for (const n of m.nodes){
+    if (n.type === "task"){
+      const x = n.cx - BG.taskW/2, y = n.cy - BG.taskH/2, lines = wrap(n.name, 19);
+      o.push(`<g class="bp-task ${n.step.maia ? "maia" : ""}" data-go="${n.step.id}" tabindex="0" role="button" aria-pressed="${S.sel===n.step.id}"><rect x="${x}" y="${y}" width="${BG.taskW}" height="${BG.taskH}" rx="9"/><text class="bp-no" x="${x + 7}" y="${y + 13}">${n.step.n}</text>
+        ${lines.map((l, i) => `<text class="bp-t" x="${n.cx}" y="${n.cy + (i - (lines.length-1)/2) * 13 + 4}" text-anchor="middle">${esc(l)}</text>`).join("")}</g>`);
+    } else if (n.type === "gateway"){
+      const r = BG.gw;
+      o.push(`<g class="bp-gate"><path d="M${n.cx} ${n.cy-r}L${n.cx+r} ${n.cy}L${n.cx} ${n.cy+r}L${n.cx-r} ${n.cy}Z"/><path class="x" d="M${n.cx-7} ${n.cy-7}L${n.cx+7} ${n.cy+7}M${n.cx+7} ${n.cy-7}L${n.cx-7} ${n.cy+7}"/><text class="bp-gtxt" x="${n.cx}" y="${n.cy - r - 7}" text-anchor="middle">${esc(n.name)}</text></g>`);
+    } else {
+      const r = n.from ? 13 : BG.ev;
+      o.push(`<circle class="bp-event ${n.type}" cx="${n.cx}" cy="${n.cy}" r="${r}"/><text class="bp-evtxt" x="${n.cx}" y="${n.cy + r + 13}" text-anchor="middle">${esc(n.name)}</text>`);
+    }
+  }
+  return o.join("") + `</svg>`;
+}
+function bpmnFigure(pid){
+  return `<figure class="bpmnfig"><div class="bpmnbar"><span class="lg"><i class="sw-w"></i>writes a table</span><span class="lg"><i class="sw-r"></i>reads a table</span><span class="grow"></span><span class="mono" id="bpmnmsg-${pid}"></span><button class="btn" type="button" data-bpmnxml="${pid}">Download .bpmn</button></div>
+    <div class="bpmnwrap">${bpmnSvg(bpmnModel(pid))}</div>
+    <figcaption>One lane per actor. Data objects under each task name the table it writes (solid) or reads (dashed). Dashed tasks are illustrative Maia steps. The download is BPMN 2.0 XML with diagram layout; it opens in Camunda Modeler or at demo.bpmn.io.</figcaption></figure>`;
+}
+function bpmnXml(pid){
+  const m = bpmnModel(pid), x = s => esc(s), c = m.p.code, P = "Process_" + c, C = "Collab_" + c;
+  const laneId = l => "Lane_" + c + "_" + m.lanes.indexOf(l);
+  const io = id => m.flows.filter(f => f.b.id === id).map(f => `<bpmn:incoming>${f.id}</bpmn:incoming>`).join("") + m.flows.filter(f => f.a.id === id).map(f => `<bpmn:outgoing>${f.id}</bpmn:outgoing>`).join("");
+  const body = [`<bpmn:laneSet id="LaneSet_${c}">` + m.lanes.map(l => `<bpmn:lane id="${laneId(l)}" name="${x(l)}">` + m.nodes.filter(n => n.lane === l).map(n => `<bpmn:flowNodeRef>${n.id}</bpmn:flowNodeRef>`).join("") + `</bpmn:lane>`).join("") + `</bpmn:laneSet>`];
+  for (const d of m.objs) body.push(`<bpmn:dataObject id="DataObject_${d.id.slice(8)}"/><bpmn:dataObjectReference id="${d.id}" name="${x(nameOf(d.dom))}" dataObjectRef="DataObject_${d.id.slice(8)}"/>`);
+  for (const n of m.nodes){
+    if (n.type === "start") body.push(`<bpmn:startEvent id="${n.id}" name="${x(n.name)}">${io(n.id)}</bpmn:startEvent>`);
+    else if (n.type === "end") body.push(`<bpmn:endEvent id="${n.id}" name="${x(n.name)}">${io(n.id)}</bpmn:endEvent>`);
+    else if (n.type === "gateway") body.push(`<bpmn:exclusiveGateway id="${n.id}" name="${x(n.name)}">${io(n.id)}</bpmn:exclusiveGateway>`);
+    else { const ob = m.objs.filter(d => d.task === n), rd = ob.filter(d => d.mode === "r"), wr = ob.filter(d => d.mode === "w");
+      body.push(`<bpmn:task id="${n.id}" name="${x(n.name)}"><bpmn:documentation>${x(n.step.def + " Lane: " + n.step.lane + (n.step.maia ? " (illustrative)." : "."))}</bpmn:documentation>${io(n.id)}` +
+        (rd.length ? `<bpmn:property id="Property_${n.id}" name="__targetRef_placeholder"/>` : "") +
+        rd.map(d => `<bpmn:dataInputAssociation id="Assoc_${d.id}"><bpmn:sourceRef>${d.id}</bpmn:sourceRef><bpmn:targetRef>Property_${n.id}</bpmn:targetRef></bpmn:dataInputAssociation>`).join("") +
+        wr.map(d => `<bpmn:dataOutputAssociation id="Assoc_${d.id}"><bpmn:targetRef>${d.id}</bpmn:targetRef></bpmn:dataOutputAssociation>`).join("") + `</bpmn:task>`); }
+  }
+  for (const f of m.flows) body.push(`<bpmn:sequenceFlow id="${f.id}"${f.name ? ` name="${f.name}"` : ""} sourceRef="${f.a.id}" targetRef="${f.b.id}"/>`);
+  const b = (id, X, Y, W, H, ex = "") => `<bpmndi:BPMNShape id="${id}_di" bpmnElement="${id}"${ex}><dc:Bounds x="${Math.round(X)}" y="${Math.round(Y)}" width="${Math.round(W)}" height="${Math.round(H)}"/></bpmndi:BPMNShape>`;
+  const wp = pts => pts.map(([px, py]) => `<di:waypoint x="${Math.round(px)}" y="${Math.round(py)}"/>`).join("");
+  const di = [b("Participant_" + c, 10, 10, m.W - 20, m.lanes.length * BG.LH, ` isHorizontal="true"`)];
+  m.lanes.forEach(l => di.push(b(laneId(l), 10 + BG.pool, m.top(l), m.W - 20 - BG.pool, BG.LH, ` isHorizontal="true"`)));
+  for (const n of m.nodes){
+    if (n.type === "task") di.push(b(n.id, n.cx - BG.taskW/2, n.cy - BG.taskH/2, BG.taskW, BG.taskH));
+    else if (n.type === "gateway") di.push(b(n.id, n.cx - BG.gw, n.cy - BG.gw, BG.gw*2, BG.gw*2, ` isMarkerVisible="true"`));
+    else { const r = n.from ? 13 : BG.ev; di.push(b(n.id, n.cx - r, n.cy - r, r*2, r*2)); }
+  }
+  for (const d of m.objs) di.push(b(d.id, d.cx - BG.obj.w/2, d.y, BG.obj.w, BG.obj.h));
+  for (const f of m.flows) di.push(`<bpmndi:BPMNEdge id="${f.id}_di" bpmnElement="${f.id}">${wp(f.pts)}</bpmndi:BPMNEdge>`);
+  for (const d of m.objs){ const t = [d.task.cx, d.task.cy + BG.taskH/2], ob = [d.cx, d.y];
+    di.push(`<bpmndi:BPMNEdge id="Assoc_${d.id}_di" bpmnElement="Assoc_${d.id}">${wp(d.mode === "w" ? [t, ob] : [ob, t])}</bpmndi:BPMNEdge>`); }
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Defs_${c}" targetNamespace="https://example.com/tallgrass-data-journey" exporter="Tallgrass Data Journey" exporterVersion="1">
+<bpmn:collaboration id="${C}"><bpmn:participant id="Participant_${c}" name="${x(m.p.name)}" processRef="${P}"/></bpmn:collaboration>
+<bpmn:process id="${P}" name="${x(m.p.name)}" isExecutable="false">
+${body.join("\n")}
+</bpmn:process>
+<bpmndi:BPMNDiagram id="Diagram_${c}"><bpmndi:BPMNPlane id="Plane_${c}" bpmnElement="${C}">
+${di.join("\n")}
+</bpmndi:BPMNPlane></bpmndi:BPMNDiagram>
+</bpmn:definitions>
+`;
+}
+
+/* ---------- 10. Data tests ---------- */
+function renderDQ(){
+  const none = M.dq.filter(q => q.today === "None").length, manual = M.dq.length - none;
+  $("view-dq").innerHTML = `<p class="viewq">How do we know the data can be trusted?</p>
+    <p class="lede">Every test runs inside the pipeline on each load. Tests marked "blocks publish" stop bad data before it reaches BI or a model.</p>
+    <div class="kpis"><div class="kpi bad"><span class="k">Tests that do not exist today</span><span class="v">${none}<small> of ${M.dq.length}</small></span></div>
+      <div class="kpi"><span class="k">Manual or partial today</span><span class="v">${manual}</span></div>
+      <div class="kpi good"><span class="k">Automated with Matillion</span><span class="v">${M.dq.length}<small> of ${M.dq.length}</small></span></div>
+      <div class="kpi"><span class="k">Block publishing on failure</span><span class="v">${M.dq.filter(q => q.blocks).length}</span></div></div>
+    <div class="cards">${M.dq.map(q => `<article class="card2 ${focus(q.datasets)}">
+      <div class="c-hd"><button class="link mono" data-go="${q.id}">${q.id}</button><span class="pill">${esc(q.dim)}</span><span class="status ${q.blocks ? "bad" : "mid"}">${q.blocks ? "Blocks publish" : "Warns"}</span></div>
+      <p class="c-t">${esc(q.def)}</p>
+      <div class="cmp"><div class="t"><b>Today</b>${esc(q.today === "None" ? "Not tested" : q.today)}</div><div class="f"><b>With Matillion</b>Every run of ${esc(nameOf(q.pipeline))}</div></div>
+      <pre class="code">${esc(q.test)}</pre>
+      <div class="refs"><span class="rl">Checks</span>${q.datasets.map(chip).join("")}</div>
+      <div class="refs"><span class="rl">Runs in</span>${chip(q.pipeline)}</div></article>`).join("")}</div>`;
+}
+
+/* ---------- 11. Regulation ---------- */
+function renderReg(){
+  const dated = M.regs.filter(r => r.date).sort((a,b) => a.date.localeCompare(b.date));
+  const y0 = 2000, y1 = 2030, W = 900, H = 60 + 3 * 34, X = y => 20 + (y - y0) / (y1 - y0) * (W - 40);
+  const yr = d => { const t = new Date(d + "T00:00:00Z"); return t.getUTCFullYear() + (t.getUTCMonth() * 30.4 + t.getUTCDate()) / 365; };
+  const now = new Date(), nowY = now.getFullYear() + (now.getMonth() * 30.4 + now.getDate()) / 365;
+  let svg = `<svg class="tl" viewBox="0 0 ${W} ${H}" role="img" aria-label="Timeline of ${dated.length} dated regulations"><line class="tl-axis" x1="20" y1="${H-28}" x2="${W-20}" y2="${H-28}"/>`;
+  for (let y = y0; y <= y1; y += 2) svg += `<line class="tl-tick" x1="${X(y)}" y1="${H-32}" x2="${X(y)}" y2="${H-24}"/><text class="tl-yr" x="${X(y)}" y="${H-8}" text-anchor="middle">${y}</text>`;
+  svg += `<line class="tl-now" x1="${X(nowY)}" y1="14" x2="${X(nowY)}" y2="${H-28}"/><text class="tl-nowtxt" x="${X(nowY) + 5}" y="22">today</text>`;
+  dated.forEach((r, i) => { const x = X(yr(r.date)), y = 44 + (i % 3) * 34;
+    svg += `<g class="tl-ev ${yr(r.date) > nowY ? "future" : ""}" data-go="${r.id}" role="button" tabindex="0"><line x1="${x}" y1="${y + 6}" x2="${x}" y2="${H-28}"/><circle cx="${x}" cy="${H-28}" r="5"/><text x="${x}" y="${y}" text-anchor="${x > W - 120 ? "end" : x < 120 ? "start" : "middle"}">${esc(r.short)} · ${r.date.slice(0,4)}</text></g>`; });
+  $("view-reg").innerHTML = `<p class="viewq">What rules does the journey have to respect?</p>
+    <p class="lede">Laws, standards and internal policies that apply to moving Tallgrass data, linked to the tables, tests and pipelines that meet them. Dates are short summaries; check official sources.</p>
+    <div class="tlwrap">${svg}</div>
+    <div class="cards">${M.regs.map(r => `<article class="card2 ${focus(r.refs)}"><div class="c-hd"><button class="link" data-go="${r.id}"><b>${esc(r.short)}</b></button><span class="pill" style="--pc:var(--k-reg)">${esc(r.cat)}</span><span class="mono muted">${esc(r.juris)}</span></div>
+      <p class="c-t">${esc(r.name)}</p><p class="muted small">${esc(r.def)}</p><p class="when mono">${esc(r.when)}</p>
+      <div class="refs"><span class="rl">Met by</span>${r.refs.map(chip).join("")}</div></article>`).join("")}</div>`;
+}
+
+/* ---------- 12. Catalogue ---------- */
+function renderCat(){
+  const q = S.q.toLowerCase();
+  const rows = M.datasets.filter(d => dsMatch(d) && (!q || (d.name + " " + d.def).toLowerCase().includes(q)));
+  const modes = [["table","Tables"],["gloss","Glossary"]];
+  let body;
+  if (S.cat === "gloss") body = `<dl class="gloss">${M.glossary.slice().sort((a,b) => a.term.localeCompare(b.term)).map(g => `<div><dt><button class="link" data-go="${g.id}">${esc(g.term)}</button></dt><dd>${esc(g.def)}<div class="refs">${g.see.map(chip).join("")}</div></dd></div>`).join("")}</dl>`;
+  else body = rows.length ? `<div class="tblwrap"><table><thead><tr><th>Table</th><th>Layer</th><th>Subject</th><th>Owner</th><th>Refresh</th><th>Freshness SLA</th><th>Sensitivity</th><th>Rows</th><th>Tests</th><th>Description</th></tr></thead><tbody>` +
+    rows.map(d => `<tr class="row" data-go="${d.id}"><td class="mono"><b>${esc(d.name)}</b></td><td><span class="pill" style="--pc:var(${LAYER_COLOR[d.layer]})">${esc(d.layer)}</span></td><td>${esc(d.subject)}</td><td>${esc(d.owner)}</td><td>${esc(d.refresh)}</td><td>${esc(d.sla)}</td><td><span class="pill" style="--pc:${sensColor(d.sens)}">${esc(d.sens)}</span></td><td class="mono">${esc(d.rows)}</td><td class="mono">${M.dq.filter(x => x.datasets.includes(d.id)).map(x => x.id).join(" ") || "–"}</td><td class="def">${esc(d.def)}</td></tr>`).join("") + `</tbody></table></div>`
+    : `<div class="empty">No tables match. Use "Reset filters and selection" in the left rail.</div>`;
+  $("view-cat").innerHTML = `<p class="viewq">What data is there, who owns it, and how fresh is it?</p>
+    <div class="subtabs">${modes.map(([k,l]) => `<button class="subtab" type="button" data-cat="${k}" aria-pressed="${S.cat===k}">${l}${k === "table" ? ` <span class="mono muted">${rows.length}</span>` : ""}</button>`).join("")}</div>${body}`;
+}
+$("view-cat").addEventListener("click", e => { const b = e.target.closest("[data-cat]"); if (b){ S.cat = b.dataset.cat; renderCat(); } });
+
+/* ---------- 13. Roadmap ---------- */
+function renderRoad(){
+  const W0 = M.waves, q = s => { const [y, qq] = s.split("-Q"); return +y * 4 + (+qq - 1); };
+  const now = new Date(), nq = now.getFullYear() * 4 + Math.floor(now.getMonth() / 3);
+  const q0 = Math.min(nq, ...W0.map(w => q(w.from))), q1 = Math.max(...W0.map(w => q(w.to)));
+  const n = q1 - q0 + 1, L = 250, W = 900, cw = (W - L - 10) / n, rh = 34, H = 34 + W0.length * rh + 8;
+  const ql = i => `${Math.floor((q0 + i) / 4)} Q${(q0 + i) % 4 + 1}`;
+  let svg = `<svg class="gantt" viewBox="0 0 ${W} ${H}" role="img" aria-label="Roadmap of ${W0.length} waves">`;
+  for (let i = 0; i < n; i++) svg += `<rect class="g-col ${i % 2 ? "alt" : ""}" x="${L + i * cw}" y="0" width="${cw}" height="${H}"/><text class="g-q" x="${L + i * cw + cw / 2}" y="20" text-anchor="middle">${ql(i)}</text>`;
+  svg += `<line class="tl-now" x1="${L + (nq - q0 + (now.getMonth() % 3 + now.getDate() / 31) / 3) * cw}" y1="26" x2="${L + (nq - q0 + (now.getMonth() % 3 + now.getDate() / 31) / 3) * cw}" y2="${H}"/>`;
+  W0.forEach((w, i) => { const y = 34 + i * rh, x = L + (q(w.from) - q0) * cw, wd = (q(w.to) - q(w.from) + 1) * cw;
+    const uc = w.unblocks.filter(id => byId.get(id)?.kind === "usecase").map(nameOf);
+    svg += `<g class="g-row" data-go="${w.id}" role="button" tabindex="0"><text class="g-name" x="10" y="${y + 20}">${w.id} · ${esc(w.name)}</text><rect class="g-bar" x="${x + 3}" y="${y + 5}" width="${wd - 6}" height="${rh - 12}" rx="5"/><text class="g-val" x="${x + 10}" y="${y + 21}">${esc(uc.length ? "Unblocks " + uc.join(", ") : "Foundation")}</text></g>`; });
+  svg += `</svg>`;
+  const groups = ["pipeline","dataset","dq","reg","usecase","system"];
+  $("view-road").innerHTML = `<p class="viewq">In what order do we get there?</p>
+    <p class="lede">Four waves. Each lists the pipelines, tables, tests and rules it delivers, and the AI use cases and waiting requests it unblocks.</p>
+    <div class="tlwrap">${svg}</div>
+    <div class="cards">${W0.map(w => `<article class="card2 ${focus(w.refs)}"><div class="c-hd"><button class="link" data-go="${w.id}"><b>${w.id} · ${esc(w.name)}</b></button><span class="grow"></span><span class="mono muted">${w.from} to ${w.to}</span></div>
+      <p class="muted small">${esc(w.def)}</p>
+      ${groups.map(k => { const ids = w.refs.filter(id => byId.get(id)?.kind === k); return ids.length ? `<div class="refs"><span class="rl">${KINDS[k].plural}</span>${ids.map(chip).join("")}</div>` : ""; }).join("")}
+      <div class="refs"><span class="rl">Unblocks</span>${w.unblocks.map(chip).join("")}</div></article>`).join("")}</div>`;
+}
+
+/* ---------- 14. How it's built ---------- */
+function renderSchema(){
+  $("view-schema").innerHTML = `<div class="schema">
+    <p>One HTML file. The scenario lives in a JSON block (<code>&lt;script id="model"&gt;</code>); every tab is generated from it when the page loads. To re-skin the demo for a prospect, edit that block: company facts in <code>meta</code>, then <code>systems</code>, <code>datasets</code>, <code>pipelines</code> and the rest.</p>
+    <h2 class="sech">Collections</h2><p>${Object.values(KINDS).map(k => `<code>${k.list}</code> ${(M[k.list] || []).length}`).join(" · ")}</p>
+    <h2 class="sech">The Network tab</h2>
+    <ol><li>Each system, pipeline and table has a stage (source, legacy, edw, ingest, bronze, transform, silver, build, gold, consumer).</li>
+      <li>Pipelines have <code>from</code>, <code>to</code> and a <code>view</code>: <code>today</code>, <code>target</code> or <code>both</code>. Extra links sit in <code>relations</code>.</li>
+      <li>Clicking a node walks the links upstream and downstream to show lineage.</li></ol>
+    <h2 class="sech">Ask</h2>
+    <p>Ask sends your question and a text copy of the scenario to Claude through the page's <code>sample</code> capability. Claude must cite record IDs; the page removes any ID not in the scenario. Ask is Claude, not Maia.</p>
+    <div><button class="btn primary" id="dlmodel" type="button" ${dl || !window.claude ? "" : "hidden"}>Download scenario JSON</button> <span id="dlmsg" class="mono muted"></span></div></div>`;
+  const b = $("dlmodel"); if (b) b.onclick = async () => {
+    const data = JSON.stringify(M, (k, v) => k === "kind" && typeof v === "string" && KINDS[v] ? undefined : v, 1);
+    try { $("dlmsg").textContent = await saveFile("tallgrass-scenario.json", data, "application/json"); } catch (e) { $("dlmsg").textContent = e.code === "cancelled" ? "" : "Download failed: " + (e.message || e.code); }
+  };
+}
+
+/* ---------- 15. Ask about this scenario (Claude, verified against IDs) ---------- */
+const SUGS = ["What blocks the demand forecast?", "Where does customer PII leave the warehouse today?", "Which tests protect gold.demand_features?", "What does wave 1 deliver?"];
+$("sugs").innerHTML = SUGS.map(s => `<button class="sug" type="button">${esc(s)}</button>`).join("");
+$("sugs").addEventListener("click", e => { const b = e.target.closest(".sug"); if (b){ $("askq").value = b.textContent; ask(b.textContent); } });
+let sample = null, ctl = null, lastAsk = null;
+function digest(){
+  const L = [`COMPANY ${JSON.stringify(M.meta)}`];
+  for (const s of M.systems) L.push(`${s.id} | system, ${s.role} | ${s.name} | ${s.def}`);
+  for (const d of M.datasets) L.push(`${d.id} | table ${d.name} (${d.layer}, ${d.subject}, ${d.sens}, refresh ${d.refresh}) | ${d.def}`);
+  for (const p of M.pipelines) L.push(`${p.id} | pipeline ${p.name} (${p.tool}, ${p.view}, ${p.schedule}) | from ${p.from.join(",")} to ${p.to.join(",")} | ${p.def} ${p.failures}`);
+  for (const u of M.usecases) L.push(`${u.id} | AI use case ${u.name} | needs ${u.needs.join(",")} | readiness today ${avg(u.today)}, target ${avg(u.target)} in ${u.wave} | blockers: ${u.blockers.join("; ")}`);
+  for (const f of M.findings) L.push(`${f.id} | finding (${f.sev}) ${f.name} | ${f.def} | ${f.refs.join(",")}`);
+  for (const b of M.backlog) L.push(`${b.id} | request ${b.name}, waiting ${b.weeks} weeks, ${b.wave}`);
+  for (const s of M.steps) L.push(`${s.id} | step ${s.n} of ${s.p}, lane ${s.lane} | ${s.name} | reads ${s.reads.join(",") || "none"}; writes ${s.writes.join(",") || "none"}; tests ${s.ctl.join(",") || "none"}`);
+  for (const q of M.dq) L.push(`${q.id} | test ${q.dim} | ${q.def} | checks ${q.datasets.join(",")} in ${q.pipeline}; today: ${q.today}`);
+  for (const r of M.regs) L.push(`${r.id} | regulation ${r.short} | ${r.when} | ${r.def} | ${r.refs.join(",")}`);
+  for (const m of M.maia) L.push(`${m.id} | illustrative Maia example ${m.name} | produces ${m.produces.join(",")}`);
+  for (const w of M.waves) L.push(`${w.id} | wave ${w.name} ${w.from} to ${w.to} | ${w.def} | delivers ${w.refs.join(",")} | unblocks ${w.unblocks.join(",")}`);
+  return L.join("\n");
+}
+function renderAsk(){
+  const o = $("askout"); if (!lastAsk){ o.innerHTML = ""; return; }
+  if (lastAsk.busy){ o.innerHTML = `<div class="answer"><div class="q">${esc(lastAsk.q)}</div>Thinking…</div>`; return; }
+  if (lastAsk.err){ o.innerHTML = `<div class="answer"><div class="q">${esc(lastAsk.q)}</div>${esc(lastAsk.err)}</div>`; return; }
+  const html = esc(lastAsk.answer).replace(/\[\[([^\[\]]{1,24})\]\]/g, (m, id) => chip(id));
+  o.innerHTML = `<div class="answer"><div class="q">${esc(lastAsk.q)}</div>${html}${lastAsk.dropped ? `<div class="note">${lastAsk.dropped} reference${lastAsk.dropped === 1 ? "" : "s"} did not match any record and ${lastAsk.dropped === 1 ? "was" : "were"} removed.</div>` : ""}</div>`;
+}
+async function ask(q){
+  q = q.trim().slice(0, 240); if (!q || !sample || lastAsk?.busy) return;
+  lastAsk = {q, busy:true}; renderAsk(); $("askgo").disabled = true; $("askstop").hidden = false; ctl = new AbortController();
+  const prompt = `You answer questions about a fictional data integration scenario for a sales demo. Use ONLY the scenario below. Do not add facts about real products beyond what it states. Maia examples in it are illustrative; say so if you mention them.
+Every time you mention a record, write its ID in double square brackets exactly as in the scenario, e.g. [[T31]] or [[PL11]]. Never invent an ID.
+If the scenario does not contain the answer, say so in one sentence. Keep the answer under 120 words, plain text.
+Reply with JSON only: {"answer": "text with [[ID]] references", "focus": "the single most relevant ID, or null"}
+
+SCENARIO
+${digest()}
+
+QUESTION
+${q}`;
+  try {
+    const r = await sample.json(prompt, {modelTier:"default", signal:ctl.signal});
+    let dropped = 0;
+    const answer = String(r?.answer || "").replace(/\[\[([^\[\]]{1,24})\]\]/g, (m, id) => byId.has(id) ? m : (dropped++, id));
+    lastAsk = answer.trim() ? {q, answer, dropped} : {q, err:"No answer came back. Try naming a table, pipeline or use case."};
+    if (byId.has(r?.focus)) select(r.focus);
+  } catch (e) {
+    const copy = {cancelled:"Stopped.", not_granted:"Ask was declined for this page. Reload to be asked again.", rate_limited:"Too many questions in a short time. Wait a minute, then ask again."};
+    lastAsk = {q, err: copy[e?.code] || ("The answer did not come back: " + (e?.message || "unknown error") + ".")};
+  }
+  $("askgo").disabled = false; $("askstop").hidden = true; renderAsk();
+}
+$("askform").addEventListener("submit", e => { e.preventDefault(); ask($("askq").value); });
+$("askstop").onclick = () => ctl?.abort();
+
+/* ---------- 16. Boot ---------- */
+function renderAll(){ renderRail(); renderTabs(); renderStart(); renderAI(); renderNet(); renderCur(); renderMaia(); renderProc(); renderDQ(); renderReg(); renderCat(); renderRoad(); renderInsp(); }
+renderSchema(); renderAll();
+(async () => {
+  try { sample = await window.claude?.use("sample"); } catch (e) {}
+  if (!sample){ $("askq").disabled = true; $("askgo").disabled = true; $("askq").placeholder = "Ask needs the Claude viewer. Open this page on claude.ai to use it."; $("sugs").hidden = true; }
+})();
+(async () => { try { dl = await window.claude?.use("downloads"); } catch (e) {} renderSchema(); })();
+})();
+</script>

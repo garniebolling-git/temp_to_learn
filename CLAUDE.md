@@ -1,26 +1,36 @@
 # Project context for Claude
 
 ## Goal
-Learning project. Build a master data reference model explorer as a Claude Artifact (single HTML page),
-modeled on the architecture of a public example artifact. Built for education, not production.
+Two single-page Claude Artifacts sharing one engine:
+1. **Tallgrass Data Journey** (`data-journey/`): the owner's Matillion presales live demo. Fictional retailer moving
+   from an on-premise SQL Server EDW to Databricks with Matillion, framed around AI readiness. This is the active project.
+2. **Master Data Atlas** (`reference-model/`): the original learning project, master data reference model. Stable at v5.
 
 ## Current state
-- Version v5 (see `CHANGELOG.md`). 11 tabs: Start here, Network, Process, Catalogue, DQ rules, Regulation,
-  Current state, Maturity, Value case, Roadmap, How it's built. Currency USD.
+- Tallgrass Data Journey v1: 11 tabs (Start here with 9-step talk track, AI readiness, Network, Current state, Maia,
+  Process, Data tests, Regulation, Catalogue, Roadmap, How it's built).
+- Master Data Atlas v5: 11 tabs, currency USD.
 - Working branch: `claude/youthful-cerf-n09i8x` (the only branch; GitHub's default). No `main` yet.
 - Git tags cannot be pushed from Claude sessions (HTTP 403). Versions are tracked in `CHANGELOG.md` and `package.json`.
 
-## Live artifact
-- Master Data Atlas: https://claude.ai/artifact/RQwdyLoD7o17zoTmM1Cx9n (private to owner until shared)
-- Source: `reference-model/index.html`. Republish this file to the same URL when it changes
-  (from another session, pass the URL to the Artifact tool as `url`, after reading it).
-- Capabilities declared: `sample` (Ask box), `downloads` (model JSON and .bpmn export).
-- GitHub Pages: https://garniebolling-git.github.io/temp_to_learn/reference-model/ (Ask does not work there).
+## Live artifacts (private to owner until shared)
+- Tallgrass Data Journey: https://claude.ai/artifact/E9qAq2xH861z7dLuoeTGhv, source `data-journey/index.html`.
+- Master Data Atlas: https://claude.ai/artifact/RQwdyLoD7o17zoTmM1Cx9n, source `reference-model/index.html`.
+- Republish a file to its own URL when it changes (from another session, read the artifact first, then pass its `url`).
+- Both declare `sample` (Ask box) and `downloads` (JSON and .bpmn export).
+- GitHub Pages: `https://garniebolling-git.github.io/temp_to_learn/<folder>/` (Ask does not work there).
+
+## Rules for the Tallgrass demo (presales honesty)
+- Tallgrass Outfitters and every number are fictional; the page says so.
+- Do not state Matillion or Maia capabilities as fact unless the owner supplies a source. Maia content stays badged
+  "Illustrative" until replaced with real examples.
+- Never label the Ask box as Maia. It is Claude via the artifact viewer.
+- No Matillion logos or brand styling unless the owner supplies approved assets.
 
 ## Workflow for every change
-1. Edit `reference-model/index.html` (data in the JSON block, code in the IIFE).
+1. Edit the page's `index.html` (data in the JSON block, code in the IIFE).
 2. Run `npm test` (Playwright uses `/opt/pw-browsers/chromium` in Claude cloud sessions). Fix any failure.
-3. Look at `tests/out/tab-*.png` for the tabs you changed.
+3. Look at `tests/out/<folder>/tab-*.png` (and `beat-*.png` for the demo) for what you changed.
 4. Republish the artifact to the same URL.
 5. Add a `CHANGELOG.md` entry with the artifact version id from the publish result, bump `package.json` version,
    update `README.md` "Current version", `docs/roadmap.md` and `docs/decisions.md` when relevant.
@@ -44,6 +54,7 @@ modeled on the architecture of a public example artifact. Built for education, n
 
 ## Where things are
 - `README.md`: overview, links, tabs, how to run checks.
+- `data-journey/README.md`: demo flow, honesty rules, data model for the Tallgrass page.
 - `reference-model/README.md`: data model fields and relation types.
 - `tests/check.js`: automated checks.
 - `docs/original-artifact-analysis.md`: how the reference artifact was built.

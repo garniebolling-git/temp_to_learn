@@ -4,7 +4,7 @@
   "private": true,
   "description": "Master data reference model explorer, published as a Claude Artifact. Learning project.",
   "scripts": {
-    "test": "node tests/check.js"
+    "test": "node tests/check.js reference-model/index.html && node tests/check.js data-journey/index.html"
   },
   "devDependencies": {
     "bpmn-moddle": "9.0.4",

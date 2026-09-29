@@ -1,5 +1,23 @@
 # Changelog
 
+# Tallgrass Data Journey
+
+Artifact: https://claude.ai/artifact/E9qAq2xH861z7dLuoeTGhv
+
+## journey v1 (artifact version 1790708468-8ca0), 2026-09-29
+- New page `data-journey/index.html`: fictional retailer Tallgrass Outfitters, SQL Server 2016 EDW to Databricks on Azure
+  with Matillion, framed around AI readiness, built for a live demo.
+- Start here: company facts and a 9-step talk track; each step opens the right tab, view and selection.
+- AI readiness: 3 use cases scored on 6 data dimensions, today and after the roadmap, with blockers.
+- Network: journey laid out by stage, Today and With Matillion views, click any node to trace lineage.
+- Current state: flows today, 7 findings, 5 waiting requests (124 weeks combined).
+- Maia: 5 illustrative prompt, draft and review examples, clearly badged.
+- Process: 3 processes with BPMN 2.0 and .bpmn export (build with Maia, nightly today, hourly with Matillion).
+- Data tests (10), Regulation (6 with timeline), Catalogue (19 tables and glossary), Roadmap (4 waves).
+- `npm test` now checks every page generically.
+
+# Master Data Atlas
+
 Artifact: https://claude.ai/artifact/RQwdyLoD7o17zoTmM1Cx9n
 
 ## v5 (artifact version 1790701621-315e), 2026-09-29

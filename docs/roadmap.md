@@ -1,5 +1,17 @@
 # Roadmap
 
+## Tallgrass Data Journey (active)
+Built in v1: Start here talk track, AI readiness, Network with lineage, Current state, Maia (illustrative), Process with BPMN,
+Data tests, Regulation, Catalogue, Roadmap.
+
+Next candidates:
+- Replace illustrative Maia examples with real ones from Matillion demos or documentation.
+- Value case: engineering hours (backlog × hours per pipeline) and report latency, with Matillion-approved figures as inputs.
+- Presenter mode: larger type and next/previous buttons for the talk track.
+- Re-skin kit: a short checklist for swapping company, sources and use cases per prospect.
+
+## Master Data Atlas (stable at v5)
+
 Status: done, next, planned.
 
 | # | View | Data it needs | Status |
