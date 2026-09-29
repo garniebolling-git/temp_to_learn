@@ -1,0 +1,730 @@
+<title>Master Data Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: filter rail | map or table | inspector. Collapses to one column under 1000px. */
+:root{
+  --bg:#f2f3ef; --surface:#ffffff; --sunk:#e8eae4; --ink:#18212c; --ink-2:#465262; --ink-3:#7a8491;
+  --rule:#d9dcd4; --rule-2:#c3c8bf; --accent:#0d6f5c; --accent-ink:#ffffff; --hl:#f0b429;
+  --k-domain:#2a56c0; --k-sa:#7890d4; --k-system:#0d7a64; --k-process:#b06400; --k-control:#b23658;
+  --s-public:#3d7a3a; --s-internal:#4a6bb0; --s-confidential:#b06400; --s-restricted:#b3243c;
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Public Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12171d; --surface:#1a2129; --sunk:#0e1318; --ink:#e6eaee; --ink-2:#aab4bf; --ink-3:#7c8793;
+  --rule:#2a333d; --rule-2:#3a4552; --accent:#3fc2a3; --accent-ink:#08201a; --hl:#f5c451;
+  --k-domain:#6f95f2; --k-sa:#9fb2e8; --k-system:#3fc2a3; --k-process:#f0a340; --k-control:#ef6f92;
+  --s-public:#7cc576; --s-internal:#8aa6e8; --s-confidential:#f0a340; --s-restricted:#f26b80; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12171d; --surface:#1a2129; --sunk:#0e1318; --ink:#e6eaee; --ink-2:#aab4bf; --ink-3:#7c8793;
+  --rule:#2a333d; --rule-2:#3a4552; --accent:#3fc2a3; --accent-ink:#08201a; --hl:#f5c451;
+  --k-domain:#6f95f2; --k-sa:#9fb2e8; --k-system:#3fc2a3; --k-process:#f0a340; --k-control:#ef6f92;
+  --s-public:#7cc576; --s-internal:#8aa6e8; --s-confidential:#f0a340; --s-restricted:#f26b80; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--f-body);padding-inline:16px;padding-block:0 32px}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--f-mono);font-size:12px}
+
+header.top{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;padding-block:18px 12px;border-bottom:1px solid var(--rule)}
+header.top h1{font:700 26px/1.1 var(--f-display);margin:0;letter-spacing:-.01em}
+header.top .sub{color:var(--ink-2);font-size:13px;max-width:70ch}
+.example{font:500 11px/1 var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--k-process);border:1px solid currentColor;border-radius:3px;padding:4px 6px}
+
+.ask{display:grid;gap:10px;padding-block:14px;border-bottom:1px solid var(--rule)}
+.ask form{display:flex;gap:8px;flex-wrap:wrap}
+.ask input{flex:1 1 280px;min-width:0;background:var(--surface);border:1px solid var(--rule-2);border-radius:6px;padding:9px 12px}
+.btn{border:1px solid var(--rule-2);background:var(--surface);border-radius:6px;padding:8px 14px;font-weight:600}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:disabled{opacity:.5;cursor:default}
+.sugs{display:flex;flex-wrap:wrap;gap:6px}
+.sug{border:1px dashed var(--rule-2);background:transparent;border-radius:999px;padding:3px 10px;font-size:12.5px;color:var(--ink-2)}
+.answer{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;max-width:90ch}
+.answer .q{font-weight:600;margin-bottom:4px}
+.answer .note{color:var(--ink-3);font-size:12.5px;margin-top:6px}
+.ref{font:500 12px var(--f-mono);border:0;border-radius:4px;padding:1px 5px;background:var(--sunk);color:var(--ink);border-bottom:2px solid var(--kc,var(--rule-2))}
+
+.shell{display:grid;grid-template-columns:230px minmax(0,1fr) 320px;gap:20px;padding-block:16px}
+.rail,.insp{min-width:0}
+.rail h2,.insp h2,.main h2{font:600 11px/1 var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin:18px 0 8px}
+.rail h2:first-child{margin-top:4px}
+.search{width:100%;background:var(--surface);border:1px solid var(--rule-2);border-radius:6px;padding:7px 10px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{border:1px solid var(--rule-2);background:var(--surface);border-radius:999px;padding:2px 9px;font-size:12.5px;display:inline-flex;gap:6px;align-items:center}
+.chip .n{color:var(--ink-3);font:11px var(--f-mono);font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.chip[aria-pressed="true"] .n{color:inherit;opacity:.7}
+.sw{width:10px;height:10px;display:inline-block;background:var(--kc)}
+.reset{margin-top:16px;background:none;border:0;padding:0;color:var(--accent);font-weight:600;font-size:13px}
+
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--rule);margin-bottom:12px}
+.tab{background:none;border:0;border-bottom:2px solid transparent;padding:8px 12px;font-weight:600;color:var(--ink-2)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab .n{font:11px var(--f-mono);color:var(--ink-3);margin-left:4px}
+
+.mapwrap{position:relative;background:var(--surface);border:1px solid var(--rule);border-radius:8px;overflow:hidden}
+#net{display:block;width:100%;height:560px;touch-action:none;cursor:grab}
+#net.dragging{cursor:grabbing}
+.maphint{position:absolute;left:10px;bottom:8px;font-size:12px;color:var(--ink-3);pointer-events:none}
+.legend{position:absolute;right:10px;top:10px;display:grid;gap:3px;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:8px 10px;font-size:12px}
+.legend div{display:flex;align-items:center;gap:7px}
+.legend svg{flex:none}
+.mapbar{position:absolute;left:10px;top:10px;display:flex;gap:6px}
+.mapbar .btn{padding:4px 10px;font-size:12.5px}
+
+.tblwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top;white-space:nowrap}
+th{font:600 11px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);background:var(--sunk);position:sticky;top:0}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--sunk)}
+tbody tr.on{background:color-mix(in srgb,var(--accent) 14%,transparent)}
+td.def{white-space:normal;min-width:220px;color:var(--ink-2)}
+.pill{display:inline-block;font:500 11px var(--f-mono);padding:1px 6px;border-radius:3px;border:1px solid var(--pc,var(--rule-2));color:var(--pc,var(--ink-2))}
+.empty{padding:28px;color:var(--ink-3);text-align:center}
+
+.insp .card{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:14px;position:sticky;top:12px}
+.insp .kind{font:600 11px var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--kc)}
+.insp h3{font:700 20px/1.2 var(--f-display);margin:4px 0 2px;text-wrap:balance}
+.insp .def{color:var(--ink-2);margin:8px 0 0}
+.insp dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:12px 0 0;font-size:13px}
+.insp dt{color:var(--ink-3)}
+.insp dd{margin:0}
+.rels{display:grid;gap:4px;margin:0;padding:0;list-style:none}
+.rels li{display:flex;gap:8px;align-items:baseline;font-size:13px}
+.rels .r{font:11px var(--f-mono);color:var(--ink-3);min-width:74px}
+.link{background:none;border:0;padding:0;text-align:left;color:var(--ink);text-decoration:underline;text-decoration-color:var(--rule-2);text-underline-offset:3px}
+.link:hover{text-decoration-color:var(--accent)}
+
+.schema{display:grid;gap:14px;max-width:90ch}
+.schema p{margin:0;color:var(--ink-2)}
+.schema .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.schema .box{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:12px}
+.schema .box b{display:flex;align-items:center;gap:8px}
+.schema code{font:12px var(--f-mono);background:var(--sunk);padding:1px 4px;border-radius:3px}
+.schema ol{margin:0;padding-left:20px;color:var(--ink-2);display:grid;gap:4px}
+
+@media (max-width:1000px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .main{order:1} .insp{order:2} .rail{order:3}
+  .insp .card{position:static}
+  #net{height:420px}
+  .legend{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top">
+  <h1>Master Data Atlas</h1>
+  <span class="example">Example data</span>
+  <span class="sub">A reference model for a fictional wholesale distributor, Alder Street Supply: 6 data domains, the systems that hold them, the processes that use them and the controls that govern them.</span>
+</header>
+
+<section class="ask" aria-label="Ask about the model">
+  <form id="askform">
+    <input id="askq" type="text" maxlength="240" autocomplete="off" placeholder="Ask about the model, e.g. which systems hold restricted data?">
+    <button class="btn primary" id="askgo" type="submit">Ask</button>
+    <button class="btn" id="askstop" type="button" hidden>Stop</button>
+  </form>
+  <div class="sugs" id="sugs"></div>
+  <div id="askout"></div>
+</section>
+
+<div class="shell">
+  <aside class="rail" id="rail" aria-label="Filters"></aside>
+  <main class="main">
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div id="view-map" role="tabpanel">
+      <div class="mapwrap">
+        <canvas id="net" aria-label="Map of domains, systems, processes and controls"></canvas>
+        <div class="mapbar"><button class="btn" id="fit" type="button">Fit</button><button class="btn" id="expall" type="button">Expand all</button></div>
+        <div class="legend" id="legend"></div>
+        <div class="maphint">Drag to pan · scroll to zoom · click to inspect · double-click a domain to open its subject areas</div>
+      </div>
+    </div>
+    <div id="view-table" role="tabpanel" hidden><div class="tblwrap" id="tbl"></div></div>
+    <div id="view-schema" role="tabpanel" hidden></div>
+  </main>
+  <aside class="insp" id="insp" aria-label="Inspector"></aside>
+</div>
+
+<!-- THE MODEL. Edit this block to make the atlas your own. Every record needs a unique id; links use ids. -->
+<script id="model" type="application/json">
+{
+"meta":{"name":"Alder Street Supply","note":"Fictional example company. Replace with your own records."},
+"domains":[
+ {"id":"D01","name":"Customer","owner":"Sales Operations","def":"Organisations and people who buy from the company."},
+ {"id":"D02","name":"Product","owner":"Category Management","def":"Items the company buys, stores and sells."},
+ {"id":"D03","name":"Supplier","owner":"Procurement","def":"Organisations the company buys goods and services from."},
+ {"id":"D04","name":"Location","owner":"Logistics","def":"Physical places: warehouses, stores, customer delivery points."},
+ {"id":"D05","name":"Employee","owner":"People Team","def":"People employed by the company and their employment record."},
+ {"id":"D06","name":"Asset","owner":"Finance","def":"Physical equipment the company owns and maintains."}
+],
+"subjectAreas":[
+ {"id":"D01.01","domain":"D01","name":"Party identity","def":"Who the customer is, legally."},
+ {"id":"D01.02","domain":"D01","name":"Contact","def":"How to reach the customer and what they agreed to receive."},
+ {"id":"D01.03","domain":"D01","name":"Commercial terms","def":"Credit and payment conditions agreed with the customer."},
+ {"id":"D02.01","domain":"D02","name":"Identification","def":"Codes and names that identify a product."},
+ {"id":"D02.02","domain":"D02","name":"Classification","def":"Where the product sits in the catalogue and its handling rules."},
+ {"id":"D02.03","domain":"D02","name":"Logistics","def":"Physical properties used to store and ship the product."},
+ {"id":"D03.01","domain":"D03","name":"Supplier identity","def":"Who the supplier is, legally."},
+ {"id":"D03.02","domain":"D03","name":"Banking","def":"Where and how the company pays the supplier."},
+ {"id":"D03.03","domain":"D03","name":"Risk and compliance","def":"Screening and certification status of the supplier."},
+ {"id":"D04.01","domain":"D04","name":"Address","def":"Postal description of a place."},
+ {"id":"D04.02","domain":"D04","name":"Geography","def":"Country, coordinates and time zone of a place."},
+ {"id":"D04.03","domain":"D04","name":"Site profile","def":"What the place is used for and its capacity."},
+ {"id":"D05.01","domain":"D05","name":"Person","def":"Identity of the employee as a person."},
+ {"id":"D05.02","domain":"D05","name":"Employment","def":"Role, reporting line and cost allocation."},
+ {"id":"D05.03","domain":"D05","name":"Payroll","def":"Data needed to pay the employee."},
+ {"id":"D06.01","domain":"D06","name":"Asset register","def":"What the asset is and when it was acquired."},
+ {"id":"D06.02","domain":"D06","name":"Financials","def":"Cost and depreciation of the asset."},
+ {"id":"D06.03","domain":"D06","name":"Maintenance","def":"Service history and where the asset sits."}
+],
+"attributes":[
+ {"id":"D01-A001","sa":"D01.01","name":"Customer ID","type":"Identifier","obl":"Mandatory","role":"Golden","sens":"Internal","def":"System-generated unique key of the golden customer record."},
+ {"id":"D01-A002","sa":"D01.01","name":"Legal name","type":"String","obl":"Mandatory","role":"Golden","sens":"Internal","def":"Registered name of the customer organisation or full name of a private buyer."},
+ {"id":"D01-A003","sa":"D01.01","name":"Tax registration number","type":"String","obl":"Conditional","role":"Golden","sens":"Confidential","def":"VAT or sales tax number. Required for business customers."},
+ {"id":"D01-A004","sa":"D01.02","name":"Primary email","type":"Email","obl":"Mandatory","role":"Golden","sens":"Confidential","def":"Email address used for order and invoice messages."},
+ {"id":"D01-A005","sa":"D01.02","name":"Phone number","type":"String","obl":"Optional","role":"Golden","sens":"Confidential","def":"Main phone number in international format."},
+ {"id":"D01-A006","sa":"D01.02","name":"Marketing consent","type":"Boolean","obl":"Mandatory","role":"Golden","sens":"Confidential","def":"Whether the customer agreed to receive marketing, with the date of agreement."},
+ {"id":"D01-A007","sa":"D01.03","name":"Credit limit","type":"Decimal","obl":"Conditional","role":"Local","sens":"Confidential","def":"Maximum open balance allowed before orders are blocked."},
+ {"id":"D01-A008","sa":"D01.03","name":"Payment terms code","type":"Code","obl":"Mandatory","role":"Reference","sens":"Internal","def":"Agreed payment terms, e.g. NET30."},
+ {"id":"D01-A009","sa":"D01.03","name":"Customer segment","type":"Code","obl":"Optional","role":"Reference","sens":"Internal","def":"Commercial segment used for pricing and reporting."},
+ {"id":"D02-A001","sa":"D02.01","name":"SKU","type":"Identifier","obl":"Mandatory","role":"Golden","sens":"Public","def":"Internal stock-keeping unit code."},
+ {"id":"D02-A002","sa":"D02.01","name":"GTIN","type":"String","obl":"Conditional","role":"Golden","sens":"Public","def":"Global trade item number printed on the barcode. Required for retail items."},
+ {"id":"D02-A003","sa":"D02.01","name":"Product name","type":"String","obl":"Mandatory","role":"Golden","sens":"Public","def":"Customer-facing name of the product."},
+ {"id":"D02-A004","sa":"D02.02","name":"Category code","type":"Code","obl":"Mandatory","role":"Reference","sens":"Public","def":"Position in the product catalogue hierarchy."},
+ {"id":"D02-A005","sa":"D02.02","name":"Hazard class","type":"Code","obl":"Conditional","role":"Reference","sens":"Internal","def":"Dangerous goods class. Required for regulated items."},
+ {"id":"D02-A006","sa":"D02.02","name":"Lifecycle status","type":"Code","obl":"Mandatory","role":"Golden","sens":"Internal","def":"Draft, active, phase-out or discontinued."},
+ {"id":"D02-A007","sa":"D02.03","name":"Net weight (kg)","type":"Decimal","obl":"Mandatory","role":"Golden","sens":"Public","def":"Weight of one unit without packaging."},
+ {"id":"D02-A008","sa":"D02.03","name":"Pack quantity","type":"Integer","obl":"Mandatory","role":"Golden","sens":"Public","def":"Number of units in one outer carton."},
+ {"id":"D02-A009","sa":"D02.03","name":"Country of origin","type":"Code","obl":"Mandatory","role":"Reference","sens":"Public","def":"ISO 3166 code of the country where the product was made."},
+ {"id":"D03-A001","sa":"D03.01","name":"Supplier ID","type":"Identifier","obl":"Mandatory","role":"Golden","sens":"Internal","def":"System-generated unique key of the golden supplier record."},
+ {"id":"D03-A002","sa":"D03.01","name":"Legal name","type":"String","obl":"Mandatory","role":"Golden","sens":"Internal","def":"Registered name of the supplier."},
+ {"id":"D03-A003","sa":"D03.01","name":"Tax registration number","type":"String","obl":"Mandatory","role":"Golden","sens":"Confidential","def":"VAT or sales tax number of the supplier."},
+ {"id":"D03-A004","sa":"D03.02","name":"IBAN","type":"String","obl":"Mandatory","role":"Golden","sens":"Restricted","def":"Bank account the supplier is paid into."},
+ {"id":"D03-A005","sa":"D03.02","name":"Bank country","type":"Code","obl":"Mandatory","role":"Reference","sens":"Restricted","def":"Country of the paying bank account."},
+ {"id":"D03-A006","sa":"D03.02","name":"Payment method","type":"Code","obl":"Mandatory","role":"Reference","sens":"Internal","def":"Bank transfer, card or direct debit."},
+ {"id":"D03-A007","sa":"D03.03","name":"Sanctions screening result","type":"Code","obl":"Mandatory","role":"Golden","sens":"Confidential","def":"Outcome of the latest check against sanctions lists."},
+ {"id":"D03-A008","sa":"D03.03","name":"Certificate expiry date","type":"Date","obl":"Optional","role":"Local","sens":"Internal","def":"Expiry of the supplier's quality certificate."},
+ {"id":"D03-A009","sa":"D03.03","name":"Diversity classification","type":"Code","obl":"Optional","role":"Local","sens":"Confidential","def":"Self-declared ownership category used for supplier diversity reporting."},
+ {"id":"D04-A001","sa":"D04.01","name":"Location ID","type":"Identifier","obl":"Mandatory","role":"Golden","sens":"Internal","def":"Unique key of the location record."},
+ {"id":"D04-A002","sa":"D04.01","name":"Street address","type":"String","obl":"Mandatory","role":"Golden","sens":"Internal","def":"Street, number and unit."},
+ {"id":"D04-A003","sa":"D04.01","name":"Postal code","type":"String","obl":"Mandatory","role":"Golden","sens":"Internal","def":"Postal code in the country's own format."},
+ {"id":"D04-A004","sa":"D04.02","name":"Country code","type":"Code","obl":"Mandatory","role":"Reference","sens":"Public","def":"ISO 3166 alpha-2 country code."},
+ {"id":"D04-A005","sa":"D04.02","name":"Coordinates","type":"Geo","obl":"Optional","role":"Golden","sens":"Internal","def":"Latitude and longitude of the site entrance."},
+ {"id":"D04-A006","sa":"D04.02","name":"Time zone","type":"Code","obl":"Optional","role":"Reference","sens":"Public","def":"IANA time zone name, e.g. Europe/Stockholm."},
+ {"id":"D04-A007","sa":"D04.03","name":"Site type","type":"Code","obl":"Mandatory","role":"Reference","sens":"Internal","def":"Warehouse, store, office or customer delivery point."},
+ {"id":"D04-A008","sa":"D04.03","name":"Opening hours","type":"String","obl":"Optional","role":"Local","sens":"Public","def":"Receiving and trading hours."},
+ {"id":"D04-A009","sa":"D04.03","name":"Dock count","type":"Integer","obl":"Optional","role":"Local","sens":"Internal","def":"Number of loading docks at a warehouse."},
+ {"id":"D05-A001","sa":"D05.01","name":"Employee ID","type":"Identifier","obl":"Mandatory","role":"Golden","sens":"Internal","def":"Unique key of the employee record."},
+ {"id":"D05-A002","sa":"D05.01","name":"Full name","type":"String","obl":"Mandatory","role":"Golden","sens":"Confidential","def":"Legal name of the employee."},
+ {"id":"D05-A003","sa":"D05.01","name":"Date of birth","type":"Date","obl":"Mandatory","role":"Golden","sens":"Restricted","def":"Used for payroll and legal age checks only."},
+ {"id":"D05-A004","sa":"D05.02","name":"Job title","type":"String","obl":"Mandatory","role":"Golden","sens":"Internal","def":"Current position title."},
+ {"id":"D05-A005","sa":"D05.02","name":"Cost centre","type":"Code","obl":"Mandatory","role":"Reference","sens":"Internal","def":"Finance cost centre the salary is charged to."},
+ {"id":"D05-A006","sa":"D05.02","name":"Manager ID","type":"Identifier","obl":"Conditional","role":"Golden","sens":"Internal","def":"Employee ID of the line manager."},
+ {"id":"D05-A007","sa":"D05.03","name":"Salary","type":"Decimal","obl":"Mandatory","role":"Golden","sens":"Restricted","def":"Annual base salary."},
+ {"id":"D05-A008","sa":"D05.03","name":"Bank account","type":"String","obl":"Mandatory","role":"Golden","sens":"Restricted","def":"Account the salary is paid into."},
+ {"id":"D05-A009","sa":"D05.03","name":"Tax code","type":"Code","obl":"Mandatory","role":"Golden","sens":"Restricted","def":"Code issued by the tax authority for withholding."},
+ {"id":"D06-A001","sa":"D06.01","name":"Asset tag","type":"Identifier","obl":"Mandatory","role":"Golden","sens":"Internal","def":"Number on the physical tag fixed to the asset."},
+ {"id":"D06-A002","sa":"D06.01","name":"Asset class","type":"Code","obl":"Mandatory","role":"Reference","sens":"Internal","def":"Forklift, racking, vehicle, IT equipment."},
+ {"id":"D06-A003","sa":"D06.01","name":"Acquisition date","type":"Date","obl":"Mandatory","role":"Golden","sens":"Internal","def":"Date the asset was received."},
+ {"id":"D06-A004","sa":"D06.02","name":"Acquisition cost","type":"Decimal","obl":"Mandatory","role":"Golden","sens":"Confidential","def":"Purchase price including installation."},
+ {"id":"D06-A005","sa":"D06.02","name":"Depreciation method","type":"Code","obl":"Mandatory","role":"Reference","sens":"Internal","def":"Straight line or declining balance."},
+ {"id":"D06-A006","sa":"D06.02","name":"Net book value","type":"Decimal","obl":"Mandatory","role":"Local","sens":"Confidential","def":"Cost minus accumulated depreciation."},
+ {"id":"D06-A007","sa":"D06.03","name":"Last service date","type":"Date","obl":"Optional","role":"Local","sens":"Internal","def":"Date of the most recent completed service."},
+ {"id":"D06-A008","sa":"D06.03","name":"Service interval (days)","type":"Integer","obl":"Optional","role":"Local","sens":"Internal","def":"Days between planned services."},
+ {"id":"D06-A009","sa":"D06.03","name":"Assigned location ID","type":"Identifier","obl":"Mandatory","role":"Golden","sens":"Internal","def":"Location ID of the site where the asset sits. Points to the Location domain."}
+],
+"systems":[
+ {"id":"S01","name":"CRM","hosting":"SaaS","def":"Customer relationship management. Where sales creates and edits customers."},
+ {"id":"S02","name":"ERP","hosting":"On-premise","def":"Enterprise resource planning. Runs finance, purchasing and order processing."},
+ {"id":"S03","name":"HR platform","hosting":"SaaS","def":"Employee records, payroll and org chart."},
+ {"id":"S04","name":"Warehouse management","hosting":"On-premise","def":"Stock, picking and shipping inside each warehouse."},
+ {"id":"S05","name":"Web shop","hosting":"SaaS","def":"Online ordering for business customers."},
+ {"id":"S06","name":"Maintenance system","hosting":"SaaS","def":"Work orders and service plans for equipment."},
+ {"id":"S07","name":"Data warehouse","hosting":"Cloud","def":"Reporting copy of data from every other system."}
+],
+"processes":[
+ {"id":"P01","code":"O2C","name":"Order to Cash","def":"From customer order through delivery and invoice to cash collected."},
+ {"id":"P02","code":"P2P","name":"Procure to Pay","def":"From purchase request through goods receipt to supplier payment."},
+ {"id":"P03","code":"H2R","name":"Hire to Retire","def":"From recruitment through employment changes to exit."},
+ {"id":"P04","code":"R2R","name":"Record to Report","def":"From journal entries to month-end close and financial statements."},
+ {"id":"P05","code":"I2M","name":"Idea to Market","def":"From new product idea to an active, sellable item."},
+ {"id":"P06","code":"A2R","name":"Acquire to Retire","def":"From buying equipment through maintenance to disposal."}
+],
+"controls":[
+ {"id":"C01","name":"Duplicate customer check","category":"Quality","def":"New customers are matched on name and tax number before creation."},
+ {"id":"C02","name":"Tax number format check","category":"Quality","def":"Tax numbers are validated against the country format."},
+ {"id":"C03","name":"Personal data access limit","category":"Privacy","def":"Only named roles read personal contact and identity fields."},
+ {"id":"C04","name":"Bank detail change approval","category":"Security","def":"A second person approves every change to bank details. Stops payment fraud."},
+ {"id":"C05","name":"GTIN check digit","category":"Quality","def":"The final digit of every GTIN is recalculated and compared."},
+ {"id":"C06","name":"Consent before marketing","category":"Privacy","def":"No marketing message goes out without recorded consent."},
+ {"id":"C07","name":"Sanctions screening before payment","category":"Compliance","def":"No first payment until the supplier passes sanctions screening."},
+ {"id":"C08","name":"Payroll data segregation","category":"Security","def":"Salary and tax fields are visible only to payroll staff."}
+],
+"relations":[
+ {"f":"S01","r":"masters","t":"D01"},{"f":"S02","r":"consumes","t":"D01"},{"f":"S05","r":"consumes","t":"D01"},{"f":"S07","r":"consumes","t":"D01"},
+ {"f":"S02","r":"masters","t":"D02"},{"f":"S04","r":"consumes","t":"D02"},{"f":"S05","r":"consumes","t":"D02"},{"f":"S07","r":"consumes","t":"D02"},
+ {"f":"S02","r":"masters","t":"D03"},{"f":"S07","r":"consumes","t":"D03"},
+ {"f":"S04","r":"masters","t":"D04"},{"f":"S02","r":"consumes","t":"D04"},{"f":"S06","r":"consumes","t":"D04"},{"f":"S03","r":"consumes","t":"D04"},
+ {"f":"S03","r":"masters","t":"D05"},{"f":"S02","r":"consumes","t":"D05"},
+ {"f":"S06","r":"masters","t":"D06"},{"f":"S02","r":"consumes","t":"D06"},{"f":"S07","r":"consumes","t":"D06"},
+ {"f":"P01","r":"creates","t":"D01"},{"f":"P01","r":"reads","t":"D02"},{"f":"P01","r":"reads","t":"D04"},
+ {"f":"P02","r":"creates","t":"D03"},{"f":"P02","r":"reads","t":"D02"},
+ {"f":"P03","r":"creates","t":"D05"},{"f":"P03","r":"reads","t":"D04"},
+ {"f":"P04","r":"reads","t":"D01"},{"f":"P04","r":"reads","t":"D03"},{"f":"P04","r":"updates","t":"D06"},
+ {"f":"P05","r":"creates","t":"D02"},
+ {"f":"P06","r":"creates","t":"D06"},{"f":"P06","r":"reads","t":"D04"},
+ {"f":"C01","r":"governs","t":"D01-A002"},{"f":"C01","r":"governs","t":"D01-A003"},
+ {"f":"C02","r":"governs","t":"D01-A003"},{"f":"C02","r":"governs","t":"D03-A003"},
+ {"f":"C03","r":"governs","t":"D01-A004"},{"f":"C03","r":"governs","t":"D01-A005"},{"f":"C03","r":"governs","t":"D05-A002"},{"f":"C03","r":"governs","t":"D05-A003"},
+ {"f":"C04","r":"governs","t":"D03-A004"},{"f":"C04","r":"governs","t":"D05-A008"},
+ {"f":"C05","r":"governs","t":"D02-A002"},
+ {"f":"C06","r":"governs","t":"D01-A006"},
+ {"f":"C07","r":"governs","t":"D03-A007"},
+ {"f":"C08","r":"governs","t":"D05-A007"},{"f":"C08","r":"governs","t":"D05-A009"},
+ {"f":"D06-A009","r":"references","t":"D04"}
+]
+}
+</script>
+
+<script>
+"use strict";
+/* ---------- 1. Load and index the model ---------- */
+const M = JSON.parse(document.getElementById("model").textContent);
+const KINDS = {
+  domain:      {label:"Domain",       plural:"Domains",       list:"domains",      color:"--k-domain"},
+  subjectArea: {label:"Subject area", plural:"Subject areas", list:"subjectAreas", color:"--k-sa"},
+  attribute:   {label:"Attribute",    plural:"Attributes",    list:"attributes",   color:"--k-domain"},
+  system:      {label:"System",       plural:"Systems",       list:"systems",      color:"--k-system"},
+  process:     {label:"Process",      plural:"Processes",     list:"processes",    color:"--k-process"},
+  control:     {label:"Control",      plural:"Controls",      list:"controls",     color:"--k-control"}
+};
+const REL = {
+  masters:   "is the master of",
+  consumes:  "uses a copy of",
+  creates:   "creates",
+  reads:     "reads",
+  updates:   "updates",
+  governs:   "governs",
+  references:"points to",
+  contains:  "contains"
+};
+const byId = new Map();
+for (const [kind, k] of Object.entries(KINDS)) for (const r of (M[k.list] || [])) byId.set(r.id, Object.assign(r, {kind}));
+for (const a of M.attributes) a.domain = byId.get(a.sa)?.domain;
+const rels = [];   // every link, both built-in containment and the model's relations
+for (const s of M.subjectAreas) rels.push({f:s.domain, r:"contains", t:s.id});
+for (const a of M.attributes) rels.push({f:a.sa, r:"contains", t:a.id});
+for (const x of M.relations) if (byId.has(x.f) && byId.has(x.t)) rels.push(x);
+const out = id => rels.filter(x => x.f === id), inn = id => rels.filter(x => x.t === id);
+const domainOf = id => { const n = byId.get(id); return !n ? null : n.kind === "domain" ? n.id : n.domain || null; };
+
+/* ---------- 2. State and small helpers ---------- */
+const FACETS = [   // filters for the Attributes table. Add a line here to add a filter.
+  {key:"domain", label:"Domain",      get:a => a.domain, name:v => byId.get(v).name},
+  {key:"sens",   label:"Sensitivity", get:a => a.sens},
+  {key:"obl",    label:"Obligation",  get:a => a.obl},
+  {key:"role",   label:"MDM role",    get:a => a.role},
+  {key:"type",   label:"Data type",   get:a => a.type}
+];
+const S = {tab:"map", sel:"D01", q:"", f:Object.fromEntries(FACETS.map(f => [f.key, new Set()])),
+           show:{system:true, process:true, control:true}, open:new Set(), hl:null};
+try { const t = localStorage.getItem("atlas.tab"); if (["map","table","schema"].includes(t)) S.tab = t; } catch (e) {}
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const nameOf = id => byId.get(id)?.name || id;
+const sensColor = s => "var(--s-" + String(s).toLowerCase() + ")";
+const link = id => `<button class="link" data-go="${esc(id)}">${esc(nameOf(id))}</button>`;
+
+function attrsFiltered(){
+  const q = S.q.toLowerCase();
+  return M.attributes.filter(a =>
+    FACETS.every(f => !S.f[f.key].size || S.f[f.key].has(f.get(a))) &&
+    (!q || (a.id + " " + a.name + " " + a.def).toLowerCase().includes(q)));
+}
+function select(id){
+  if (!byId.has(id)) return;
+  S.sel = id;
+  const n = byId.get(id);
+  if (n.kind === "attribute") S.open.add(n.domain);
+  if (n.kind === "subjectArea") S.open.add(n.domain);
+  renderAll();
+}
+
+/* ---------- 3. Left rail: search, map toggles, facet chips ---------- */
+function renderRail(){
+  const pool = M.attributes;
+  let h = `<h2>Search attributes</h2><input class="search" id="q" type="search" placeholder="Name, ID or definition" value="${esc(S.q)}">`;
+  h += `<h2>Show on map</h2><div class="chips">` + ["system","process","control"].map(k =>
+    `<button class="chip" data-show="${k}" aria-pressed="${S.show[k]}"><span class="sw" style="--kc:var(${KINDS[k].color})"></span>${KINDS[k].plural}</button>`).join("") + `</div>`;
+  for (const f of FACETS){
+    const counts = new Map();
+    for (const a of pool) counts.set(f.get(a), (counts.get(f.get(a)) || 0) + 1);
+    h += `<h2>${esc(f.label)}</h2><div class="chips">` + [...counts].sort((a,b) => String(a[0]).localeCompare(String(b[0]))).map(([v,n]) =>
+      `<button class="chip" data-facet="${f.key}" data-v="${esc(v)}" aria-pressed="${S.f[f.key].has(v)}">${esc(f.name ? f.name(v) : v)}<span class="n">${n}</span></button>`).join("") + `</div>`;
+  }
+  h += `<button class="reset" id="reset">Reset all filters</button>`;
+  $("rail").innerHTML = h;
+  $("q").oninput = e => { S.q = e.target.value; renderTable(); renderTabs(); };
+}
+$("rail").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.id === "reset"){ S.q = ""; for (const k in S.f) S.f[k].clear(); S.hl = null; }
+  else if (b.dataset.show){ S.show[b.dataset.show] = !S.show[b.dataset.show]; }
+  else if (b.dataset.facet){ const set = S.f[b.dataset.facet], v = b.dataset.v; set.has(v) ? set.delete(v) : set.add(v); }
+  else return;
+  renderAll();
+});
+
+/* ---------- 4. Tabs ---------- */
+function renderTabs(){
+  const t = [["map","Map",""],["table","Attributes",attrsFiltered().length],["schema","How it's built",""]];
+  $("tabs").innerHTML = t.map(([k,l,n]) => `<button class="tab" role="tab" data-tab="${k}" aria-selected="${S.tab===k}">${l}${n!==""?`<span class="n">${n}</span>`:""}</button>`).join("");
+  for (const [k] of t) $("view-" + k).hidden = S.tab !== k;
+}
+$("tabs").addEventListener("click", e => {
+  const b = e.target.closest("[data-tab]"); if (!b) return;
+  S.tab = b.dataset.tab; try { localStorage.setItem("atlas.tab", S.tab); } catch (e) {}
+  renderTabs(); if (S.tab === "map") { resize(); } else if (S.tab === "table") renderTable();
+});
+
+/* ---------- 5. Attributes table ---------- */
+function renderTable(){
+  const rows = attrsFiltered();
+  if (!rows.length){ $("tbl").innerHTML = `<div class="empty">No attributes match these filters. Use "Reset all filters" in the left rail.</div>`; return; }
+  $("tbl").innerHTML = `<table><thead><tr><th>ID</th><th>Attribute</th><th>Domain</th><th>Subject area</th><th>Type</th><th>Obligation</th><th>MDM role</th><th>Sensitivity</th><th>Controls</th><th>Definition</th></tr></thead><tbody>` +
+    rows.map(a => {
+      const ctl = inn(a.id).filter(x => x.r === "governs").map(x => x.f);
+      return `<tr data-go="${a.id}" class="${S.sel===a.id?"on":""}"><td class="mono">${a.id}</td><td><b>${esc(a.name)}</b></td><td>${esc(nameOf(a.domain))}</td><td>${esc(nameOf(a.sa))}</td><td>${esc(a.type)}</td><td>${esc(a.obl)}</td><td>${esc(a.role)}</td><td><span class="pill" style="--pc:${sensColor(a.sens)}">${esc(a.sens)}</span></td><td class="mono">${ctl.join(" ") || "–"}</td><td class="def">${esc(a.def)}</td></tr>`;
+    }).join("") + `</tbody></table>`;
+}
+
+/* ---------- 6. Inspector ---------- */
+function renderInsp(){
+  const n = byId.get(S.sel);
+  if (!n){ $("insp").innerHTML = `<div class="card"><p class="def">Click anything on the map or in the table to see its details here.</p></div>`; return; }
+  const k = KINDS[n.kind];
+  let h = `<div class="card"><div class="kind" style="--kc:var(${k.color})">${k.label} · <span class="mono">${esc(n.id)}</span></div><h3>${esc(n.name)}</h3><p class="def">${esc(n.def)}</p><dl>`;
+  const fields = {owner:"Owner", code:"Code", hosting:"Hosting", category:"Category", type:"Data type", obl:"Obligation", role:"MDM role", sens:"Sensitivity"};
+  for (const [f,l] of Object.entries(fields)) if (l && n[f] != null) h += `<dt>${l}</dt><dd>${f==="sens"?`<span class="pill" style="--pc:${sensColor(n[f])}">${esc(n[f])}</span>`:esc(n[f])}</dd>`;
+  if (n.kind === "attribute") h += `<dt>Domain</dt><dd>${link(n.domain)}</dd><dt>Subject area</dt><dd>${link(n.sa)}</dd>`;
+  if (n.kind === "subjectArea") h += `<dt>Domain</dt><dd>${link(n.domain)}</dd>`;
+  if (n.kind === "domain") h += `<dt>Attributes</dt><dd>${M.attributes.filter(a=>a.domain===n.id).length}</dd>`;
+  h += `</dl>`;
+  const o = out(n.id).filter(x => !(n.kind === "domain" && x.r === "contains"));
+  const i = inn(n.id).filter(x => x.r !== "contains");
+  if (n.kind === "domain"){
+    h += `<h2>Subject areas</h2><ul class="rels">` + M.subjectAreas.filter(s=>s.domain===n.id).map(s => `<li><span class="r mono">${s.id}</span>${link(s.id)}</li>`).join("") + `</ul>`;
+    const ctl = [...new Set(rels.filter(x => x.r==="governs" && domainOf(x.t)===n.id).map(x => x.f))];
+    if (ctl.length) h += `<h2>Controls on its attributes</h2><ul class="rels">` + ctl.map(c => `<li><span class="r mono">${c}</span>${link(c)}</li>`).join("") + `</ul>`;
+  }
+  if (o.length) h += `<h2>${n.kind==="subjectArea"?"Attributes":"Links out"}</h2><ul class="rels">` + o.map(x => `<li><span class="r">${esc(REL[x.r]||x.r)}</span>${link(x.t)}</li>`).join("") + `</ul>`;
+  if (i.length) h += `<h2>Links in</h2><ul class="rels">` + i.map(x => `<li><span class="r">${esc(REL[x.r]||x.r)}</span>${link(x.f)}</li>`).join("") + `</ul>`;
+  if (n.kind === "attribute"){
+    const sys = rels.filter(x => x.t === n.domain && (x.r==="masters"||x.r==="consumes"));
+    if (sys.length) h += `<h2>Systems holding its domain</h2><ul class="rels">` + sys.map(x => `<li><span class="r">${esc(x.r)}</span>${link(x.f)}</li>`).join("") + `</ul>`;
+  }
+  $("insp").innerHTML = h + `</div>`;
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-go]"); if (b) select(b.dataset.go); });
+
+/* ---------- 7. Map: a small force layout drawn on canvas ---------- */
+const cv = $("net"), ctx = cv.getContext("2d");
+let nodes = [], edges = [], view = {x:0, y:0, k:1}, colors = {}, fitted = false;
+const R = {domain:24, subjectArea:11, system:15, process:15, control:10};
+
+function readColors(){
+  colors = {ink:css("--ink"), ink2:css("--ink-2"), ink3:css("--ink-3"), rule:css("--rule-2"), surf:css("--surface"), hl:css("--hl"), acc:css("--accent")};
+  for (const k in KINDS) colors[k] = css(KINDS[k].color);
+}
+function buildGraph(){
+  const prev = new Map(nodes.map(n => [n.id, n]));
+  const domF = S.f.domain;
+  const doms = M.domains.filter(d => !domF.size || domF.has(d.id));
+  const vis = new Set(doms.map(d => d.id));
+  nodes = []; edges = [];
+  const add = (r, px, py) => {
+    const p = prev.get(r.id);
+    nodes.push(p ? Object.assign(p, {label:r.name}) : {id:r.id, kind:r.kind, label:r.name, x:px + (Math.random()-.5)*30, y:py + (Math.random()-.5)*30, vx:0, vy:0});
+    vis.add(r.id);
+  };
+  doms.forEach((d, i) => { const a = i / doms.length * Math.PI * 2; add(d, Math.cos(a)*170, Math.sin(a)*170); });
+  for (const d of doms) if (S.open.has(d.id)){
+    const pn = nodes.find(n => n.id === d.id);
+    M.subjectAreas.filter(s => s.domain === d.id).forEach(s => { add(s, pn.x, pn.y); edges.push({a:d.id, b:s.id, r:"contains"}); });
+  }
+  const outer = [["system",M.systems,-1],["process",M.processes,0],["control",M.controls,1]];
+  for (const [k, list, side] of outer){
+    if (!S.show[k]) continue;
+    list.forEach((r, i) => {
+      const targets = out(r.id).map(x => x.r === "governs" ? (S.open.has(domainOf(x.t)) ? byId.get(x.t).sa : domainOf(x.t)) : x.t).filter(t => vis.has(t));
+      if (!targets.length) return;
+      const a = (side * 2.1) + (i - list.length/2) * .28;
+      add(r, Math.cos(a)*380, Math.sin(a)*380);
+      for (const x of out(r.id)){
+        const t = x.r === "governs" ? (S.open.has(domainOf(x.t)) ? byId.get(x.t).sa : domainOf(x.t)) : x.t;
+        if (vis.has(t) && !edges.some(e => e.a === r.id && e.b === t)) edges.push({a:r.id, b:t, r:x.r});
+      }
+    });
+  }
+  simulate(prev.size ? 160 : 420);
+}
+function simulate(iter){
+  const idx = new Map(nodes.map(n => [n.id, n]));
+  for (let it = 0; it < iter; it++){
+    const cool = 1 - it / iter;
+    for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++){
+      const a = nodes[i], b = nodes[j]; let dx = b.x - a.x, dy = b.y - a.y, d2 = dx*dx + dy*dy || .01;
+      const f = 8000 / d2, d = Math.sqrt(d2); dx /= d; dy /= d;
+      a.vx -= dx*f; a.vy -= dy*f; b.vx += dx*f; b.vy += dy*f;
+    }
+    for (const e of edges){
+      const a = idx.get(e.a), b = idx.get(e.b); if (!a || !b) continue;
+      const L = e.r === "contains" ? 62 : 170, dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || .01, f = (d - L) * .03;
+      a.vx += dx/d*f; a.vy += dy/d*f; b.vx -= dx/d*f; b.vy -= dy/d*f;
+    }
+    for (const n of nodes){
+      n.vx -= n.x * .006; n.vy -= n.y * .006;
+      if (n.pin) { n.vx = n.vy = 0; continue; }
+      const sp = Math.hypot(n.vx, n.vy), cap = 30 * cool + 1;
+      if (sp > cap){ n.vx *= cap/sp; n.vy *= cap/sp; }
+      n.x += n.vx; n.y += n.vy; n.vx *= .6; n.vy *= .6;
+    }
+  }
+}
+function fit(){
+  if (!nodes.length) return;
+  const W = cv.clientWidth, H = cv.clientHeight;
+  let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;
+  for (const n of nodes){ x0=Math.min(x0,n.x); y0=Math.min(y0,n.y); x1=Math.max(x1,n.x); y1=Math.max(y1,n.y); }
+  const k = Math.min(1.6, (W - 120) / (x1 - x0 + 60), (H - 110) / (y1 - y0 + 60));
+  view = {k, x:-(x0 + x1)/2*k, y:-(y0 + y1)/2*k};
+}
+function hlSet(){
+  if (!S.hl) return null;
+  const s = new Set();
+  for (const id of S.hl){
+    const n = byId.get(id); if (!n) continue;
+    s.add(id);
+    if (n.kind === "attribute"){ s.add(n.sa); s.add(n.domain); }
+    if (n.kind === "subjectArea") s.add(n.domain);
+  }
+  return s;
+}
+function shape(n, r){
+  ctx.beginPath();
+  if (n.kind === "system"){ const s = r*.9; ctx.roundRect ? ctx.roundRect(n.x-s, n.y-s, s*2, s*2, 4) : ctx.rect(n.x-s, n.y-s, s*2, s*2); }
+  else if (n.kind === "process"){ ctx.moveTo(n.x, n.y-r); ctx.lineTo(n.x+r, n.y); ctx.lineTo(n.x, n.y+r); ctx.lineTo(n.x-r, n.y); ctx.closePath(); }
+  else if (n.kind === "control"){ ctx.moveTo(n.x, n.y-r*1.2); ctx.lineTo(n.x+r*1.1, n.y+r*.8); ctx.lineTo(n.x-r*1.1, n.y+r*.8); ctx.closePath(); }
+  else ctx.arc(n.x, n.y, r, 0, Math.PI*2);
+}
+function draw(){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2), W = cv.clientWidth, H = cv.clientHeight;
+  if (!W || !H) return;
+  if (cv.width !== Math.round(W*dpr) || cv.height !== Math.round(H*dpr)){ cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr); }
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+  ctx.save(); ctx.translate(W/2 + view.x, H/2 + view.y); ctx.scale(view.k, view.k);
+  const idx = new Map(nodes.map(n => [n.id, n])), hs = hlSet(), sel = S.sel, hov = hover?.id;
+  const near = new Set([sel, hov]); for (const e of edges) if (e.a===sel||e.b===sel||e.a===hov||e.b===hov){ near.add(e.a); near.add(e.b); }
+  const dim = id => hs ? !hs.has(id) : false;
+  for (const e of edges){
+    const a = idx.get(e.a), b = idx.get(e.b); if (!a || !b) continue;
+    const on = (e.a===sel||e.b===sel||e.a===hov||e.b===hov);
+    ctx.globalAlpha = dim(e.a) && dim(e.b) ? .12 : on ? .95 : .4;
+    ctx.strokeStyle = on ? colors[a.kind] : colors.rule;
+    ctx.lineWidth = (e.r === "masters" ? 2.6 : 1.2) / Math.sqrt(view.k);
+    ctx.setLineDash(e.r === "consumes" || e.r === "reads" ? [5,4] : []);
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+  for (const n of nodes){
+    const r = R[n.kind] || 10;
+    ctx.globalAlpha = dim(n.id) ? .2 : 1;
+    if (hs && hs.has(n.id)){ ctx.fillStyle = colors.hl; ctx.beginPath(); ctx.arc(n.x, n.y, r + 7, 0, Math.PI*2); ctx.fill(); }
+    shape(n, r); ctx.fillStyle = colors[n.kind]; ctx.fill();
+    if (n.id === sel){ ctx.lineWidth = 3; ctx.strokeStyle = colors.ink; shape(n, r + 4); ctx.stroke(); }
+    if (n.kind === "domain" && S.open.has(n.id)){ ctx.lineWidth = 2; ctx.strokeStyle = colors.surf; shape(n, r - 5); ctx.stroke(); }
+  }
+  ctx.textAlign = "center"; ctx.textBaseline = "top";
+  for (const n of nodes){
+    const r = R[n.kind] || 10, big = n.kind === "domain";
+    if (view.k < .55 && !big && !near.has(n.id)) continue;
+    ctx.globalAlpha = dim(n.id) ? .3 : 1;
+    ctx.font = `${big ? 600 : 400} ${big ? 13.5 : 11.5}px "Public Sans", system-ui, sans-serif`;
+    const y = n.y + r + (n.kind === "control" ? 6 : 4);
+    ctx.lineWidth = 4; ctx.strokeStyle = colors.surf; ctx.strokeText(n.label, n.x, y);
+    ctx.fillStyle = big || near.has(n.id) ? colors.ink : colors.ink2; ctx.fillText(n.label, n.x, y);
+  }
+  ctx.restore(); ctx.globalAlpha = 1;
+}
+function legend(){
+  const item = (k, lab) => { const c = `var(${KINDS[k].color})`, p = {domain:`<circle cx="7" cy="7" r="6" fill="${c}"/>`, subjectArea:`<circle cx="7" cy="7" r="4" fill="${c}"/>`,
+    system:`<rect x="1.5" y="1.5" width="11" height="11" rx="2" fill="${c}"/>`, process:`<path d="M7 1 13 7 7 13 1 7Z" fill="${c}"/>`, control:`<path d="M7 1.5 13 12.5H1Z" fill="${c}"/>`}[k];
+    return `<div><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">${p}</svg>${lab}</div>`; };
+  $("legend").innerHTML = item("domain","Domain") + item("subjectArea","Subject area") + item("system","System") + item("process","Process") + item("control","Control") +
+    `<div><svg width="14" height="14" aria-hidden="true"><line x1="0" y1="7" x2="14" y2="7" stroke="var(--ink-2)" stroke-width="2.6"/></svg>masters</div>` +
+    `<div><svg width="14" height="14" aria-hidden="true"><line x1="0" y1="7" x2="14" y2="7" stroke="var(--ink-2)" stroke-width="1.2" stroke-dasharray="4 3"/></svg>uses a copy · reads</div>`;
+}
+const toWorld = (sx, sy) => ({x:(sx - cv.clientWidth/2 - view.x)/view.k, y:(sy - cv.clientHeight/2 - view.y)/view.k});
+function hit(sx, sy){
+  const p = toWorld(sx, sy); let best = null, bd = Infinity;
+  for (const n of nodes){ const d = Math.hypot(n.x - p.x, n.y - p.y), r = (R[n.kind]||10) + 6; if (d < r && d < bd){ best = n; bd = d; } }
+  return best;
+}
+let drag = null, hover = null;
+cv.addEventListener("pointerdown", e => {
+  const r = cv.getBoundingClientRect(), sx = e.clientX - r.left, sy = e.clientY - r.top, n = hit(sx, sy);
+  drag = {sx, sy, node:n, vx:view.x, vy:view.y, moved:false}; cv.setPointerCapture(e.pointerId); cv.classList.add("dragging");
+  if (n) n.pin = true;
+});
+cv.addEventListener("pointermove", e => {
+  const r = cv.getBoundingClientRect(), sx = e.clientX - r.left, sy = e.clientY - r.top;
+  if (!drag){ const h = hit(sx, sy); if (h?.id !== hover?.id){ hover = h; cv.style.cursor = h ? "pointer" : ""; draw(); } return; }
+  if (Math.hypot(sx - drag.sx, sy - drag.sy) > 3) drag.moved = true;
+  if (drag.node){ const p = toWorld(sx, sy); drag.node.x = p.x; drag.node.y = p.y; }
+  else { view.x = drag.vx + sx - drag.sx; view.y = drag.vy + sy - drag.sy; }
+  draw();
+});
+cv.addEventListener("pointerup", () => {
+  if (!drag) return;
+  if (drag.node){ drag.node.pin = false; if (!drag.moved) select(drag.node.id); }
+  drag = null; cv.classList.remove("dragging"); draw();
+});
+cv.addEventListener("dblclick", e => {
+  const r = cv.getBoundingClientRect(), n = hit(e.clientX - r.left, e.clientY - r.top);
+  if (n?.kind === "domain"){ S.open.has(n.id) ? S.open.delete(n.id) : S.open.add(n.id); renderAll(); }
+});
+cv.addEventListener("wheel", e => {
+  e.preventDefault();
+  const r = cv.getBoundingClientRect(), sx = e.clientX - r.left, sy = e.clientY - r.top, p = toWorld(sx, sy);
+  view.k = Math.max(.3, Math.min(3, view.k * Math.exp(-e.deltaY * .0015)));
+  view.x = sx - cv.clientWidth/2 - p.x*view.k; view.y = sy - cv.clientHeight/2 - p.y*view.k; draw();
+}, {passive:false});
+$("fit").onclick = () => { fit(); draw(); };
+$("expall").onclick = () => {
+  const all = M.domains.every(d => S.open.has(d.id));
+  M.domains.forEach(d => all ? S.open.delete(d.id) : S.open.add(d.id));
+  $("expall").textContent = all ? "Expand all" : "Collapse all"; renderAll(); fit(); draw();
+};
+function resize(){ if (!fitted && cv.clientWidth){ fit(); fitted = true; } draw(); }
+new ResizeObserver(resize).observe(cv);
+const retheme = () => { readColors(); draw(); };
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", retheme);
+new MutationObserver(retheme).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
+
+/* ---------- 8. "How it's built" tab ---------- */
+let dl = null;
+function renderSchema(){
+  const counts = Object.entries(KINDS).map(([k,v]) => `<div class="box"><b><span class="sw" style="--kc:var(${v.color})"></span>${v.plural} <span class="mono" style="color:var(--ink-3)">${(M[v.list]||[]).length}</span></b><p>Stored in <code>${v.list}</code>.</p></div>`).join("");
+  const rc = {}; for (const x of M.relations) rc[x.r] = (rc[x.r] || 0) + 1;
+  $("view-schema").innerHTML = `<div class="schema">
+    <p>This page is one HTML file. The data sits in a JSON block inside the file (<code>&lt;script id="model"&gt;</code>). Every view on the page, the map, the table, the filters and the inspector, is generated from that block when the page loads. Change the JSON and the page changes with it.</p>
+    <h2>Entity types</h2><div class="grid">${counts}</div>
+    <h2>Relation types</h2><div class="grid">${Object.entries(rc).map(([r,n]) => `<div class="box"><b>${esc(r)} <span class="mono" style="color:var(--ink-3)">${n}</span></b><p>Read as "A ${esc(REL[r]||r)} B".</p></div>`).join("")}</div>
+    <h2>How Ask works</h2>
+    <ol><li>Your question and a text copy of the whole model go to Claude through the page's <code>sample</code> capability.</li>
+      <li>Claude must answer in JSON and name every record as <code>[[ID]]</code>.</li>
+      <li>The page checks each ID against the model. IDs not found are removed and counted, so the answer only links to records that exist.</li>
+      <li>Valid IDs light up on the map and become clickable.</li></ol>
+    <h2>Make it yours</h2>
+    <ol><li>Download the model below and edit it, or ask Claude to rewrite it for your subject.</li>
+      <li>Keep the ID pattern: domain <code>D01</code>, subject area <code>D01.01</code>, attribute <code>D01-A001</code>.</li>
+      <li>Add a filter by adding one line to <code>FACETS</code> in the script.</li>
+      <li>Add a relation type by adding it to <code>REL</code> and using it in <code>relations</code>.</li></ol>
+    <div><button class="btn primary" id="dl" type="button" ${dl ? "" : "hidden"}>Download model JSON</button> <span id="dlmsg" class="mono" style="color:var(--ink-3)"></span></div>
+  </div>`;
+  const b = $("dl"); if (b) b.onclick = async () => {
+    const data = JSON.stringify({meta:M.meta, domains:M.domains, subjectAreas:M.subjectAreas, attributes:M.attributes.map(({kind,domain,...a}) => a),
+      systems:M.systems, processes:M.processes, controls:M.controls, relations:M.relations}, (k, v) => k === "kind" && typeof v === "string" && KINDS[v] ? undefined : v, 1);
+    try { const r = await dl.save({filename:"master-data-model.json", data}); $("dlmsg").textContent = r.status === "saved" ? "Saved." : ""; }
+    catch (e) { $("dlmsg").textContent = e.code === "cancelled" ? "" : "Download failed: " + (e.message || e.code); }
+  };
+}
+
+/* ---------- 9. Ask: Claude answers, the page verifies every ID ---------- */
+const SUGS = ["Which systems hold restricted data?", "What protects supplier bank details?", "Which processes create master data?", "Where does the Location domain get used?"];
+$("sugs").innerHTML = SUGS.map(s => `<button class="sug" type="button">${esc(s)}</button>`).join("");
+$("sugs").addEventListener("click", e => { const b = e.target.closest(".sug"); if (b){ $("askq").value = b.textContent; ask(b.textContent); } });
+let sample = null, ctl = null, lastAsk = null;
+function digest(){
+  const L = [];
+  for (const d of M.domains) L.push(`${d.id} | domain | ${d.name} | owner ${d.owner}`);
+  for (const s of M.subjectAreas) L.push(`${s.id} | subject area of ${s.domain} | ${s.name}`);
+  for (const a of M.attributes) L.push(`${a.id} | attribute in ${a.sa} | ${a.name} | ${a.type}, ${a.obl}, ${a.role}, ${a.sens}`);
+  for (const s of M.systems) L.push(`${s.id} | system | ${s.name} (${s.hosting}) | ${s.def}`);
+  for (const p of M.processes) L.push(`${p.id} | process | ${p.name} (${p.code}) | ${p.def}`);
+  for (const c of M.controls) L.push(`${c.id} | control | ${c.name} (${c.category}) | ${c.def}`);
+  L.push("", "RELATIONS (from relation to):");
+  for (const x of M.relations) L.push(`${x.f} ${x.r} ${x.t}`);
+  return L.join("\n");
+}
+function renderAsk(){
+  const o = $("askout");
+  if (!lastAsk){ o.innerHTML = ""; return; }
+  if (lastAsk.busy){ o.innerHTML = `<div class="answer"><div class="q">${esc(lastAsk.q)}</div>Thinking…</div>`; return; }
+  if (lastAsk.err){ o.innerHTML = `<div class="answer"><div class="q">${esc(lastAsk.q)}</div>${esc(lastAsk.err)}</div>`; return; }
+  const html = esc(lastAsk.answer).replace(/\[\[([^\[\]]{1,24})\]\]/g, (m, id) => `<button class="ref" data-go="${esc(id)}" style="--kc:var(${KINDS[byId.get(id).kind].color})">${esc(nameOf(id))}</button>`);
+  o.innerHTML = `<div class="answer"><div class="q">${esc(lastAsk.q)}</div>${html}` +
+    (lastAsk.dropped ? `<div class="note">${lastAsk.dropped} reference${lastAsk.dropped===1?"":"s"} did not match any record in the model and ${lastAsk.dropped===1?"was":"were"} removed.</div>` : "") +
+    (S.hl ? `<div class="note">Matching records are highlighted on the map. <button class="link" id="clearhl">Clear highlight</button></div>` : "") + `</div>`;
+  const c = $("clearhl"); if (c) c.onclick = () => { S.hl = null; renderAsk(); draw(); };
+}
+async function ask(q){
+  q = q.trim().slice(0, 240); if (!q || !sample || lastAsk?.busy) return;
+  lastAsk = {q, busy:true}; renderAsk();
+  $("askgo").disabled = true; $("askstop").hidden = false; ctl = new AbortController();
+  const prompt = `You answer questions about a master data reference model. Use ONLY the model below. Do not use outside knowledge about any company.
+Every time you mention a record, write its ID in double square brackets, exactly as in the model, e.g. [[D01]] or [[S02]]. Never invent an ID.
+If the model does not contain the answer, say so in one sentence.
+Keep the answer under 120 words, plain text, no markdown.
+Reply with JSON only, in this shape:
+{"answer": "text with [[ID]] references", "focus": "the single most relevant ID, or null", "ids": ["up to 12 IDs to highlight on the map"]}
+
+MODEL
+${digest()}
+
+QUESTION
+${q}`;
+  try {
+    const r = await sample.json(prompt, {modelTier:"default", signal:ctl.signal});
+    let dropped = 0;
+    const answer = String(r?.answer || "").replace(/\[\[([^\[\]]{1,24})\]\]/g, (m, id) => byId.has(id) ? m : (dropped++, id));
+    const ids = [...new Set((Array.isArray(r?.ids) ? r.ids : []).filter(id => byId.has(id)))].slice(0, 12);
+    if (!answer.trim()) lastAsk = {q, err:"No answer came back. Try naming a domain, system, process or control."};
+    else {
+      lastAsk = {q, answer, dropped};
+      S.hl = ids.length ? ids : null;
+      if (byId.has(r?.focus)) select(r.focus); else { draw(); }
+      if (S.hl && S.tab === "schema"){ S.tab = "map"; renderTabs(); resize(); }
+    }
+  } catch (e) {
+    const copy = {cancelled:"Stopped.", not_granted:"Ask was declined for this page. Reload the page to be asked again.", rate_limited:"Too many questions in a short time. Wait a minute, then ask again."};
+    lastAsk = {q, err: copy[e?.code] || ("The answer did not come back: " + (e?.message || "unknown error") + ".")};
+  }
+  $("askgo").disabled = false; $("askstop").hidden = true; renderAsk();
+}
+$("askform").addEventListener("submit", e => { e.preventDefault(); ask($("askq").value); });
+$("askstop").onclick = () => ctl?.abort();
+
+/* ---------- 10. Boot ---------- */
+function renderAll(){ renderRail(); renderTabs(); renderTable(); renderInsp(); buildGraph(); draw(); }
+readColors(); legend(); renderSchema(); renderAll();
+if (document.fonts) document.fonts.ready.then(draw);
+(async () => {
+  try { sample = await window.claude?.use("sample"); } catch (e) {}
+  if (!sample){
+    $("askq").disabled = true; $("askgo").disabled = true;
+    $("askq").placeholder = "Ask needs the Claude viewer. Open this page on claude.ai to use it.";
+    $("sugs").hidden = true;
+  }
+})();
+(async () => { try { dl = await window.claude?.use("downloads"); } catch (e) {} renderSchema(); })();
+</script>
