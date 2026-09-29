@@ -53,6 +53,7 @@ Two single-page Claude Artifacts sharing one engine:
 - Regulation dates are learning summaries. Do not present them as verified legal dates.
 
 ## Where things are
+- `HANDOFF.md`: how to move this project to a work account; first-session tasks there.
 - `README.md`: overview, links, tabs, how to run checks.
 - `data-journey/README.md`: demo flow, honesty rules, data model for the Tallgrass page.
 - `reference-model/README.md`: data model fields and relation types.
