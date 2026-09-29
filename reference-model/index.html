@@ -119,7 +119,7 @@ td.def{white-space:normal;min-width:220px;color:var(--ink-2)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
-<header class="top">
+<header class="top" id="top">
   <h1>Master Data Atlas</h1>
   <span class="example">Example data</span>
   <span class="sub">A reference model for a fictional wholesale distributor, Alder Street Supply: 6 data domains, the systems that hold them, the processes that use them and the controls that govern them.</span>
@@ -294,7 +294,12 @@ td.def{white-space:normal;min-width:220px;color:var(--ink-2)}
 }
 </script>
 
+<div id="fatal" hidden style="margin-block:12px;padding:10px 12px;border:1px solid var(--s-restricted);border-radius:6px;color:var(--s-restricted);font:13px var(--f-mono)"></div>
 <script>
+window.addEventListener("error", e => { const b = document.getElementById("fatal"); if (b){ if (b.parentNode !== document.body || document.body.firstElementChild !== b) document.body.prepend(b); b.hidden = false; b.textContent += "Page error: " + (e.message || "unknown") + (e.lineno ? " (line " + e.lineno + ")" : "") + "\n"; } });
+</script>
+<script>
+(() => {
 "use strict";
 /* ---------- 1. Load and index the model ---------- */
 const M = JSON.parse(document.getElementById("model").textContent);
@@ -727,4 +732,5 @@ if (document.fonts) document.fonts.ready.then(draw);
   }
 })();
 (async () => { try { dl = await window.claude?.use("downloads"); } catch (e) {} renderSchema(); })();
+})();
 </script>
