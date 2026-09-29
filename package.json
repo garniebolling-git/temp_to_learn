@@ -1,0 +1,13 @@
+{
+  "name": "master-data-atlas",
+  "version": "5.0.0",
+  "private": true,
+  "description": "Master data reference model explorer, published as a Claude Artifact. Learning project.",
+  "scripts": {
+    "test": "node tests/check.js"
+  },
+  "devDependencies": {
+    "bpmn-moddle": "9.0.4",
+    "playwright": "1.63.0"
+  }
+}
