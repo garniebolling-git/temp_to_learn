@@ -4,7 +4,7 @@ Live-demo scenario for Matillion presales. A fictional US outdoor retailer, Tall
 Source: on-premise SQL Server 2016 EDW. Target: Databricks on Azure with Unity Catalog. Integration: Matillion with Maia.
 
 - Artifact: https://claude.ai/artifact/E9qAq2xH861z7dLuoeTGhv (private until shared)
-- Version: v1 (see `CHANGELOG.md` at the repository root)
+- Version: v2 (see `CHANGELOG.md` at the repository root)
 
 ## Honesty rules for this page
 - Company, people and every number are fictional. The page says so in a badge and a footer.

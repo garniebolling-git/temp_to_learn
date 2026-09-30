@@ -4,6 +4,9 @@
 
 Artifact: https://claude.ai/artifact/E9qAq2xH861z7dLuoeTGhv
 
+## journey v2 (artifact version 1790785120-94d1), 2026-09-30
+- Network map scales with the browser width: from 70% of natural size (then scrolls sideways) up to 140%.
+
 ## journey v1 (artifact version 1790708468-8ca0), 2026-09-29
 - New page `data-journey/index.html`: fictional retailer Tallgrass Outfitters, SQL Server 2016 EDW to Databricks on Azure
   with Matillion, framed around AI readiness, built for a live demo.

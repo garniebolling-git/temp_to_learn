@@ -7,7 +7,7 @@ Two single-page Claude Artifacts sharing one engine:
 2. **Master Data Atlas** (`reference-model/`): the original learning project, master data reference model. Stable at v5.
 
 ## Current state
-- Tallgrass Data Journey v1: 11 tabs (Start here with 9-step talk track, AI readiness, Network, Current state, Maia,
+- Tallgrass Data Journey v2: 11 tabs (Start here with 9-step talk track, AI readiness, Network, Current state, Maia,
   Process, Data tests, Regulation, Catalogue, Roadmap, How it's built).
 - Master Data Atlas v5: 11 tabs, currency USD.
 - Working branch: `claude/youthful-cerf-n09i8x` (the only branch; GitHub's default). No `main` yet.

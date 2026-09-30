@@ -115,7 +115,7 @@ header.top .sub{color:var(--ink-2);font-size:13px;max-width:78ch;flex-basis:100%
 .seg button{border:0;background:var(--surface);padding:6px 14px;font-weight:600;font-size:13px}
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
 .netwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:8px}
-.net{display:block;font-family:var(--f-body)}
+.net{display:block;width:100%;height:auto;margin-inline:auto;font-family:var(--f-body)}
 .n-band{fill:var(--sunk)}
 .n-bandtxt{font:600 11px var(--f-mono);fill:var(--ink-3);letter-spacing:.04em}
 .n-col{font:600 10.5px var(--f-mono);fill:var(--ink-3);text-transform:uppercase;letter-spacing:.06em}
@@ -724,7 +724,8 @@ function renderNet(){
   const pos = new Map();
   byCol.forEach((list, ci) => { const off = (rows - list.length) * RH / 2; list.forEach((n, ri) => pos.set(n.id, {x:L + ci * CW, y:TOP + off + ri * RH})); });
   const lin = lineage(g, S.sel), sel = S.sel;
-  let svg = `<svg class="net" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${view === "today" ? "Today" : "Target"} data journey: ${g.nodes.length} systems, pipelines and tables">`;
+  // Scales with the container: 70% of natural size at the smallest (then scrolls), 140% at the largest.
+  let svg = `<svg class="net" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMin meet" style="min-width:${Math.round(W * 0.7)}px;max-width:${Math.round(W * 1.4)}px" role="img" aria-label="${view === "today" ? "Today" : "Target"} data journey: ${g.nodes.length} systems, pipelines and tables">`;
   const band = (c0, c1, label) => { const i0 = g.cols.indexOf(c0), i1 = g.cols.indexOf(c1); if (i0 < 0) return "";
     return `<rect class="n-band" x="${L + i0 * CW - 8}" y="8" width="${(i1 - i0) * CW + NW + 16}" height="${H - 16}" rx="10"/><text class="n-bandtxt" x="${L + i0 * CW}" y="26">${esc(label)}</text>`; };
   svg += band("edw", "edw", "On-premise");

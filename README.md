@@ -5,7 +5,7 @@ generated tabs, inspector, BPMN 2.0 export, automated checks).
 
 | Project | Purpose | Version | Artifact | Source |
 |---|---|---|---|---|
-| Tallgrass Data Journey | Matillion presales live demo: SQL Server EDW to Databricks, AI readiness, Maia (illustrative) | v1 | https://claude.ai/artifact/E9qAq2xH861z7dLuoeTGhv | [data-journey/](data-journey/) |
+| Tallgrass Data Journey | Matillion presales live demo: SQL Server EDW to Databricks, AI readiness, Maia (illustrative) | v2 | https://claude.ai/artifact/E9qAq2xH861z7dLuoeTGhv | [data-journey/](data-journey/) |
 | Master Data Atlas | Learning project: master data reference model | v5 | https://claude.ai/artifact/RQwdyLoD7o17zoTmM1Cx9n | [reference-model/](reference-model/) |
 
 Both artifacts are private to the owner until shared from the page's Share menu. All companies and figures are fictional.
