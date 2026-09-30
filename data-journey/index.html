@@ -718,24 +718,47 @@ function lineage(g, id){
   return new Set([...up, ...down]);
 }
 function renderNet(){
-  const view = S.view, g = netGraph(view), CW = 150, NW = 134, NH = 40, RH = 52, TOP = 62, L = 16;
+  const view = S.view, g = netGraph(view), CW = 170, NW = 134, NH = 40, RH = 76, TOP = 62, L = 16;
   const byCol = g.cols.map(c => g.nodes.filter(n => stageOf(n) === c));
   const rows = Math.max(...byCol.map(c => c.length)), W = L * 2 + g.cols.length * CW - (CW - NW), H = TOP + rows * RH + 16;
+  // Order each column by the average row of its neighbours (a few sweeps both ways) so lines cross less.
+  const rowOf = new Map(); const place = () => byCol.forEach((list, ci) => { const off = (rows - list.length) / 2; list.forEach((n, ri) => rowOf.set(n.id, off + ri)); });
+  place();
+  const nb = id => g.edges.flatMap(e => e.f === id ? [e.t] : e.t === id ? [e.f] : []);
+  for (let sweep = 0; sweep < 4; sweep++){
+    const order = sweep % 2 ? byCol.map((_, i) => byCol.length - 1 - i) : byCol.map((_, i) => i);
+    for (const ci of order){
+      const bary = n => { const r = nb(n.id).map(id => rowOf.get(id)).filter(v => v != null); return r.length ? r.reduce((a, b) => a + b, 0) / r.length : rowOf.get(n.id); };
+      const keyed = byCol[ci].map(n => [n, bary(n)]); keyed.sort((a, b) => a[1] - b[1]); byCol[ci] = keyed.map(k => k[0]); place();
+    }
+  }
   const pos = new Map();
-  byCol.forEach((list, ci) => { const off = (rows - list.length) * RH / 2; list.forEach((n, ri) => pos.set(n.id, {x:L + ci * CW, y:TOP + off + ri * RH})); });
+  byCol.forEach((list, ci) => list.forEach(n => pos.set(n.id, {x:L + ci * CW, y:TOP + rowOf.get(n.id) * RH})));
+  // Each line gets its own connection point on the box edge, ordered by where its other end sits.
+  const port = new Map(), spread = (id, list, side) => {
+    list.sort((a, b) => a.y - b.y);
+    const step = list.length > 1 ? Math.min(8, (NH - 12) / (list.length - 1)) : 0;
+    list.forEach((it, i) => port.set(`${side}:${it.e.f}>${it.e.t}`, pos.get(id).y + NH / 2 + (i - (list.length - 1) / 2) * step));
+  };
+  for (const n of g.nodes){
+    spread(n.id, g.edges.filter(e => e.f === n.id && pos.has(e.t)).map(e => ({e, y:pos.get(e.t).y})), "out");
+    spread(n.id, g.edges.filter(e => e.t === n.id && pos.has(e.f)).map(e => ({e, y:pos.get(e.f).y})), "in");
+  }
   const lin = lineage(g, S.sel), sel = S.sel;
-  // Scales with the container: 70% of natural size at the smallest (then scrolls), 140% at the largest.
-  let svg = `<svg class="net" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMin meet" style="min-width:${Math.round(W * 0.7)}px;max-width:${Math.round(W * 1.4)}px" role="img" aria-label="${view === "today" ? "Today" : "Target"} data journey: ${g.nodes.length} systems, pipelines and tables">`;
+  // Scales with the container: 65% of natural size at the smallest (then scrolls), 140% at the largest.
+  let svg = `<svg class="net" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMin meet" style="min-width:${Math.round(W * 0.65)}px;max-width:${Math.round(W * 1.4)}px" role="img" aria-label="${view === "today" ? "Today" : "Target"} data journey: ${g.nodes.length} systems, pipelines and tables">`;
   const band = (c0, c1, label) => { const i0 = g.cols.indexOf(c0), i1 = g.cols.indexOf(c1); if (i0 < 0) return "";
     return `<rect class="n-band" x="${L + i0 * CW - 8}" y="8" width="${(i1 - i0) * CW + NW + 16}" height="${H - 16}" rx="10"/><text class="n-bandtxt" x="${L + i0 * CW}" y="26">${esc(label)}</text>`; };
   svg += band("edw", "edw", "On-premise");
   if (view === "target") svg += band("bronze", "gold", "Databricks Lakehouse on Azure · Unity Catalog");
   g.cols.forEach((c, i) => svg += `<text class="n-col" x="${L + i * CW}" y="46">${esc(COLS[view][i][1])}</text>`);
-  for (const e of g.edges){
+  // Faded lines first, highlighted lineage last so it is never hidden underneath.
+  const onLin = e => lin && lin.has(e.f) && lin.has(e.t);
+  for (const e of [...g.edges.filter(e => !onLin(e)), ...g.edges.filter(onLin)]){
     const a = pos.get(e.f), b = pos.get(e.t); if (!a || !b) continue;
-    const x1 = a.x + NW, y1 = a.y + NH / 2, x2 = b.x, y2 = b.y + NH / 2, dx = Math.max(30, (x2 - x1) / 2);
+    const k = `${e.f}>${e.t}`, x1 = a.x + NW, y1 = port.get("out:" + k), x2 = b.x, y2 = port.get("in:" + k), dx = Math.max(30, (x2 - x1) / 2);
     const manual = [e.f, e.t].some(id => ["PL02","S13"].includes(id));
-    const cls = lin ? (lin.has(e.f) && lin.has(e.t) ? "on" : "dim") : "";
+    const cls = lin ? (onLin(e) ? "on" : "dim") : "";
     svg += `<path class="n-edge ${manual ? "manual" : ""} ${cls}" d="M${x1} ${y1} C${x1 + dx} ${y1} ${x2 - dx} ${y2} ${x2} ${y2}"/>`;
   }
   for (const n of g.nodes){

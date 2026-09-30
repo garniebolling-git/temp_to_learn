@@ -4,6 +4,13 @@
 
 Artifact: https://claude.ai/artifact/E9qAq2xH861z7dLuoeTGhv
 
+## journey v3 (artifact version 1790785348-22e4), 2026-09-30
+- Network: rows 76 px apart (was 52), column gaps 36 px (was 16).
+- Boxes in each column are ordered next to the boxes they connect to, so lines cross less.
+- Each line has its own connection point on a box edge, so lines fan out instead of merging.
+- Highlighted lineage lines draw on top of faded ones.
+- Scaling floor lowered to 65% so the wider map still fits a 1100 px window.
+
 ## journey v2 (artifact version 1790785120-94d1), 2026-09-30
 - Network map scales with the browser width: from 70% of natural size (then scrolls sideways) up to 140%.
 
