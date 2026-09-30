@@ -7,7 +7,7 @@ It is written for both the owner and Claude.
 
 | Project | Folder | State | What it is |
 |---|---|---|---|
-| Tallgrass Data Journey | `data-journey/` | v1, active | Matillion presales live demo. Fictional retailer, on-premise SQL Server EDW to Databricks on Azure, framed around AI readiness. 11 tabs, 9-step talk track. |
+| Tallgrass Data Journey | `data-journey/` | v3, active | Matillion presales live demo. Fictional retailer, on-premise SQL Server EDW to Databricks on Azure, framed around AI readiness. 11 tabs, 9-step talk track. |
 | Master Data Atlas | `reference-model/` | v5, stable | Original learning project. Master data reference model for a fictional distributor. 11 tabs. |
 
 Both are single HTML files: CSS, a JSON data block (`<script id="model">`) and code in one IIFE.

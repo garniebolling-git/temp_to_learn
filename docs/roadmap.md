@@ -3,6 +3,8 @@
 ## Tallgrass Data Journey (active)
 Built in v1: Start here talk track, AI readiness, Network with lineage, Current state, Maia (illustrative), Process with BPMN,
 Data tests, Regulation, Catalogue, Roadmap.
+Built in v2 and v3: Network map scales with the browser width; lineage lines separated (taller rows, wider gaps,
+neighbour-based ordering, one connection point per line, highlighted lines on top).
 
 Next candidates:
 - Replace illustrative Maia examples with real ones from Matillion demos or documentation.
