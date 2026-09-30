@@ -1,0 +1,13 @@
+sourceSystem,sourcePrimaryKey,name,roles,country,street,city,state,postcode,tax_id,duns,status,bank_type,bank_key,bank_acct,payment_terms,last_changed,last_transaction,block
+ECOM,WEB-000001,Harbor Hops Inc,Customer,US,7489 Elm St,St. Louis,MO,63101,17-8610055,074631437,Active,,,,,2026-04-24,2026-08-15,GB-NONE
+ECOM,WEB-000002,Meridian Plastics Inc,Customer,US,4666 Commerce Dr,Chicago,IL,60601,67-9162307,324069689,Active,,,,,2026-06-06,2026-09-15,GB-NONE
+ECOM,WEB-000003,Oakmont Cans Corp,Customer,US,4517 Main St,Tulsa,OK,74103,51-5616161,917128523,Active,,,,,2026-04-26,2026-08-31,GB-NONE
+ECOM,WEB-000004,Meridian Pallets Inc,Customer,US,161 Elm St,Minneapolis,MN,55401,96-8627827,953054027,Active,,,,,2026-05-26,2026-09-02,GB-NONE
+ECOM,WEB-000005,Meridian Hops Inc,Customer,US,1719 Rail Ave,Kansas City,MO,64106,17-2518360,897526432,Active,,,,,2026-09-01,2026-08-18,GB-NONE
+ECOM,WEB-000006,Lonestar Returnables Inc,Customer,US,5053 Main St,Kansas City,MO,64106,73-9200463,779723762,Active,,,,,2026-04-23,2026-08-05,GB-NONE
+ECOM,WEB-000007,Stonebridge Pallets GmbH,Customer,DE,Hafenstrasse 73,Hamburg,,20095,DE955199504,916338469,Active,,,,,2026-09-05,2026-09-27,GB-NONE
+ECOM,WEB-000008,Ironwood Returnables Ltd,Customer,GB,Dock Road 49,Leeds,,LS1 1AA,GB128528383,052913820,Active,,,,,2026-04-16,2026-09-15,GB-NONE
+ECOM,WEB-000009,Silverleaf Pallets Inc,Customer,US,2983 Rail Ave,Minneapolis,MN,55401,36-9968535,844475149,Active,,,,,2026-08-31,2026-09-16,GB-NONE
+ECOM,WEB-000010,Northgate Returnables Co,Customer,US,3949 Main St,Omaha,NE,68102,59-4093905,542265689,Active,,,,,2026-08-14,2026-09-09,GB-NONE
+ECOM,WEB-000011,Redfield Hops LLC,Customer,US,7968 Main St,Des Moines,IA,50309,41-9816095,842249198,Active,,,,,2026-08-29,2026-09-07,GB-NONE
+ECOM,WEB-000012,Lakeshore Supply Corp LLC,Customer,US,6335 Industrial Blvd,Des Moines,IA,50309,92-9227537,115763995,Active,,,,,2026-09-22,2026-09-21,GB-NONE

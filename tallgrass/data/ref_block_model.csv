@@ -1,0 +1,9 @@
+global_code,name,sap_native,d365_native
+GB-SANC,Sanctions block (global),Posting block + Purchasing block + Payment block,Vendor on hold = All
+GB-FIN,Finance hold,Central posting block,Vendor on hold = Payment
+GB-PROC,Procurement hold,Central purchasing block,Vendor on hold = Invoice
+GB-DORM,Dormant,Central purchasing block,Vendor on hold = Invoice
+GB-CRED,Credit block,Credit block (customer),Customer on hold = All
+GB-LEGAL,Legal hold,Posting + Purchasing block,Vendor on hold = All
+GB-DUP,Duplicate pending,Central purchasing block,Vendor on hold = Invoice
+GB-NONE,Not blocked,(blank),No

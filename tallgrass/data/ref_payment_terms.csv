@@ -1,0 +1,7 @@
+code,name,days,sap_key,d365_key
+NT30,Net 30,30,NT30,Net30
+NT45,Net 45,45,NT45,Net45
+NT60,Net 60,60,NT60,Net60
+NT90,Net 90,90,NT90,Net90
+IMM,Immediate,0,IMM,COD
+2N10,2% 10 Net 30,30,2N10,2%10Net30

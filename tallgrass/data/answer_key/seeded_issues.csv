@@ -1,0 +1,44 @@
+object,key,golden_id,issue,requirement,expected_action
+Party,V100001,G00001,Vendor and customer are separate records for same legal entity,CUS-02,Merge into one party with Vendor and Customer roles
+Party,V100002,G00002,Payment terms differ between SAP (NT60) and D365 (NT30),VEN-10,Include in harmonisation list
+Party,V100004,G00004,Sanctions list hit (simulated event),VEN-09,Apply GB-SANC global block in SAP and D365
+Party,SUP-00001,G00005,IBAN checksum fails at portal entry,VEN-05,"Reject, supplier corrects IBAN"
+Party,CUST-000005,G00010,Payment terms differ SAP NT45 vs D365 NT90,VEN-10,Include in harmonisation list
+Party,CUST-000007,G00014,Payment terms differ SAP NT60 vs D365 NT45,VEN-10,Include in harmonisation list
+Party,CUST-000012,G00030,Payment terms differ SAP NT60 vs D365 NT90,VEN-10,Include in harmonisation list
+Party,V100032,,IBAN checksum invalid in source,VEN-05,"Flag, steward corrects"
+Party,V100007,,IBAN checksum invalid in source,VEN-05,"Flag, steward corrects"
+Party,V100027,,IBAN checksum invalid in source,VEN-05,"Flag, steward corrects"
+Party,V100033,,Tax ID missing,VEN-03,"Flag, request from supplier"
+Party,V100020,,Tax ID missing,VEN-03,"Flag, request from supplier"
+Party,V100013,,Tax ID missing,VEN-03,"Flag, request from supplier"
+Party,V100023,,No transactions in more than 18 months,VEN-11,"Flag dormant, propose GB-DORM block"
+Party,V100024,,No transactions in more than 18 months,VEN-11,"Flag dormant, propose GB-DORM block"
+Party,V100028,,No transactions in more than 18 months,VEN-11,"Flag dormant, propose GB-DORM block"
+Party,V100034,,No transactions in more than 18 months,VEN-11,"Flag dormant, propose GB-DORM block"
+Party,001TG00000003,,Address not standardised (case and spacing),CUS-03,Standardise and verify
+Party,001TG00000018,,Address not standardised (case and spacing),CUS-03,Standardise and verify
+Party,001TG00000020,,Address not standardised (case and spacing),CUS-03,Standardise and verify
+Party,CUST-000013,,Country code not ISO alpha-2,CUS-03,Fix against reference data
+Party,CUST-000034,,Country code not ISO alpha-2,CUS-03,Fix against reference data
+Party,WEB-000009,G00056,Duplicate of CRM account with different legal suffix,CUS-04,Merge
+Party,WEB-000010,G00057,Duplicate of CRM account with different legal suffix,CUS-04,Merge
+Party,WEB-000011,G00036,Duplicate of CRM account with different legal suffix,CUS-04,Merge
+Party,WEB-000012,G00043,Duplicate of CRM account with different legal suffix,CUS-04,Merge
+Material,FG90001,,New SKU: producing market completes basic data; CA and MX extensions pending,"MAT-01,MAT-02,MAT-03",Early publish as Under Creation; parallel market tasks
+Material,FG00016,,GTIN check digit invalid,MAT-05,Reject at entry or flag
+Material,FG00019,,GTIN check digit invalid,MAT-05,Reject at entry or flag
+Material,FG00017,,GTIN check digit invalid,MAT-05,Reject at entry or flag
+Material,PK00009,,Packaging missing PPWR recycled content and ESG class,MAT-06,Stewardship task
+Material,PK00003,,Packaging missing PPWR recycled content and ESG class,MAT-06,Stewardship task
+Material,PK00010,,Packaging missing PPWR recycled content and ESG class,MAT-06,Stewardship task
+Material,PK00008,,Packaging missing PPWR recycled content and ESG class,MAT-06,Stewardship task
+Material,FG00018,,UoM conversion missing (case and pallet),MAT-07,Request from producing market
+Material,FG00020,,UoM conversion missing (case and pallet),MAT-07,Request from producing market
+Material,FG00007,,UoM conversion missing (case and pallet),MAT-07,Request from producing market
+Material,FG00013,,Description breaks naming rule,MAT-04,Regenerate from rule
+Material,FG00020,,Description breaks naming rule,MAT-04,Regenerate from rule
+GL,600100,,Length not 8 digits,FIN-01,Reject at entry
+GL,400200,,Length not 8 digits,FIN-01,Reject at entry
+GL,50000999,,Duplicate name of existing account,FIN-01,Flag as duplicate
+CostCenter,CC-1008,,No profit centre assigned,FIN-03,Stewardship task

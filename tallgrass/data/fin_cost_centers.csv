@@ -1,0 +1,11 @@
+cost_center,name,profit_center,parent,source_system
+CC-1001,Brewing KC,PC-1000,CC-1000,SAP
+CC-1002,Packaging KC,PC-2000,CC-1000,SAP
+CC-1003,Distribution Midwest,PC-3000,CC-1000,SAP
+CC-1004,Sales US East,PC-4000,CC-1000,SAP
+CC-1005,Sales US West,PC-1000,CC-1000,SAP
+CC-1006,Marketing Brands,PC-2000,CC-1000,SAP
+CC-1007,IT Shared Services,PC-3000,CC-1000,SAP
+CC-1008,Finance Shared Services,,CC-1000,SAP
+CC-1009,Sales Canada,PC-1000,CC-1000,SAP
+CC-1010,Sales Mexico,PC-2000,CC-1000,SAP

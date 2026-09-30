@@ -1,0 +1,41 @@
+id,domain,title,description,priority
+VEN-01,Vendor,Rule-based workflow for vendor create and change,"Parallel approvals by Compliance, Finance and Procurement driven by rules",Must
+VEN-02,Vendor,Add vendor role to an existing party,No duplicate party when a customer becomes a vendor,Must
+VEN-03,Vendor,Tax ID validation at entry,EIN (US) and VAT (EU) format and checksum validated before submit,Must
+VEN-04,Vendor,Segregation of duties on bank changes,Requester cannot approve own change; two distinct approvers,Must
+VEN-05,Vendor,IBAN validation at entry,IBAN checksum (mod 97) validated in portal and in MDM,Must
+VEN-06,Vendor,Supplier self-service onboarding,Portal for new suppliers and data updates,Should
+VEN-07,Vendor,Third-party enrichment,"DUNS, legal name and address enrichment via platform service",Should
+VEN-08,Vendor,Duplicate detection across ERPs,"Match across SAP, D365 and CRM before create",Must
+VEN-09,Vendor,Sanctions screening with global block,Sanctions event triggers global block in all ERPs,Must
+VEN-10,Vendor,Payment terms harmonisation report,"Vendors with different terms in SAP and D365, ranked by spend",Should
+VEN-11,Vendor,Dormant vendor flagging,Flag vendors with no transactions in 18 months,Should
+VEN-12,Vendor,Publish to SAP and D365,"One publish, native mapping, cross-references written back",Must
+VEN-13,Vendor,Full audit of changes,"Every change logged with actor, channel and time",Must
+CUS-01,Customer,Customer hierarchy,"Sold-to, ship-to and bill-to relationships governed",Must
+CUS-02,Customer,Customer and vendor as one party,"One party with two roles, both source keys linked",Must
+CUS-03,Customer,Address verification,Postal address standardised and verified at entry,Should
+CUS-04,Customer,"Match and merge CRM, D365, e-commerce",Survivorship rules per attribute,Must
+CUS-05,Customer,Credit block sync,Credit block set in MDM reaches both ERPs,Should
+CUS-06,Customer,Consent flags on person records,CCPA and GDPR consent stored and synced,Should
+MAT-01,Material,Core data from producing market,Producing market completes basic data incl. units of measure,Must
+MAT-02,Material,Market extensions derived from sales orgs,"Parallel market tasks created from extensions, not chosen by hand",Must
+MAT-03,Material,Early publish as Under Creation,SKU visible in SAP before it is fully complete,Should
+MAT-04,Material,Description from naming rules,Short and long descriptions generated per category rule,Should
+MAT-05,Material,GTIN validation,GTIN-13 check digit validated and uniqueness enforced,Must
+MAT-06,Material,Packaging sustainability attributes,PPWR recycled content and ESG material class on packaging,Must
+MAT-07,Material,Governed unit of measure conversions,"Case, pack and pallet conversions validated",Must
+MAT-08,Material,Status lifecycle,"Under Creation, Active, Blocked",Must
+FIN-01,Finance,GL account naming and length rules,GL accounts must be 6 digits,Must
+FIN-02,Finance,Cost centre hierarchy governance,Cost centres roll up to approved hierarchy,Must
+FIN-03,Finance,Profit centre assignment,Every cost centre maps to one profit centre,Should
+FIN-04,Finance,Chart of accounts sync,CoA published to SAP and D365; D365 main account requires 8 digits,Must
+FIN-05,Finance,Controller approval,Finance controller approves CoA changes,Must
+XD-01,Cross-domain,One governed model,"Party, product and reference share one model and one workflow engine",Must
+XD-02,Cross-domain,Error queue with reprocess,"Failed ERP syncs visible, explained and reprocessable",Must
+XD-03,Cross-domain,Same services for every channel,"Screen, ERP and agent call the same match, DQ and workflow services",Must
+XD-04,Cross-domain,Cross-reference keys,Golden ID linked to every source key,Must
+XD-05,Cross-domain,Global block model,One block model mapped to native ERP values within 24 hours,Must
+XD-06,Cross-domain,Combined analytics,Spend across both ERPs on the golden ID,Should
+XD-07,Cross-domain,Stewardship dashboard,One dashboard across all domains,Should
+XD-08,Cross-domain,Agent access with audit,"Agents call the platform through governed APIs, audited like users",Should

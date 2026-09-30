@@ -1,0 +1,6 @@
+ref,finding
+FIN-01 vs FIN-04,GL length is 6 digits in FIN-01 but D365 main account requires 8 digits in FIN-04. Demo enforces 8 and flags the conflict.
+VEN-05 vs VEN-01,VEN-05 asks for IBAN only. US vendors use ABA routing and account numbers. Demo validates both.
+XD-05 vs VEN-12,XD-05 says block mapping within 24 hours. The sanctions scene expects minutes. Demo shows minutes; SLA needs a decision.
+MAT-03 vs MAT-08,MAT-03 wants SKU visible in SAP as Under Creation. MAT-08 lifecycle does not define a visible pre-Active state.
+XD-03 vs XD-08,Overlap. XD-08 is the agent case of XD-03. Demo treats XD-08 as a subset.

@@ -1,0 +1,2 @@
+sourceSystem,sourcePrimaryKey,name,roles,country,street,city,state,postcode,tax_id,duns,status,bank_type,bank_key,bank_acct,payment_terms,last_changed,last_transaction,block
+PORTAL,SUP-00001,Nordvik Kartonage AS,Vendor,NO,Kaigata 56,Oslo,,0150,NO562062904MVA,,Draft,IBAN,NO1299880768293,,NT30,2026-09-29,,GB-NONE

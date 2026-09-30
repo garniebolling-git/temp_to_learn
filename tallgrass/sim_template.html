@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Tallgrass Multidomain MDM | Demo Simulator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{color-scheme:light;--ink:#1c2a22;--mut:#5b6b62;--line:#d8e0da;--bg:#f4f7f4;--card:#fff;--navy:#1f5d3a;--red:#2f8f57;--gold:#d9a441;--ok:#1e8e3e;--warn:#b7791f;--err:#c5221f;--hl:#fff3cf}
+*{box-sizing:border-box}body{margin:0;font:13px/1.45 "Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--bg);display:flex;flex-direction:column;height:100vh}
+header{background:var(--navy);color:#fff;padding:8px 14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-bottom:3px solid var(--gold)}
+header h1{font-size:15px;margin:0;font-weight:600}header .sub{opacity:.8;font-size:12px}
+#logo{height:40px;min-width:120px;border-radius:6px;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:16px;font-weight:700;letter-spacing:.3px;padding:0 6px;background:rgba(255,255,255,.08)}
+.acts{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}.acts button{background:rgba(255,255,255,.12);color:#fff;border:0;border-radius:4px;padding:4px 8px;font-size:12px;cursor:pointer}.acts button.on{background:var(--gold);color:#1c2a22;font-weight:600}
+.narr{background:#fff;border-bottom:1px solid var(--line);display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:8px 14px}
+.fx{font:600 12px Consolas,monospace;color:var(--mut);border:1px solid var(--line);padding:3px 8px;border-radius:3px;background:var(--bg);white-space:nowrap}
+.narr .t{font-weight:600}.narr .s{color:var(--mut);font-style:italic}.ids{display:inline-flex;gap:4px;flex-wrap:wrap;margin-top:3px}
+.chip{display:inline-block;background:#e6f3ea;color:var(--navy);border-radius:10px;padding:1px 8px;font-size:11px;font-weight:600}
+.chip.ok{background:#e6f4ea;color:var(--ok)}.chip.warn{background:#fff4d6;color:var(--warn)}.chip.err{background:#fce8e6;color:var(--err)}.chip.grey{background:#eef0f3;color:var(--mut)}.chip.gold{background:#fbeccb;color:#7a5200}
+.nav{display:flex;gap:6px;align-items:center}.nav button{border:1px solid var(--line);background:#fff;border-radius:4px;padding:6px 12px;cursor:pointer;font-weight:600}.nav button.primary{background:var(--red);color:#fff;border-color:var(--red)}.nav .play{color:var(--navy)}
+.body{flex:1;display:grid;grid-template-columns:1fr 340px;min-height:0}
+main{overflow:auto;padding:14px}aside{border-left:1px solid var(--line);background:#fff;overflow:auto;padding:12px}
+aside h4{margin:10px 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut)}aside h4:first-child{margin-top:0}
+.who{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:6px;padding:8px}
+.who.pulse{animation:pl 1.2s ease-out 2}@keyframes pl{0%{box-shadow:0 0 0 0 rgba(47,143,87,.5)}100%{box-shadow:0 0 0 12px rgba(47,143,87,0)}}
+.av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;flex:none}
+.chg{border-left:4px solid var(--c);background:#fafbfa;padding:5px 8px;margin:4px 0;border-radius:0 4px 4px 0;font-size:12px}.chg b{color:var(--c)}
+.log{font-size:11px;border-left:2px solid var(--line);padding-left:8px}.log div{margin:3px 0;color:var(--mut)}.log .cur{font-weight:700;color:var(--ink)}
+.dm{display:grid;grid-template-columns:repeat(2,1fr);gap:4px}.dm div{border:1px solid var(--line);border-radius:4px;padding:4px 6px;font-size:11px;display:flex;justify-content:space-between}
+.dm div.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 12%,white);font-weight:700}
+.prog{height:3px;background:#dfeae3}.prog i{display:block;height:100%;width:0;background:var(--gold)}
+@media (max-width:900px){.body{grid-template-columns:1fr}aside{border-left:0;border-top:1px solid var(--line)}}
+.sysbar{display:flex;align-items:center;gap:10px;margin-bottom:10px}.sysbar .logo{width:30px;height:30px;border-radius:6px;display:grid;place-items:center;color:#fff;font-weight:700;font-size:11px}
+.sysbar h2{margin:0;font-size:16px}.sysbar .note{color:var(--mut);font-size:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px;margin-bottom:12px}.card h3{margin:0 0 8px;font-size:13px;color:var(--navy)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+table{border-collapse:collapse;width:100%;font-size:12px}th{background:#e7f1ea;text-align:left;font-weight:600;border:1px solid var(--line);padding:4px 6px;position:sticky;top:0}
+td{border:1px solid var(--line);padding:4px 6px;vertical-align:top}tr.hl td{background:var(--hl)}tr.new td{background:#e6f4ea}tr.bad td{background:#fce8e6}
+.tabs{display:flex;background:#e3eee6;border-top:1px solid var(--line);overflow-x:auto;padding:0 6px}
+.tabs button{border:0;border-right:1px solid var(--line);background:transparent;padding:7px 14px;cursor:pointer;font-size:12px;white-space:nowrap;display:flex;align-items:center;gap:6px;border-top:3px solid transparent}
+.tabs button.on{background:#fff;font-weight:600;border-top-color:var(--c)}.tabs .dot{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.tabs button.ping::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold);display:inline-block;animation:p 1s infinite}@keyframes p{50%{opacity:.2}}
+.flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.node{border:1px solid var(--line);border-radius:6px;padding:6px 10px;background:#fff;font-size:12px;text-align:center;min-width:110px}
+.node.done{border-color:var(--ok);background:#e6f4ea}.node.act{border-color:var(--red);background:#e3f4ea;font-weight:600}.arrow{color:var(--mut)}
+.par{display:flex;flex-direction:column;gap:6px;border-left:2px dashed var(--line);border-right:2px dashed var(--line);padding:0 6px}
+.form{display:grid;grid-template-columns:160px 1fr;gap:6px 10px;align-items:center}.form label{color:var(--mut)}
+.inp{border:1px solid var(--line);border-radius:4px;padding:5px 7px;background:#fff;min-height:28px}.inp.err{border-color:var(--err);background:#fce8e6}.inp.ok{border-color:var(--ok)}
+.msg{font-size:11px;margin-top:2px}.msg.err{color:var(--err)}.msg.ok{color:var(--ok)}
+.chat{max-width:780px}.bub{border-radius:8px;padding:8px 10px;margin:6px 0;max-width:88%}.bub.u{background:#e3f2e8;margin-left:auto}.bub.a{background:#fff;border:1px solid var(--line)}
+.bub .w{font-size:11px;color:var(--mut);margin-bottom:2px}.tool{font:11px Consolas,monospace;background:#f1f4f2;border-radius:4px;padding:4px 6px;margin:4px 0;color:#34443b}
+.arch{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:14px;align-items:stretch}.col{display:flex;flex-direction:column;gap:8px}
+.box{border:1px solid var(--line);border-radius:6px;padding:8px;background:#fff}.box b{display:block;font-size:12px}.box span{color:var(--mut);font-size:11px}
+.hub{background:#eef6f0;border:2px solid var(--navy);border-radius:8px;padding:10px}.head{background:#e3f2e8;border:2px solid var(--red);border-radius:8px;padding:8px;grid-column:1/4;text-align:center}
+.kpi{font-size:22px;font-weight:700;color:var(--navy)}.kpi small{display:block;font-size:11px;color:var(--mut);font-weight:400}
+.src{font-size:10px;padding:0 5px;border-radius:8px;color:#fff;margin-left:4px}
+.subtabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}.subtabs button{border:1px solid var(--line);background:#fff;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:12px}.subtabs button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.disclaimer{font-size:11px;color:var(--mut);padding:4px 14px;background:#fff;border-top:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:8px;margin:4px 0}.bar i{display:block;height:16px;border-radius:3px}
+select{border:1px solid var(--line);border-radius:4px;padding:4px}
+</style></head><body>
+<header><div id="logo" title="Click to replace the logo (PNG/SVG)"></div><input type="file" id="logofile" accept="image/*" style="display:none">
+<div><h1>Tallgrass Beverage Co. · Multidomain MDM | Demo Simulator</h1><div class="sub">One model, one engine, any head. Simulated systems and data.</div></div><div class="acts" id="acts"></div></header>
+<div class="narr"><span class="fx" id="stepno">fx</span><div><div class="t" id="ntitle"></div><div class="s" id="nsays"></div><div class="ids" id="nids"></div></div>
+<div class="nav"><button id="play" class="play">&#9654; Play</button><select id="speed" title="Speed"><option value="9000">Slow</option><option value="6500" selected>Normal</option><option value="4000">Fast</option></select><button id="prev">&larr; Back</button><button class="primary" id="next">Next step &rarr;</button></div></div>
+<div class="prog"><i id="progbar"></i></div>
+<div class="body"><main id="main"></main><aside id="side"></aside></div>
+<div class="tabs" id="tabs"></div>
+<div class="disclaimer">Simulation only. Screens are illustrative mockups based on publicly documented Informatica IDMC, SAP and Dynamics 365 capabilities, not product screenshots. Tallgrass, all companies, numbers and people are fictitious. Agent tool names are illustrative. Requirement IDs were invented for this test.</div>
+<script>
+const DATA = /*__DATA__*/null;
+const $=s=>document.querySelector(s);const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const usd=n=>'$'+Math.round(n).toLocaleString('en-US');
+// ---- logo (made-up mark, replaceable)
+const LOGO_SVG=`<svg width="34" height="34" viewBox="0 0 34 34"><rect width="34" height="34" rx="8" fill="#d9a441"/><path d="M8 28 C8 18 10 12 12 6 M14 28 C14 16 16 10 18 4 M20 28 C20 18 23 12 26 7 M26 28 C26 21 27 18 29 14" stroke="#1f5d3a" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>`;
+function setLogo(src){$('#logo').innerHTML=`<img src="${src}" alt="Logo" style="max-height:36px;max-width:160px;display:block">`;$('#logo').style.background='#fff'}
+$('#logo').innerHTML=LOGO_SVG+'<span>Tallgrass</span>';
+try{const k=localStorage.getItem('tgLogo');if(k)setLogo(k)}catch(e){}
+$('#logo').onclick=()=>$('#logofile').click();
+$('#logofile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{setLogo(r.result);try{localStorage.setItem('tgLogo',r.result)}catch(e){}};r.readAsDataURL(f)};
+
+const SYS={arch:['Architecture','#6b7280','ARC'],mdm:['IDMC MDM (Business 360)','#1f5d3a','MDM'],ref:['Reference 360','#2f8f57','R360'],inbox:['Task Inbox','#7c4dff','TSK'],portal:['Supplier Portal','#00897b','SUP'],
+ sap:['SAP S/4HANA','#0a6ed1','SAP'],d365:['Dynamics 365 F&O','#5c2d91','D365'],crm:['Salesforce CRM','#00a1e0','CRM'],ecom:['E-commerce','#e37400','WEB'],chat:['Headless: Claude / Slack (MCP)','#2f8f57','MCP'],d360:['Data 360 + Tableau','#2e7d32','D360']};
+const SRC={SAP:'#0a6ed1',D365:'#5c2d91',CRM:'#00a1e0',ECOM:'#e37400',PORTAL:'#00897b',MDM:'#1f5d3a'};
+const DOM={Party:'#2f8f57',Product:'#d9803a',Finance:'#0a6ed1',Reference:'#7c4dff'};
+const H=DATA.hero,HS=H[0],HD=H[1],HC=H[2],G=DATA.glass,SANC=DATA.sanc,HM=DATA.hero_mat,P=DATA.portal;
+const who=(n,r,ch,c)=>({n,r,ch,c});
+const PRES=who('Presenter','Solution architect','Screen',' #6b7280'.trim()),BUY=who('Dana Ortiz','Procurement buyer','Slack via MCP','#2f8f57'),SUP=who('Nordvik Kartonage','External supplier','Supplier portal','#00897b'),
+ COMP=who('Sam Ruiz','Compliance officer','Task inbox','#7c4dff'),AP=who('Priya Nair','AP approver','Slack approval via MCP','#0a6ed1'),STW=who('Marcus Hale','Data steward','Stewardship console','#b7791f'),
+ SYSA=who('Platform event','Automatic, no user','API event','#c5221f'),MKT=who('Elena Petrova','Producing market owner (US)','Task inbox','#d9803a'),MKT2=who('CA and MX market owners','Parallel market tasks','Task inbox','#d9803a'),
+ FIN=who('Lee Brandt','Finance controller','Reference 360 form','#0a6ed1'),CFO=who('Jordan Wells','CFO','Claude via MCP','#2f8f57'),AUTO=who('Platform','Automatic publish','Publish service','#1f5d3a');
+// act, tab, view, title, says, ids, who, domains touched, change text, run
+const S=[
+ {act:0,tab:'arch',t:'One model, many heads',s:'"Every arrow into and out of MDM uses the same governed services: a screen, an ERP or an agent."',ids:['XD-01','XD-03'],w:PRES,d:[],c:'Nothing changes. Landscape and services shown.'},
+ {act:0,tab:'mdm',view:'model',t:'The Tallgrass entity graph',s:'"Your four domain tabs are one model here. Roles, not copies."',ids:['XD-01','CUS-02'],w:PRES,d:[],c:'Nothing changes. Model shown.'},
+ {act:1,tab:'chat',t:'Buyer asks from Slack: do we already have this supplier?',s:'"The buyer never opens the MDM tool. The agent calls MDM\'s own match service."',ids:['VEN-08','CUS-04','XD-08'],w:BUY,d:[],c:'Read only. Match service called through MCP.',run:st=>st.chat.push('q1')},
+ {act:1,tab:'mdm',view:'match',t:'Match candidates across SAP, D365 and CRM',s:'"Same match rules whether called from Slack, the portal or a batch load."',ids:['VEN-08','CUS-04'],w:SYSA,d:['Party'],c:'3 source records clustered as one candidate party.'},
+ {act:1,tab:'mdm',view:'golden',t:'Merge into one golden party with two roles',s:'"A customer who is also a vendor: one party, two roles. Both source keys stay linked."',ids:['CUS-02','VEN-02','XD-04'],w:STW,d:['Party'],c:'Golden party G00001 linked: Vendor and Customer roles.',run:st=>{st.merged=true}},
+ {act:1,tab:'portal',t:'Supplier self-service: IBAN checksum fails at entry',s:'"Validation happens at entry, not in a monthly clean-up."',ids:['VEN-06','VEN-05'],w:SUP,d:['Party'],c:'Draft supplier record rejected at entry. Nothing reaches ERP.',run:st=>{st.portal=1}},
+ {act:1,tab:'portal',t:'Supplier corrects IBAN; tax ID, address and DUNS verified',s:'"Enrichment is called by the platform, not rebuilt in the portal."',ids:['VEN-03','VEN-07','VEN-05'],w:SUP,d:['Party'],c:'New supplier passes validation and enrichment; approval starts.',run:st=>{st.portal=2}},
+ {act:1,tab:'inbox',t:'Rule-based parallel approval: Compliance approves',s:'"This is the only workflow engine you will see today. Every domain uses it."',ids:['VEN-01','VEN-04'],w:COMP,d:['Party'],c:'Compliance task closed. Finance task still open.',run:st=>{st.comp=true}},
+ {act:1,tab:'chat',t:'AP approves the bank details from Slack',s:'"Approvers act where they work; segregation of duties is enforced by the platform."',ids:['VEN-04','VEN-13','XD-08'],w:AP,d:['Party'],c:'Finance approval recorded with channel = Slack/MCP.',run:st=>{st.fin=true;st.chat.push('q2')}},
+ {act:1,tab:'mdm',view:'sync',t:'Publish once: SAP and D365 confirm, cross-references written back',s:'"One record, two ERP dialects. The golden ID now knows both numbers."',ids:['VEN-12','XD-04'],w:AUTO,d:['Party'],c:'Published to SAP and D365. Crosswalk written back.',run:st=>{st.published=true}},
+ {act:1,tab:'d365',t:'D365: vendor account for the same party',s:'"Update once: both roles, both ERPs."',ids:['VEN-12','CUS-02'],w:AUTO,d:['Party'],c:'D365 shows one account, customer and vendor roles.'},
+ {act:2,tab:'mdm',view:'product',t:'Shared SKU: producing market (US) completes basic data',s:'"Core data, including units of measure, comes from the producing market."',ids:['MAT-01','MAT-07','MAT-05'],w:MKT,d:['Product'],c:'Basic data and UoM conversions completed. GTIN validated.',run:st=>{st.mat=1}},
+ {act:2,tab:'mdm',view:'desc',t:'Description generated from Tallgrass naming rules',s:'"Different category, different rule. No code change."',ids:['MAT-04'],w:AUTO,d:['Product'],c:'Short and long descriptions generated from rule.'},
+ {act:2,tab:'sap',view:'mat',t:'SKU published to SAP early with status Under Creation',s:'"The SKU exists in SAP early, so BOM and recipe work can start."',ids:['MAT-03','MAT-08'],w:AUTO,d:['Product'],c:'Material '+HM.sourcePrimaryKey+' created in SAP as Under Creation.',run:st=>{st.mat=2}},
+ {act:2,tab:'mdm',view:'product',t:'Parallel CA and MX market tasks complete; SKU becomes Active',s:'"Markets are derived from the SKU\'s extensions, not chosen by hand."',ids:['MAT-02','MAT-08'],w:MKT2,d:['Product'],c:'Both market tasks closed. Status Active.',run:st=>{st.mat=3}},
+ {act:3,tab:'ref',view:'gl',t:'Finance on the same engine: 6-digit GL account rejected',s:'"Your length rules, enforced at entry. Same workflow engine you saw for vendors."',ids:['FIN-01','FIN-04','FIN-05'],w:FIN,d:['Finance'],c:'GL 600100 rejected. Note: sheet says 6 digits, D365 needs 8.'},
+ {act:3,tab:'ref',view:'blocks',t:'Reference data: one global block model, native values per ERP',s:'"Lists of values have their own governance and their own ERP sync."',ids:['XD-05'],w:FIN,d:['Reference'],c:'Block model shown with SAP and D365 native values.'},
+ {act:4,tab:'mdm',view:'sync',t:'Bank change published: SAP OK, D365 rejects',s:'"This is the scenario that breaks most MDM programmes."',ids:['XD-02','VEN-12'],w:AUTO,d:['Party'],c:'SAP accepted. D365 rejected: TaxGroup mandatory. Error queued.',run:st=>{st.err=true}},
+ {act:4,tab:'chat',t:'Steward asks: which records failed to sync today?',s:'"The answer comes from the same error queue."',ids:['XD-02','XD-08'],w:STW,d:[],c:'Read only. Error queue queried through MCP.',run:st=>st.chat.push('q3')},
+ {act:4,tab:'mdm',view:'sync',t:'Fix and reprocess: both ERPs reconciled',s:'"Overrides are allowed, but never silent."',ids:['XD-02','VEN-13'],w:STW,d:['Party'],c:'TaxGroup added. D365 reprocessed. Override logged.',run:st=>{st.err=false;st.reproc=true}},
+ {act:5,tab:'mdm',view:'golden2',t:'Sanctions event arrives via API: global block applied',s:'"No one opened a screen. The event arrives; the platform acts."',ids:['VEN-09','XD-05'],w:SYSA,d:['Party','Reference'],c:SANC.name+' set to GB-SANC across the golden record.',run:st=>{st.blocked=true}},
+ {act:5,tab:'sap',view:'ven',t:'SAP: posting, purchasing and payment blocks set',s:'"One block model, native values in each ERP."',ids:['XD-05','VEN-09'],w:AUTO,d:['Party'],c:'SAP central blocks set from GB-SANC.'},
+ {act:5,tab:'d365',t:'D365: vendor on hold = All',s:'"Within minutes, in both ERPs, with history."',ids:['XD-05','VEN-09'],w:AUTO,d:['Party'],c:'D365 vendor on hold = All.'},
+ {act:6,tab:'mdm',view:'steward',t:'One stewardship dashboard, every domain',s:'"One dashboard, not four."',ids:['XD-07','VEN-11','CUS-04','MAT-06'],w:STW,d:['Party','Product','Finance'],c:'Open issues shown for party, product and finance.'},
+ {act:7,tab:'d360',t:'Combined spend across SAP and D365 on the golden ID',s:'"Analytics works because the vendor is one vendor."',ids:['XD-06','VEN-10'],w:CFO,d:[],c:'Read only. Spend unified on golden ID.'},
+ {act:7,tab:'chat',t:'CFO asks: total spend with our glass supplier, and are terms aligned?',s:'"Governed answer from the same golden record."',ids:['XD-06','VEN-10','XD-08'],w:CFO,d:[],c:'Read only. Terms mismatch found: NT60 vs NT30.',run:st=>st.chat.push('q4')},
+];
+const ACTS=['0 Opening','1 Trading partner','2 Shared SKU','3 Finance','4 Exceptions','5 Blocks','6 Steward','7 Value'];
+let step=0,tab='arch',sub={},timer=null;
+function stateAt(n){const st={chat:[],merged:false,portal:0,comp:false,fin:false,published:false,mat:0,err:false,reproc:false,blocked:false};for(let i=0;i<=n;i++)S[i].run&&S[i].run(st);return st}
+
+// ------------ helpers
+const bar=(k,note)=>`<div class="sysbar"><div class="logo" style="background:${SYS[k][1]}">${SYS[k][2]}</div><div><h2>${SYS[k][0]}</h2><div class="note">${note||''}</div></div></div>`;
+const tbl=(cols,rows,cls=()=>'')=>`<table><tr>${cols.map(c=>`<th>${esc(c[0])}</th>`).join('')}</tr>${rows.map(r=>`<tr class="${cls(r)}">${cols.map(c=>`<td>${c[1](r)}</td>`).join('')}</tr>`).join('')}</table>`;
+const src=s=>`<span class="src" style="background:${SRC[s]||'#888'}">${s}</span>`;
+const sysTbl=rows=>tbl([['Key',r=>esc(r.sourcePrimaryKey)],['Name',r=>esc(r.name)],['Roles',r=>esc(r.roles)],['Country',r=>esc(r.country)],['City',r=>esc(r.city)],['Terms',r=>esc(r.payment_terms)],['Status',r=>esc(r.status)]],rows);
+const node=(t,c='')=>`<div class="node ${c}">${t}</div>`;
+
+// ------------ renderers
+function rArch(){return bar('arch','Systems in scope and how they connect')+`<div class="arch">
+<div class="head"><b>Informatica Headless</b>: API Center + MDM MCP server + CLAIRE agents &rarr; Claude, Slack, Agentforce, any agent. <span class="chip gold">Same rules, same audit</span></div>
+<div class="col"><div class="card" style="margin:0"><h3>Sources</h3>${['sap','d365','crm','ecom','portal'].map(k=>`<div class="box" style="border-left:4px solid ${SYS[k][1]};margin-bottom:6px"><b>${SYS[k][0]}</b><span>${({sap:'Vendors, materials, GL, cost centres',d365:'Acquired brands: customers, vendors, GL',crm:'Accounts and contacts',ecom:'Web customers',portal:'Supplier onboarding and updates'})[k]}</span></div>`).join('')}</div></div>
+<div class="hub"><h3 style="margin:0 0 6px;color:var(--navy)">IDMC Multidomain MDM SaaS</h3>
+<div class="grid2"><div class="box"><b>Party</b><span>Organization with Customer and Vendor roles, hierarchy</span></div><div class="box"><b>Product</b><span>FG, packaging (PPWR/ESG), raw, MRO; market extensions</span></div>
+<div class="box"><b>Reference 360</b><span>CoA, cost and profit centres, block model, LOVs</span></div><div class="box"><b>Shared services</b><span>Match, DQ, workflow, publish, audit, stewardship</span></div></div>
+<div class="grid3" style="margin-top:8px"><div class="kpi">${DATA.counts.source_records}<small>source party records</small></div><div class="kpi">${DATA.counts.golden_parties}<small>golden parties</small></div><div class="kpi">${DATA.counts.materials}<small>materials</small></div></div></div>
+<div class="col"><div class="card" style="margin:0"><h3>Consumers</h3>${['sap','d365','d360'].map(k=>`<div class="box" style="border-left:4px solid ${SYS[k][1]};margin-bottom:6px"><b>${SYS[k][0]}</b><span>${({sap:'Golden records with native mapping',d365:'Golden records with native mapping',d360:'Spend and quality analytics on golden ID'})[k]}</span></div>`).join('')}
+<div class="box" style="border-left:4px solid var(--gold)"><b>People and agents</b><span>Task inbox, portal, Slack, Claude via MCP</span></div></div></div></div>`}
+
+function subtabs(items,cur,key){return `<div class="subtabs">${items.map(([k,l])=>`<button class="${k===cur?'on':''}" onclick="sub.${key}='${k}';render()">${l}</button>`).join('')}</div>`}
+
+function rMdm(st,v){v=v||'golden';
+ const tabsH=subtabs([['model','Entity model'],['match','Match and merge'],['golden','Golden record'],['sync','Publish and sync'],['product','Product workflow'],['desc','Description rules'],['steward','Stewardship'],['golden2','Block status']],v,'mdm');
+ let b='';
+ if(v==='model')b=`<div class="card"><h3>Business entities and relationships (one model)</h3><div class="flow">${node('<b>Party</b><br>Organization')}<span class="arrow">&rarr;</span><div class="par">${node('Role: Vendor')}${node('Role: Customer')}</div><span class="arrow">&rarr;</span>${node('Bank account<br>Address<br>Tax ID')}<span class="arrow">&rarr;</span>${node('Crosswalk<br>SAP, D365, CRM')}</div><div class="flow" style="margin-top:12px">${node('<b>Product</b><br>SKU')}<span class="arrow">&rarr;</span><div class="par">${node('Market extension US')}${node('Market extension CA')}${node('Market extension MX')}</div><span class="arrow">&rarr;</span>${node('UoM, GTIN<br>PPWR, ESG')}</div><div class="flow" style="margin-top:12px">${node('<b>Reference</b><br>GL, cost centre, block model')}<span class="arrow">&rarr;</span>${node('Native values per ERP')}</div></div>`;
+ if(v==='match'){const show=step>=3;b=`<div class="card"><h3>Match candidates</h3>${show?tbl([['Source',r=>src(r.sourceSystem)],['Key',r=>esc(r.sourcePrimaryKey)],['Name',r=>esc(r.name)],['Tax ID',r=>esc(r.tax_id)],['Address',r=>esc(r.street+', '+r.city)],['Score',r=>r.sourceSystem==='SAP'?'0.97':r.sourceSystem==='CRM'?'0.97':'0.96']],H,r=>'hl')+'<div class="msg ok" style="margin-top:6px">Rule: exact tax ID + fuzzy name + address. Recommendation: merge, do not create a duplicate.</div>':'<i>No match run yet.</i>'}</div>`}
+ if(v==='golden'||v==='golden2'){const bl=st.blocked;const g=v==='golden2'?{id:SANC.gid,n:SANC.name}:{id:HS.gid||'G00001',n:'Prairie Returnables LLC'};
+  b=`<div class="card"><h3>Golden party ${g.id}: ${esc(g.n)} ${v==='golden2'&&bl?'<span class="chip err">GB-SANC global block</span>':''}</h3>`+
+  (v==='golden'?(st.merged?`<div class="form"><label>Roles</label><div class="inp ok">Vendor, Customer</div><label>Legal name (survivor)</label><div class="inp">Prairie Returnables LLC <span class="chip grey">CRM trusted</span></div><label>Tax ID</label><div class="inp">${esc(HS.tax_id)}</div><label>DUNS</label><div class="inp">${esc(HS.duns)}</div><label>Address</label><div class="inp">410 Industrial Blvd, Kansas City MO 64106 <span class="chip grey">D365 and CRM agree</span></div><label>Bank</label><div class="inp">ABA ${esc(HS.bank_key)} <span class="chip grey">SAP only</span></div><label>Crosswalk</label><div class="inp">SAP ${HS.sourcePrimaryKey} | D365 ${HD.sourcePrimaryKey} | CRM ${HC.sourcePrimaryKey}</div></div>`:'<i>Three separate source records. Not merged yet.</i>'):
+  `<div class="form"><label>Status</label><div class="inp ${bl?'err':'ok'}">${bl?'Blocked: GB-SANC':'Active'}</div><label>Source event</label><div class="inp">${bl?'Sanctions screening API, 1 hit, simulated':'None'}</div><label>SAP native</label><div class="inp">${bl?'Posting + purchasing + payment block':'-'}</div><label>D365 native</label><div class="inp">${bl?'On hold = All':'-'}</div></div>`)+'</div>'}
+ if(v==='sync'){const sapS=st.published?'Confirmed':'Not published',dS=!st.published?'Not published':st.err?'Rejected: TaxGroup mandatory':'Confirmed';
+  b=`<div class="card"><h3>Publish and sync status: G00001</h3>${tbl([['Target',r=>src(r[0])],['Payload',r=>esc(r[1])],['Status',r=>r[2]]],[['SAP','Vendor V100001 bank update','<span class="chip '+(st.published?'ok':'grey')+'">'+sapS+'</span>'],['D365','Vendor CUST-000001 bank update','<span class="chip '+(!st.published?'grey':st.err?'err':'ok')+'">'+dS+'</span>']],r=>(r[0]==='D365'&&st.err)?'bad':'')}
+  ${st.err?'<div class="msg err" style="margin-top:8px">Error queue: 1 item, owner Data steward, age 4 min. Suggested fix: set TaxGroup on the D365 vendor.</div>':''}${st.reproc?'<div class="msg ok" style="margin-top:8px">Reprocessed. Override reason and approver logged to audit.</div>':''}</div>`}
+ if(v==='product'){const m=st.mat;b=`<div class="card"><h3>SKU ${HM.sourcePrimaryKey}: ${esc(HM.description)}</h3><div class="flow">${node('US basic data<br>UoM, GTIN',m>=1?'done':'act')}<span class="arrow">&rarr;</span>${node('Early publish<br>Under Creation',m>=2?'done':m===1?'act':'')}<span class="arrow">&rarr;</span><div class="par">${node('CA market task',m>=3?'done':m===2?'act':'')}${node('MX market task',m>=3?'done':m===2?'act':'')}</div><span class="arrow">&rarr;</span>${node('Status: Active',m>=3?'done':'')}</div>
+  <div class="form" style="margin-top:12px"><label>GTIN-13</label><div class="inp ok">${esc(HM.gtin)} <span class="chip ok">check digit valid</span></div><label>Case / pallet</label><div class="inp">${m>=1?'4 packs per case, 72 cases per pallet':'pending'}</div><label>Status</label><div class="inp">${['Draft','Draft','Under Creation','Active'][m]}</div></div></div>`}
+ if(v==='desc')b=`<div class="card"><h3>Description rules by category</h3>${tbl([['Category',r=>r[0]],['Rule',r=>r[1]],['Generated',r=>r[2]]],[['Finished goods','BRAND STYLE SIZE FORMAT PACK','TALLGRASS AMBER LAGER 12OZ CAN 6PK'],['Packaging','TYPE SIZE SPEC','CAN 12OZ TG SPEC 4'],['Raw material','NAME GRADE LOT SPEC','MALT BARLEY 2ROW LOT SPEC 1']],r=>r[0]==='Finished goods'?'hl':'')}</div>`;
+ if(v==='steward'){const c=DATA.issue_by_domain;b=`<div class="card"><h3>Open data quality issues</h3><div class="grid3"><div class="kpi">${c.Party}<small>Party</small></div><div class="kpi">${c.Material}<small>Product</small></div><div class="kpi">${c.Finance}<small>Finance</small></div></div></div><div class="card"><h3>Sample of seeded issues</h3>${tbl([['Object',r=>r.object],['Key',r=>esc(r.key)],['Issue',r=>esc(r.issue)],['Req',r=>`<span class="chip">${esc(r.requirement)}</span>`],['Action',r=>esc(r.expected_action)]],DATA.issues.slice(0,14))}</div>`}
+ return bar('mdm','Business 360 console (mockup)')+tabsH+b}
+
+function rRef(st,v){v=v||'gl';const t=subtabs([['gl','Chart of accounts'],['blocks','Block model'],['terms','Payment terms']],v,'ref');let b='';
+ if(v==='gl')b=`<div class="grid2"><div class="card"><h3>New GL account request</h3><div class="form"><label>Account</label><div class="inp err">600100</div><label>Name</label><div class="inp">Sponsorship misc</div><label>Class</label><div class="inp">Operating expense</div></div><div class="msg err">Rule GL-LEN: account must be 8 digits. 6 digits rejected at entry.</div><div class="msg" style="color:var(--warn)">Customer sheet FIN-01 says 6 digits. D365 needs 8 (FIN-04). Decision needed.</div></div><div class="card"><h3>Existing accounts (sample)</h3>${tbl([['Account',r=>esc(r.gl_account)],['Name',r=>esc(r.name)],['Class',r=>esc(r.account_class)]],DATA.coa.slice(0,8))}</div></div>`;
+ if(v==='blocks')b=`<div class="card"><h3>Global block model</h3>${tbl([['Global',r=>`<b>${r.g}</b>`],['Name',r=>esc(r.n)],['SAP native',r=>esc(r.sap)],['D365 native',r=>esc(r.d365)]],DATA.blocks,r=>r.g==='GB-SANC'?'hl':'')}</div>`;
+ if(v==='terms')b=`<div class="card"><h3>Payment terms</h3>${tbl([['Code',r=>r.code],['Name',r=>r.name],['Days',r=>r.days]],DATA.terms)}</div>`;
+ return bar('ref','Reference 360 (mockup)')+t+b}
+
+function rInbox(st){return bar('inbox','Workflow tasks (one engine for every domain)')+`<div class="card"><h3>Supplier onboarding: Nordvik Kartonage AS</h3>${tbl([['Task',r=>r[0]],['Assignee',r=>r[1]],['Status',r=>r[2]]],[['Compliance review','Sam Ruiz',st.comp?'<span class="chip ok">Approved</span>':'<span class="chip warn">Open</span>'],['Finance bank verification','Priya Nair',st.fin?'<span class="chip ok">Approved via Slack</span>':'<span class="chip warn">Open</span>'],['Procurement category check','Dana Ortiz','<span class="chip ok">Auto-passed</span>']])}<div class="msg" style="margin-top:6px">Rule: new supplier + bank details &rarr; Compliance and Finance in parallel. Requester cannot approve.</div></div>`}
+
+function rPortal(st){const p=st.portal;return bar('portal','Supplier self-service (mockup)')+`<div class="card"><h3>Nordvik Kartonage AS: company details</h3><div class="form"><label>Country</label><div class="inp">NO</div><label>VAT</label><div class="inp ${p>=2?'ok':''}">${esc(P.tax_id)}${p>=2?' <span class="chip ok">verified</span>':''}</div><label>IBAN</label><div><div class="inp ${p===1?'err':p>=2?'ok':''}">${p>=2?esc(DATA.portal_good_iban):esc(P.bank_key)}</div>${p===1?'<div class="msg err">IBAN checksum invalid (mod 97). Check the number and retry.</div>':''}${p>=2?'<div class="msg ok">IBAN valid.</div>':''}</div><label>DUNS</label><div class="inp">${p>=2?'Enriched by platform: 518204417':'(blank)'}</div><label>Address</label><div class="inp">Kaigata 12, 0150 Oslo</div></div><div class="btns" style="margin-top:10px"><span class="chip ${p>=2?'ok':'warn'}">${p>=2?'Submitted for approval':'Submit blocked'}</span></div></div>`}
+
+function rSap(st,v){if(v==='mat')return bar('sap','Material master MM03 (mockup)')+`<div class="card"><h3>${HM.sourcePrimaryKey} ${esc(HM.description)}</h3><div class="form"><label>Status</label><div class="inp ${st.mat>=3?'ok':'hl'}">${st.mat>=3?'Active':'Under Creation (X-plant status)'}</div><label>Base UoM</label><div class="inp">PK</div><label>EAN</label><div class="inp">${esc(HM.gtin)}</div><label>Plants / sales orgs</label><div class="inp">US01${st.mat>=3?', CA01, MX01':''}</div><label>Created by</label><div class="inp">MDM publish service</div></div></div>`;
+ if(v==='ven'){const b=st.blocked;return bar('sap','Vendor master XK03 (mockup)')+`<div class="card"><h3>${SANC.name}</h3><div class="form"><label>Posting block</label><div class="inp ${b?'err':''}">${b?'X (central)':''}</div><label>Purchasing block</label><div class="inp ${b?'err':''}">${b?'X (central)':''}</div><label>Payment block</label><div class="inp ${b?'err':''}">${b?'B':''}</div><label>Source of change</label><div class="inp">${b?'MDM GB-SANC, sanctions event':'-'}</div></div></div>`}
+ return bar('sap','Vendor and material master (mockup)')+`<div class="card"><h3>Vendors</h3>${sysTbl(DATA.sample.SAP)}</div>`}
+function rD365(st){const b=st.blocked;return bar('d365','Vendors and customers (mockup)')+(step>=9&&step<12?`<div class="card"><h3>${'Prairie Returnables LLC'}</h3><div class="form"><label>Account</label><div class="inp">${HD.sourcePrimaryKey}</div><label>Roles</label><div class="inp ok">Customer, Vendor</div><label>Tax ID</label><div class="inp">${esc(HS.tax_id)}</div><label>Golden ID</label><div class="inp">G00001</div></div></div>`:'')+
+ (step>=21?`<div class="card"><h3>${SANC.name}</h3><div class="form"><label>On hold</label><div class="inp ${b?'err':''}">${b?'All':'No'}</div><label>Change source</label><div class="inp">MDM GB-SANC</div></div></div>`:'')+`<div class="card"><h3>Accounts</h3>${sysTbl(DATA.sample.D365)}</div>`}
+const rCrm=()=>bar('crm','Accounts (mockup)')+`<div class="card">${sysTbl(DATA.sample.CRM)}</div>`;
+const rEcom=()=>bar('ecom','Web customers (mockup)')+`<div class="card">${sysTbl(DATA.sample.ECOM)}</div>`;
+
+const Q={q1:[['Do we already have Prairie Returnables as a supplier?',null],['I found 3 candidates for this legal entity. One golden party is likely: SAP V100001 (vendor), D365 CUST-000001 (customer) and CRM 001TG00000001. Scores 0.96 to 0.97. Recommendation: add the vendor role to the existing party instead of creating a new one.','mdm.match_party(name="Prairie Returnables", country="US")  // same service as the UI']],
+ q2:[['Show my open approvals. Then approve.',null],['1 open task: bank details for Nordvik Kartonage AS. Before: none. After: new IBAN, valid checksum. Compliance already approved. Approved on your behalf. Audit entry written with channel = Slack/MCP. Segregation of duties checked: you are not the requester.','mdm.list_tasks(user="priya.nair")  mdm.complete_task(id="T-1042", decision="approve")']],
+ q3:[['Which records failed to sync to D365 today and why?',null],['1 failure. G00001 Prairie Returnables LLC. Reason: TaxGroup mandatory on D365 vendor. Owner: Marcus Hale. Age: 4 minutes. SAP update for the same change succeeded.','mdm.query_sync_errors(target="D365", since="today")']],
+ q4:[['What is our total spend with our glass bottle supplier across SAP and D365, and are payment terms aligned?',null],[`Rhone Verre Conteneurs SAS (G00002). Total spend last 12 months ${usd(G.sap_spend+G.d365_spend)}: SAP ${usd(G.sap_spend)}, D365 ${usd(G.d365_spend)}. Terms are not aligned: SAP Net 60, D365 Net 30. Harmonising to Net 60 would change payment timing on ${usd(G.d365_spend)} of spend.`,'d360.spend_by_golden_id(gid="G00002")  mdm.get_party(gid="G00002")']]};
+function rChat(st){return bar('chat','Slack or Claude connected to the MDM MCP server (mockup)')+`<div class="chat">${st.chat.map(q=>{const [u,a]=Q[q];return `<div class="bub u"><div class="w">You</div>${esc(u[0])}</div><div class="bub a"><div class="w">Assistant</div><div class="tool">${esc(a[1])}</div>${esc(a[0])}</div>`}).join('')||'<i>No messages yet.</i>'}</div>`}
+function rD360(){const a=G.sap_spend,b=G.d365_spend,m=Math.max(a,b);const rows=DATA.multi.filter(x=>x.sap!==x.d365);
+ return bar('d360','Spend on the golden ID (mockup)')+`<div class="grid2"><div class="card"><h3>${esc(G.name)}: spend by ERP</h3><div class="bar"><span style="width:60px">SAP</span><i style="width:${a/m*300}px;background:${SRC.SAP}"></i>${usd(a)}</div><div class="bar"><span style="width:60px">D365</span><i style="width:${b/m*300}px;background:${SRC.D365}"></i>${usd(b)}</div><div class="kpi" style="margin-top:8px">${usd(a+b)}<small>combined on ${G.gid}</small></div></div>
+ <div class="card"><h3>Vendors in both ERPs with different terms</h3>${tbl([['Vendor',r=>esc(r.name)],['SAP',r=>r.sap],['D365',r=>r.d365],['Spend',r=>usd(r.spend)]],rows)}</div></div>`}
+
+// ------------ shell
+function renderSide(){const s=S[step],w=s.w;const seen=new Set();for(let i=0;i<=step;i++)S[i].d.forEach(x=>seen.add(x));
+ $('#side').innerHTML=`<h4>Who acts</h4><div class="who pulse"><div class="av" style="background:${w.c}">${esc(w.n[0])}</div><div><b>${esc(w.n)}</b><br><span style="color:var(--mut)">${esc(w.r)}</span><br><span class="chip">${esc(w.ch)}</span></div></div>
+ <h4>What changes (this step)</h4>${s.d.length?s.d.map(x=>`<div class="chg" style="--c:${DOM[x]}"><b>${x}</b>: ${esc(s.c)}</div>`).join(''):`<div class="chg" style="--c:#6b7280"><b>No data change</b>: ${esc(s.c)}</div>`}
+ <h4>Domains touched so far: ${seen.size} of 4</h4><div class="dm">${Object.keys(DOM).map(x=>`<div class="${seen.has(x)?'on':''}" style="--c:${DOM[x]}">${x}<span>${seen.has(x)?'&#10003;':''}</span></div>`).join('')}</div>
+ <h4>Cumulative change log</h4><div class="log">${S.slice(0,step+1).map((x,i)=>x.d.length?`<div class="${i===step?'cur':''}">${i+1}. ${esc(x.w.n)}: ${esc(x.c)}</div>`:'').join('')||'<div>No changes yet.</div>'}</div>`}
+function render(){const s=S[step];tab=s.tab;if(sub._step!==step){sub._step=step;if(s.view)sub[tab]=s.view}
+ const st=stateAt(step),v=sub[tab];let h='';
+ h=({arch:rArch,mdm:()=>rMdm(st,sub.mdm),ref:()=>rRef(st,sub.ref),inbox:()=>rInbox(st),portal:()=>rPortal(st),sap:()=>rSap(st,s.tab==='sap'?s.view:null),d365:()=>rD365(st),crm:rCrm,ecom:rEcom,chat:()=>rChat(st),d360:rD360})[tab]();
+ $('#main').innerHTML=h;if(tab==='chat')$('#main').scrollTop=1e6;else $('#main').scrollTop=0;
+ $('#stepno').textContent='fx  Step '+(step+1)+' / '+S.length;$('#ntitle').textContent=s.t;$('#nsays').textContent=s.s;$('#nids').innerHTML=s.ids.map(i=>`<span class="chip">${i}</span>`).join('');
+ $('#progbar').style.width=((step+1)/S.length*100)+'%';
+ $('#acts').innerHTML=ACTS.map((a,i)=>`<button class="${s.act===i?'on':''}" onclick="go(${S.findIndex(x=>x.act===i)})">${a}</button>`).join('');
+ const order=['arch','mdm','ref','inbox','portal','sap','d365','crm','ecom','chat','d360'];
+ $('#tabs').innerHTML=order.map(k=>`<button class="${k===tab?'on':''} ${k===tab&&false?'ping':''}" style="--c:${SYS[k][1]}" onclick="goTab('${k}')"><span class="dot"></span>${SYS[k][0]}</button>`).join('');
+ renderSide()}
+function go(n){step=Math.max(0,Math.min(S.length-1,n));sub._step=-1;render()}
+function goTab(k){tab=k;const st=stateAt(step),s=S[step];const fake=Object.assign({},s,{tab:k});$('#main').innerHTML=({arch:rArch,mdm:()=>rMdm(st,sub.mdm),ref:()=>rRef(st,sub.ref),inbox:()=>rInbox(st),portal:()=>rPortal(st),sap:()=>rSap(st,k===s.tab?s.view:null),d365:()=>rD365(st),crm:rCrm,ecom:rEcom,chat:()=>rChat(st),d360:rD360})[k]();
+ document.querySelectorAll('#tabs button').forEach((b,i)=>b.classList.toggle('on',['arch','mdm','ref','inbox','portal','sap','d365','crm','ecom','chat','d360'][i]===k))}
+$('#next').onclick=()=>go(step+1);$('#prev').onclick=()=>go(step-1);
+function stop(){clearTimeout(timer);timer=null;$('#play').innerHTML='&#9654; Play'}
+function tick(){if(step>=S.length-1){stop();return}go(step+1);timer=setTimeout(tick,+$('#speed').value)}
+$('#play').onclick=()=>{if(timer){stop();return}$('#play').innerHTML='&#10074;&#10074; Pause';if(step>=S.length-1)go(0);timer=setTimeout(tick,+$('#speed').value)};
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(step+1);if(e.key==='ArrowLeft')go(step-1)});
+render();
+</script></body></html>

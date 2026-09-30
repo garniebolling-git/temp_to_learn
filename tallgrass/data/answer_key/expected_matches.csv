@@ -1,0 +1,7 @@
+golden_id,cluster,members,rule,expected_score,requirement
+G00001,Hero dup trio,SAP:V100001|D365:CUST-000001|CRM:001TG00000001,Exact tax ID + fuzzy name + address,0.97,"VEN-08,CUS-02,CUS-04"
+G00002,Glass supplier both ERPs,SAP:V100002|D365:CUST-000002,Exact VAT,1.00,"VEN-08,XD-06"
+G00056,CRM/ECOM name variant,CRM:001TG00000020|ECOM:WEB-000009,Fuzzy name + address,0.93,CUS-04
+G00057,CRM/ECOM name variant,CRM:001TG00000021|ECOM:WEB-000010,Fuzzy name + address,0.93,CUS-04
+G00036,CRM/ECOM name variant,CRM:001TG00000004|ECOM:WEB-000011,Fuzzy name + address,0.93,CUS-04
+G00043,CRM/ECOM name variant,CRM:001TG00000010|ECOM:WEB-000012,Fuzzy name + address,0.93,CUS-04

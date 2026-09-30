@@ -1,0 +1,29 @@
+gl_account,name,account_class,source_system,status
+10000100,Cash,Assets,SAP,Active
+10000200,Accounts receivable,Assets,SAP,Active
+10000300,Inventory finished goods,Assets,SAP,Active
+10000400,Inventory packaging,Assets,SAP,Active
+10000500,Prepaid expenses,Assets,SAP,Active
+20000100,Accounts payable,Liabilities,SAP,Active
+20000200,Accrued expenses,Liabilities,SAP,Active
+20000300,Deposit liability returnables,Liabilities,SAP,Active
+20000400,Tax payable,Liabilities,SAP,Active
+40000100,Product sales domestic,Revenue,SAP,Active
+40000200,Product sales export,Revenue,SAP,Active
+40000300,Returnables deposits revenue,Revenue,SAP,Active
+40000400,Other revenue,Revenue,SAP,Active
+50000100,Raw materials,Cost of goods sold,SAP,Active
+50000200,Packaging materials,Cost of goods sold,SAP,Active
+50000300,Direct labour,Cost of goods sold,SAP,Active
+50000400,Freight in,Cost of goods sold,SAP,Active
+50000500,Brewing overhead,Cost of goods sold,SAP,Active
+60000100,Sales and marketing,Operating expense,SAP,Active
+60000200,Distribution,Operating expense,SAP,Active
+60000300,Utilities,Operating expense,SAP,Active
+60000400,Maintenance,Operating expense,SAP,Active
+60000500,IT services,Operating expense,SAP,Active
+60000600,Professional fees,Operating expense,SAP,Active
+60000700,Travel,Operating expense,SAP,Active
+600100,Sponsorship misc,Operating expense,D365,Draft
+400200,product sales dom.,Revenue,D365,Draft
+50000999,Raw materials,Cost of goods sold,D365,Draft

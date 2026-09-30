@@ -1,0 +1,58 @@
+golden_id,name,roles,country,tax_id
+G00001,Prairie Returnables LLC,Vendor+Customer,US,96-6161087
+G00002,Rhone Verre Conteneurs SAS,Vendor,FR,FR79207960858
+G00003,Great Lakes PET Preforms Inc,Vendor,US,60-7920737
+G00004,Baltic Freight Sp. z o.o.,Vendor,PL,PL6027094769
+G00005,Nordvik Kartonage AS,Vendor,NO,NO562062904MVA
+G00006,Clearwater Packaging GmbH,Vendor,DE,DE476115280
+G00007,Harbor Pallets B.V.,Vendor,NL,NL441591526B01
+G00008,Pinecrest Plastics NV,Vendor,BE,BE0206479686
+G00009,Bluestem Returnables Co,Vendor,US,89-8447283
+G00010,Keystone Returnables LLC,Vendor,US,35-2871516
+G00011,Granite Freight Co,Vendor,US,23-2050808
+G00012,Riverbend Malt B.V.,Vendor,NL,NL390310059B01
+G00013,Willow Print Ltd,Vendor,GB,GB806061808
+G00014,Ashford Closures Corp,Vendor,US,70-5102716
+G00015,Willow Logistics Co,Vendor,US,35-3420671
+G00016,Willow Closures Co,Vendor,US,23-9344173
+G00017,Clearwater Cooling Corp,Vendor,US,94-7272116
+G00018,Ironwood Equipment SAS,Vendor,FR,FR27962588444
+G00019,Redfield Cooling Inc,Vendor,US,59-6539769
+G00020,Eastvale Freight B.V.,Vendor,NL,NL923149141B01
+G00021,Sterling Cooling LLC,Vendor,US,81-3433414
+G00022,Summit Hops AS,Vendor,NO,NO613594869MVA
+G00023,Blackwater Pallets Inc,Vendor,US,52-4680990
+G00024,Harbor Malt Co,Vendor,US,21-1814792
+G00025,Lakeshore Hops Ltd,Vendor,GB,GB452792207
+G00026,Northgate Returnables Co,Vendor,US,23-9325293
+G00027,Westmark Supply Corp,Vendor,US,95-3944658
+G00028,Willow Equipment Sp. z o.o.,Vendor,PL,PL2621251964
+G00029,Sunfield Print Sp. z o.o.,Vendor,PL,PL9720330811
+G00030,Silverleaf Distribution Co,Vendor,US,91-1846983
+G00031,Harbor Packaging Inc,Vendor,US,14-5030687
+G00032,Harbor Hops Inc,Customer,US,17-8610055
+G00033,Meridian Plastics Inc,Customer,US,67-9162307
+G00034,Willow Plastics LLC,Customer,US,61-4707755
+G00035,Cedar Plastics LLC,Customer,US,91-8131765
+G00036,Redfield Hops LLC,Customer,US,41-9816095
+G00037,Lonestar Returnables LLC,Customer,US,70-3975041
+G00038,Oakmont Cans Corp,Customer,US,51-5616161
+G00039,Stonebridge Pallets LLC,Customer,US,87-4351401
+G00040,Blackwater Foods Co,Customer,US,82-8809827
+G00041,Oakmont Returnables Co,Customer,US,73-1327600
+G00042,Ashford Plastics Corp,Customer,US,12-6729030
+G00043,Lakeshore Supply Corp,Customer,US,92-9227537
+G00044,Ironwood Malt Co,Customer,US,37-4090628
+G00045,Lakeshore Closures Inc,Customer,US,83-4789117
+G00046,Blackwater Freight Corp,Customer,US,85-4343236
+G00047,Eastvale Cans Corp,Customer,US,88-4742341
+G00048,Bluestem Chemicals Corp,Customer,US,65-8700131
+G00049,Meridian Pallets Inc,Customer,US,96-8627827
+G00050,Lakeshore Packaging Corp,Customer,US,74-5528899
+G00051,Meridian Hops Inc,Customer,US,17-2518360
+G00052,Lonestar Returnables Inc,Customer,US,73-9200463
+G00053,Ironwood Hops Inc,Customer,US,61-1280697
+G00054,Stonebridge Pallets GmbH,Vendor+Customer,DE,DE955199504
+G00055,Ironwood Returnables Ltd,Vendor+Customer,GB,GB128528383
+G00056,Silverleaf Pallets LLC,Vendor+Customer,US,36-9968535
+G00057,Northgate Returnables LLC,Vendor+Customer,US,59-4093905
